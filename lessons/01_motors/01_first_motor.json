@@ -1,0 +1,82 @@
+{
+  "id": "01_first_motor",
+  "title": "Your first motor",
+  "starterOpMode": "FirstMotorOp.java",
+  "starterFiles": ["FirstMotorOp.java"],
+  "steps": [
+    {
+      "title": "Get the motor",
+      "hint": "Look at the hardwareMap.get docs if you're stuck. The device name must match the robot config exactly.",
+      "content": [
+        {
+          "type": "text",
+          "value": "The hardwareMap is an object that gives you access to every device attached to your robot. In your OpMode's runOpMode() method, call hardwareMap.get() to retrieve a motor by name. The name must match what is in the robot configuration."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "DcMotor front_left_motor = hardwareMap.get(DcMotor.class, \"front_left_motor\");"
+        },
+        {
+          "type": "link",
+          "label": "DcMotor docs",
+          "url": "https://ftctechnh.github.io/ftc_app/doc/javadoc/com/qualcomm/robotcore/hardware/DcMotor.html"
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Power it on",
+      "hint": "setPower takes a value from -1.0 (full reverse) to 1.0 (full forward). Use 0.5 for half speed forward.",
+      "content": [
+        {
+          "type": "text",
+          "value": "Once you have a reference to the motor, call setPower() to make it spin. The value ranges from -1.0 (full reverse) to 1.0 (full forward). Call this inside the while (opModeIsActive()) loop so it keeps running."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "front_left_motor.setPower(0.5);"
+        }
+      ],
+      "check": { "type": "motor_power", "name": "front_left_motor", "target": 0.5, "tolerance": 0.1 }
+    },
+    {
+      "title": "Watch the encoder",
+      "hint": "getCurrentPosition() returns the number of encoder ticks since the last reset. Keep the motor running and the ticks will accumulate.",
+      "content": [
+        {
+          "type": "text",
+          "value": "DC motors have built-in encoders that count rotation ticks. You can read the current count with getCurrentPosition(). Use telemetry to display the value on screen while the OpMode runs."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "int ticks = front_left_motor.getCurrentPosition();\ntelemetry.addData(\"Encoder\", ticks);\ntelemetry.update();"
+        },
+        {
+          "type": "link",
+          "label": "Encoder / DcMotor.getCurrentPosition docs",
+          "url": "https://ftctechnh.github.io/ftc_app/doc/javadoc/com/qualcomm/robotcore/hardware/DcMotor.html#getCurrentPosition--"
+        }
+      ],
+      "check": { "type": "encoder_ticks", "name": "front_left_motor", "minimum": 500 }
+    },
+    {
+      "title": "Stop the motor",
+      "hint": "Always set power to 0.0 at the end of your OpMode. If you skip this, the motor keeps running after the OpMode stops.",
+      "content": [
+        {
+          "type": "text",
+          "value": "When your OpMode ends, always set motor power to 0.0. Leaving motors at non-zero power can damage hardware and is against safe robot design rules. Add this after your while loop exits."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "front_left_motor.setPower(0.0);"
+        }
+      ],
+      "check": { "type": "motor_power", "name": "front_left_motor", "target": 0.0, "tolerance": 0.05 }
+    }
+  ]
+}

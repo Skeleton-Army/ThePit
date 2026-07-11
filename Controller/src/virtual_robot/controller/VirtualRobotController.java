@@ -49,6 +49,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import virtual_robot.robots.ControlsElements;
 import virtual_robot.robots.classes.MecanumBot;
 import virtual_robot.keyboard.KeyState;
+import virtual_robot.lessons.OpModeHotReloader;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -142,7 +143,9 @@ public class VirtualRobotController {
         }
     };
 
-    boolean getOpModeInitialized(){ return opModeInitialized; }
+    public boolean getOpModeInitialized(){ return opModeInitialized; }
+    
+    public boolean getOpModeStarted(){ return opModeStarted; }
 
     public void initialize() {
         OpMode.setVirtualRobotController(this);
@@ -485,6 +488,7 @@ public class VirtualRobotController {
 
     @FXML
     private void handleDriverButtonAction(ActionEvent event){
+        if (hotReloading) return;
         if (!opModeInitialized){
             /*
              * INIT has been pressed.
@@ -684,6 +688,8 @@ public class VirtualRobotController {
                 || Config.GAME.isHumanPlayerActionRequested() && opModeInitialized) {
             Config.GAME.updateHumanPlayerState(TIME_INTERVAL_MILLISECONDS);
         }
+
+        virtual_robot.lessons.SimState.getInstance().update(bot, hardwareMap, opModeInitialized, opModeStarted);
     }
 
     @FXML
@@ -711,6 +717,42 @@ public class VirtualRobotController {
 
     public void updateTelemetryDisplay(String telemetryText) {
         txtTelemetry.setText(telemetryText);
+    }
+
+    /**
+     * Exposed so that OpModeHotReloader (wired from ThePitApplication)
+     * can refresh the combo box items when TeamCode .class files change.
+     */
+    public ComboBox<Class<?>> getOpModeComboBox() {
+        return cbxOpModes;
+    }
+
+    private volatile boolean hotReloading = false;
+
+    public boolean isHotReloading() {
+        return hotReloading;
+    }
+
+    public void setHotReloading(final boolean reloading) {
+        this.hotReloading = reloading;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (reloading) {
+                    if (!opModeInitialized) {
+                        driverButton.setDisable(true);
+                        driverButton.setText("COMPILING...");
+                    }
+                    cbxOpModes.setDisable(true);
+                } else {
+                    if (!opModeInitialized) {
+                        driverButton.setDisable(false);
+                        driverButton.setText("INIT");
+                    }
+                    cbxOpModes.setDisable(false);
+                }
+            }
+        });
     }
 		
     @FXML

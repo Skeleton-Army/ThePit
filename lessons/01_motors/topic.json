@@ -1,0 +1,4 @@
+{
+  "title": "Motors",
+  "description": "Learn how to control DC motors. You will get a motor from the hardware map, set its power, read its encoder, and stop it cleanly."
+}
