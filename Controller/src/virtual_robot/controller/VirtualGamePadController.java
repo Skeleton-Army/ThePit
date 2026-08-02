@@ -83,6 +83,7 @@ public class VirtualGamePadController {
 
 
     VirtualRobotController virtualRobotController = null;
+    private volatile boolean keyboardActive = false;
 
     ChangeListener<Number> sliderChangeListener = new ChangeListener<Number>() {
         @Override
@@ -186,6 +187,24 @@ public class VirtualGamePadController {
 
     void setVirtualRobotController(VirtualRobotController vrController){
         virtualRobotController = vrController;
+    }
+
+    void setJoysticksFromKeyboard(float leftX, float leftY, float rightX, float rightY) {
+        left_stick_x = leftX;
+        left_stick_y = leftY;
+        right_stick_x = rightX;
+        right_stick_y = rightY;
+        keyboardActive = leftX != 0 || leftY != 0 || rightX != 0 || rightY != 0;
+        Platform.runLater(() -> {
+            joyStickLeftHandle.setTranslateX(50 + leftX * 50);
+            joyStickLeftHandle.setTranslateY(50 + leftY * 50);
+            joyStickRightHandle.setTranslateX(50 + rightX * 50);
+            joyStickRightHandle.setTranslateY(50 + rightY * 50);
+        });
+    }
+
+    boolean isKeyboardActive() {
+        return keyboardActive;
     }
 
 

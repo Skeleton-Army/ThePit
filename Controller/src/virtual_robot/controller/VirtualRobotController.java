@@ -208,6 +208,9 @@ public class VirtualRobotController {
             gamePadHelper = new RealGamePadHelper();
         }
         gamePadExecutorService.scheduleAtFixedRate(gamePadHelper, 0, 20, TimeUnit.MILLISECONDS);
+
+        borderPane.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyFilter);
+        borderPane.addEventFilter(KeyEvent.KEY_RELEASED, this::handleKeyFilter);
     }
 
     /**
@@ -851,6 +854,23 @@ public class VirtualRobotController {
         }
     }
 
+    private void handleKeyFilter(KeyEvent e) {
+        KeyCode code = e.getCode();
+        if (e.getEventType() == KeyEvent.KEY_PRESSED) {
+            keyState.set(code, true);
+        } else if (e.getEventType() == KeyEvent.KEY_RELEASED) {
+            keyState.set(code, false);
+        }
+        if (isArrowKey(code)) {
+            e.consume();
+        }
+    }
+
+    private static boolean isArrowKey(KeyCode code) {
+        return code == KeyCode.UP || code == KeyCode.DOWN
+            || code == KeyCode.LEFT || code == KeyCode.RIGHT;
+    }
+
     public boolean getKeyState(KeyCode code){
         return keyState.get(code);
     }
@@ -1036,7 +1056,29 @@ public class VirtualRobotController {
 
     public class VirtualGamePadHelper implements GamePadHelper {
 
+        private boolean wasKeyboardActive = false;
+
         public void run() {
+            float lsx = 0, lsy = 0, rsx = 0, rsy = 0;
+            boolean keysHeld = false;
+
+            if (getKeyState(KeyCode.W)) { lsy = -1.0f; keysHeld = true; }
+            if (getKeyState(KeyCode.S)) { lsy = 1.0f;  keysHeld = true; }
+            if (getKeyState(KeyCode.A)) { lsx = -1.0f; keysHeld = true; }
+            if (getKeyState(KeyCode.D)) { lsx = 1.0f;  keysHeld = true; }
+            if (getKeyState(KeyCode.UP))    { rsy = -1.0f; keysHeld = true; }
+            if (getKeyState(KeyCode.DOWN))  { rsy = 1.0f;  keysHeld = true; }
+            if (getKeyState(KeyCode.LEFT))  { rsx = -1.0f; keysHeld = true; }
+            if (getKeyState(KeyCode.RIGHT)) { rsx = 1.0f;  keysHeld = true; }
+
+            if (keysHeld) {
+                virtualGamePadController.setJoysticksFromKeyboard(lsx, lsy, rsx, rsy);
+                wasKeyboardActive = true;
+            } else if (wasKeyboardActive) {
+                virtualGamePadController.setJoysticksFromKeyboard(0, 0, 0, 0);
+                wasKeyboardActive = false;
+            }
+
             VirtualGamePadController.ControllerState state = virtualGamePadController.getState();
             gamePad1.update(state);
             virtualGamePadController.setOutputs(gamePad1);
