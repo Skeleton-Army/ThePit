@@ -14,8 +14,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.Group;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import virtual_robot.config.Config;
 
 import java.security.Key;
@@ -26,12 +32,15 @@ public class VirtualGamePadController {
     @FXML StackPane joyStickLeftPane;
     @FXML StackPane joyStickRightPane;
     @FXML Circle joyStickLeftHandle;
-    @FXML
-    Circle joyStickRightHandle;
-    @FXML
-    HBox gamepadBackground;
-    @FXML
-    Button btnX;
+    @FXML Circle joyStickRightHandle;
+    @FXML Rectangle joystickLeftBg;
+    @FXML Rectangle joystickRightBg;
+    @FXML Line joystickLeftLineH;
+    @FXML Line joystickLeftLineV;
+    @FXML Line joystickRightLineH;
+    @FXML Line joystickRightLineV;
+    @FXML HBox gamepadBackground;
+    @FXML Button btnX;
     @FXML Button btnY;
     @FXML Button btnA;
     @FXML Button btnB;
@@ -43,6 +52,16 @@ public class VirtualGamePadController {
     @FXML Button btnRB;
     @FXML Slider sldLeft;
     @FXML Slider sldRight;
+
+    private static final javafx.scene.paint.Color C_BG = javafx.scene.paint.Color.web("#313244");
+    private static final javafx.scene.paint.Color C_STROKE = javafx.scene.paint.Color.web("#45475a");
+    private static final javafx.scene.paint.Color C_ACCENT = javafx.scene.paint.Color.web("#89b4fa");
+    private static final javafx.scene.paint.Color C_RED = javafx.scene.paint.Color.web("#f38ba8");
+    private static final javafx.scene.paint.Color C_HANDLE_L = javafx.scene.paint.Color.web("#89b4fa");
+    private static final javafx.scene.paint.Color C_HANDLE_R = javafx.scene.paint.Color.web("#a6e3a1");
+    private static final javafx.scene.paint.Color C_CROSSHAIR_L = javafx.scene.paint.Color.web("#89b4fa");
+    private static final javafx.scene.paint.Color C_CROSSHAIR_R = javafx.scene.paint.Color.web("#a6e3a1");
+    private static final String C_BG_HEX = "#181825";
 
 
     volatile float left_stick_x = 0;
@@ -77,6 +96,92 @@ public class VirtualGamePadController {
         System.out.println("Initializing virtual gamepad");
         sldLeft.valueProperty().addListener(sliderChangeListener);
         sldRight.valueProperty().addListener(sliderChangeListener);
+
+        joystickLeftBg.setFill(C_BG);
+        joystickLeftBg.setStroke(C_STROKE);
+        joystickRightBg.setFill(C_BG);
+        joystickRightBg.setStroke(C_STROKE);
+        joystickLeftLineH.setStroke(C_CROSSHAIR_L);
+        joystickLeftLineV.setStroke(C_CROSSHAIR_L);
+        joystickRightLineH.setStroke(C_CROSSHAIR_R);
+        joystickRightLineV.setStroke(C_CROSSHAIR_R);
+        joyStickLeftHandle.setFill(C_HANDLE_L);
+        joyStickRightHandle.setFill(C_HANDLE_R);
+
+        addDpadIcons();
+        addFaceButtonIcons();
+        addBumperIcons();
+    }
+
+    private void addDpadIcons() {
+        btnDU.setText(""); btnDU.setGraphic(makeArrow(0));
+        btnDD.setText(""); btnDD.setGraphic(makeArrow(2));
+        btnDL.setText(""); btnDL.setGraphic(makeArrow(3));
+        btnDR.setText(""); btnDR.setGraphic(makeArrow(1));
+    }
+
+    private void addFaceButtonIcons() {
+        btnX.setText(""); btnX.setGraphic(makeFaceButton("X", C_ACCENT));
+        btnY.setText(""); btnY.setGraphic(makeFaceButton("Y", javafx.scene.paint.Color.web("#f9e2af")));
+        btnA.setText(""); btnA.setGraphic(makeFaceButton("A", javafx.scene.paint.Color.web("#a6e3a1")));
+        btnB.setText(""); btnB.setGraphic(makeFaceButton("B", javafx.scene.paint.Color.web("#f38ba8")));
+    }
+
+    private void addBumperIcons() {
+        btnLB.setText(""); btnLB.setGraphic(makeBumperIcon("LB"));
+        btnRB.setText(""); btnRB.setGraphic(makeBumperIcon("RB"));
+    }
+
+    /**
+     * Create a triangle arrow icon for D-pad.
+     * @param dir 0=up, 1=right, 2=down, 3=left
+     */
+    private Group makeArrow(int dir) {
+        double s = 6.0;
+        double h = 8.0;
+        Polygon tri;
+        switch (dir) {
+            case 0: tri = new Polygon(0, -h, -s, s, s, s); break;
+            case 1: tri = new Polygon(h, 0, -s, -s, -s, s); break;
+            case 2: tri = new Polygon(0, h, -s, -s, s, -s); break;
+            default: tri = new Polygon(-h, 0, s, -s, s, s); break;
+        }
+        tri.setFill(C_ACCENT);
+        tri.setStroke(C_ACCENT);
+        tri.setStrokeWidth(1);
+        return new Group(tri);
+    }
+
+    /**
+     * Create a colored circle with a letter for face buttons.
+     */
+    private StackPane makeFaceButton(String letter, javafx.scene.paint.Color color) {
+        Circle c = new Circle(11);
+        c.setFill(color);
+        c.setStroke(color.darker());
+        c.setStrokeWidth(1);
+        Text t = new Text(letter);
+        t.setFont(Font.font("System", FontWeight.BOLD, 11));
+        t.setFill(C_BG);
+        return new StackPane(c, t);
+    }
+
+    /**
+     * Create a small pill-shaped icon for bumpers.
+     */
+    private Group makeBumperIcon(String label) {
+        Rectangle rect = new Rectangle(34, 16);
+        rect.setArcWidth(16);
+        rect.setArcHeight(16);
+        rect.setFill(C_BG);
+        rect.setStroke(C_STROKE);
+        rect.setStrokeWidth(1);
+        Text t = new Text(label);
+        t.setFont(Font.font("System", FontWeight.BOLD, 8));
+        t.setFill(javafx.scene.paint.Color.web("#6c7086"));
+        t.setTranslateX(-t.getLayoutBounds().getWidth() / 2);
+        t.setTranslateY(4);
+        return new Group(rect, t);
     }
 
     void setVirtualRobotController(VirtualRobotController vrController){
@@ -181,7 +286,7 @@ public class VirtualGamePadController {
 
         interruptLEDandRumbleThreads();
 
-        final String normalStyle = "-fx-background-color: #FFFFFF";
+        final String normalStyle = "-fx-background-color: " + C_BG_HEX;
         if (Platform.isFxApplicationThread()){
             sldLeft.setStyle(normalStyle);
             sldRight.setStyle(normalStyle);
@@ -318,8 +423,8 @@ public class VirtualGamePadController {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    sldLeft.setStyle("-fx-background-color: #FFFFFF");
-                    sldRight.setStyle("-fx-background-color: #FFFFFF");
+                    sldLeft.setStyle("-fx-background-color: " + C_BG_HEX);
+                    sldRight.setStyle("-fx-background-color: " + C_BG_HEX);
                 }
             });
         }

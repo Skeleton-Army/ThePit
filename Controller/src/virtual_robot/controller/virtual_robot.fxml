@@ -5,112 +5,131 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" onKeyPressed="#handleKeyEvents" onKeyReleased="#handleKeyEvents" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="virtual_robot.controller.VirtualRobotController">
+<BorderPane fx:id="borderPane" stylesheets="@virtual_robot.css" onKeyPressed="#handleKeyEvents" onKeyReleased="#handleKeyEvents" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="virtual_robot.controller.VirtualRobotController">
    <center>
-      <Pane fx:id="fieldPane" maxHeight="0.0" maxWidth="0.0" minHeight="0.0" minWidth="0.0" onMouseDragged="#handleFieldMouseClick" onMousePressed="#handleFieldMouseClick" prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
+      <Pane fx:id="fieldPane" styleClass="field-container" maxHeight="0.0" maxWidth="0.0" minHeight="0.0" minWidth="0.0" onMouseDragged="#handleFieldMouseClick" onMousePressed="#handleFieldMouseClick" prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="imgViewBackground" pickOnBounds="true" preserveRatio="true" />
          </children></Pane>
    </center>
+
+   <!-- ── Right Panel: Controls ────────────────────────────────── -->
    <right>
-      <VBox fx:id="vbxRight" alignment="CENTER" BorderPane.alignment="TOP_CENTER">
+      <VBox fx:id="vbxRight" styleClass="sidebar-right" alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
          <children>
-            <Label text="Configurations">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            <ComboBox fx:id="cbxConfig" onAction="#setConfig" prefWidth="250.0" promptText="Configurations" />
-            <Label alignment="CENTER" contentDisplay="CENTER" text="OpModes">
-               <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            <ComboBox fx:id="cbxOpModes" prefWidth="250.0" promptText="OpModes" />
-            <Button fx:id="driverButton" alignment="CENTER" minWidth="75.0" mnemonicParsing="false" onAction="#handleDriverButtonAction" text="INIT">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
-               </VBox.margin></Button>
-            <TextArea fx:id="txtTelemetry" editable="false" prefHeight="250.0" prefWidth="250.0" />
-            <HBox fx:id="hbxGamePads" prefWidth="200.0">
-               <children>
-                  <CheckBox fx:id="checkBoxGamePad1" mnemonicParsing="false" text="GamePad1">
-                     <HBox.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </HBox.margin>
-                  </CheckBox>
-                  <CheckBox fx:id="checkBoxGamePad2" mnemonicParsing="false" text="GamePad2">
-                     <HBox.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </HBox.margin>
-                  </CheckBox>
-               </children>
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
+
+            <!-- ── Robot Select ── -->
+            <Label text="ROBOT" styleClass="section-heading" />
+            <Separator styleClass="section-divider" />
+            <Label text="Configuration" styleClass="control-label" />
+            <ComboBox fx:id="cbxConfig" onAction="#setConfig" prefWidth="226.0" promptText="Select robot…">
+               <VBox.margin><Insets bottom="8.0" /></VBox.margin>
+            </ComboBox>
+            <Label text="OpMode" styleClass="control-label" />
+            <ComboBox fx:id="cbxOpModes" prefWidth="226.0" promptText="Select OpMode…">
+               <VBox.margin><Insets bottom="10.0" /></VBox.margin>
+            </ComboBox>
+
+            <!-- ── INIT / START / STOP ── -->
+            <Button fx:id="driverButton" styleClass="button-primary" alignment="CENTER" mnemonicParsing="false" onAction="#handleDriverButtonAction" text="INIT">
+               <VBox.margin><Insets bottom="8.0" top="2.0" /></VBox.margin>
+            </Button>
+            <Separator styleClass="section-divider">
+               <VBox.margin><Insets bottom="10.0" top="4.0" /></VBox.margin>
+            </Separator>
+
+            <!-- ── Telemetry ── -->
+            <Label text="TELEMETRY" styleClass="section-heading" />
+            <Separator styleClass="section-divider" />
+            <TextArea fx:id="txtTelemetry" editable="false" prefHeight="240.0" prefWidth="226.0">
+               <VBox.margin><Insets bottom="10.0" top="4.0" /></VBox.margin>
+            </TextArea>
+
+            <!-- ── GamePad ── -->
+            <Label text="GAMEPAD" styleClass="section-heading" />
+            <Separator styleClass="section-divider" />
+            <HBox fx:id="hbxGamePads" prefWidth="200.0" spacing="12" alignment="CENTER">
+               <VBox.margin><Insets top="6.0" bottom="2.0" /></VBox.margin>
             </HBox>
             <HBox prefWidth="200.0">
                <children>
-                  <CheckBox fx:id="cbxShowPath" mnemonicParsing="false" onAction="#handleCbxShowPathAction" text="Show path">
-                     <padding>
-                        <Insets left="10.0" top="15.0" />
-                     </padding>
+                  <CheckBox fx:id="checkBoxGamePad1" mnemonicParsing="false" text="Gamepad 1">
+                     <HBox.margin><Insets left="0.0" right="12.0" /></HBox.margin>
                   </CheckBox>
+                  <CheckBox fx:id="checkBoxGamePad2" mnemonicParsing="false" text="Gamepad 2" />
                </children>
+               <VBox.margin><Insets top="2.0" /></VBox.margin>
             </HBox>
+            <CheckBox fx:id="cbxShowPath" mnemonicParsing="false" onAction="#handleCbxShowPathAction" text="Show path trail">
+               <VBox.margin><Insets bottom="6.0" top="2.0" /></VBox.margin>
+            </CheckBox>
+
          </children>
       </VBox>
    </right>
+
+   <!-- ── Left Panel: Game & Simulation ────────────────────────── -->
    <left>
-      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+      <VBox styleClass="sidebar-left" alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
          <children>
-            <CheckBox fx:id="checkBoxAutoHuman" mnemonicParsing="false" onAction="#handleCheckBoxAutoHumanAction" selected="true" text="Automate human player">
-               <padding>
-                  <Insets left="10.0" top="15.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
+
+            <!-- ── Game ── -->
+            <Label text="GAME" styleClass="section-heading" />
+            <Separator styleClass="section-divider" />
+            <CheckBox fx:id="checkBoxAutoHuman" mnemonicParsing="false" onAction="#handleCheckBoxAutoHumanAction" selected="true" text="Auto Human Player">
+               <VBox.margin><Insets bottom="6.0" top="4.0" /></VBox.margin>
             </CheckBox>
-            <Button mnemonicParsing="false" onAction="#handleBtnHumanAction" text="Human Action">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
+            <Button mnemonicParsing="false" onAction="#handleBtnHumanAction" text="Human Action" styleClass="button-sm">
+               <VBox.margin><Insets bottom="4.0" /></VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#handleBtnResetGameElements" text="Reset Elements">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
+            <Button mnemonicParsing="false" onAction="#handleBtnResetGameElements" text="Reset Elements" styleClass="button-sm">
+               <VBox.margin><Insets bottom="4.0" /></VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#handleBtnPreloadElementsOnBot" text="Preload Elements">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
+            <Button mnemonicParsing="false" onAction="#handleBtnPreloadElementsOnBot" text="Preload on Robot" styleClass="button-sm">
+               <VBox.margin><Insets bottom="10.0" /></VBox.margin>
             </Button>
-            <Label fx:id="lblRunTime" text="0.00">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            <Label text="Random Motor Error">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
+
+            <!-- ── Runtime ── -->
+            <Separator styleClass="section-divider">
+               <VBox.margin><Insets bottom="6.0" /></VBox.margin>
+            </Separator>
+            <HBox alignment="CENTER_LEFT" spacing="6">
+               <children>
+                  <Label text="Runtime" styleClass="control-label" />
+                  <Label fx:id="lblRunTime" text="0.00" styleClass="value-label" />
+                  <Label text="s" styleClass="small-label" />
+               </children>
+               <VBox.margin><Insets bottom="12.0" /></VBox.margin>
+            </HBox>
+
+            <!-- ── Motor Realism ── -->
+            <Label text="DRIVE MOTOR REALISM" styleClass="section-heading" />
+            <Separator styleClass="section-divider" />
+            <Label text="Random Error" styleClass="control-label">
+               <VBox.margin><Insets top="6.0" /></VBox.margin>
             </Label>
             <Slider fx:id="sldRandomMotorError" blockIncrement="0.05" majorTickUnit="0.05" max="0.25" minorTickCount="0" />
-            <Label text="Systematic Motor Error" />
+            <Label text="Systematic Error" styleClass="control-label">
+               <VBox.margin><Insets top="4.0" /></VBox.margin>
+            </Label>
             <Slider fx:id="sldSystematicMotorError" blockIncrement="0.02" majorTickUnit="0.02" max="0.1" minorTickCount="0" />
-            <Label text="Motor Inertia" />
+            <Label text="Inertia" styleClass="control-label">
+               <VBox.margin><Insets top="4.0" /></VBox.margin>
+            </Label>
             <Slider fx:id="sldMotorInertia" blockIncrement="0.1" majorTickUnit="0.1" max="2.0" minorTickCount="0" />
+
          </children>
       </VBox>
    </left>
+
 </BorderPane>

@@ -497,6 +497,8 @@ public class VirtualRobotController {
             pathLine.getPoints().clear();
             txtTelemetry.setText("");
             driverButton.setText("START");
+            driverButton.getStyleClass().removeAll("button-primary", "button-stop");
+            driverButton.getStyleClass().add("button-primary");
             opModeInitialized = true;
             cbxConfig.setDisable(true);
             Runnable runOpMode = new Runnable() {
@@ -534,12 +536,16 @@ public class VirtualRobotController {
              * START has been pressed.
              */
             driverButton.setText("STOP");
+            driverButton.getStyleClass().removeAll("button-primary", "button-stop");
+            driverButton.getStyleClass().add("button-stop");
             opModeStarted = true;
         } else{
             /*
              * STOP has been pressed. Note that it is not possible for this to happen before START is pressed.
              */
             driverButton.setText("INIT");
+            driverButton.getStyleClass().removeAll("button-primary", "button-stop");
+            driverButton.getStyleClass().add("button-primary");
             opModeInitialized = false;
             /*
              * Setting opModeStarted to false will:
@@ -660,7 +666,8 @@ public class VirtualRobotController {
         Platform.runLater(new Runnable() {
             public void run() {
                 driverButton.setText("INIT");
-                //resetGamePad();
+                driverButton.getStyleClass().removeAll("button-primary", "button-stop");
+                driverButton.getStyleClass().add("button-primary");
                 initializeTelemetryTextArea();
                 cbxConfig.setDisable(false);
             }
@@ -748,6 +755,8 @@ public class VirtualRobotController {
                     if (!opModeInitialized) {
                         driverButton.setDisable(false);
                         driverButton.setText("INIT");
+                        driverButton.getStyleClass().removeAll("button-primary", "button-stop");
+                        driverButton.getStyleClass().add("button-primary");
                     }
                     cbxOpModes.setDisable(false);
                 }
