@@ -1,0 +1,45 @@
+{
+  "id": "02_command_opmode",
+  "title": "CommandOpMode",
+  "starterOpMode": "CommandOpModeLesson.java",
+  "starterFiles": ["CommandOpModeLesson.java"],
+  "steps": [
+    {
+      "title": "Look at the starter file",
+      "content": [
+        {
+          "type": "text",
+          "value": "Open CommandOpModeLesson.java.\n\nIt extends CommandOpMode and has one method: initialize().\n\nYou don't write loop() — the scheduler handles the loop for you."
+        }
+      ]
+    },
+    {
+      "title": "initialize() — your setup method",
+      "content": [
+        {
+          "type": "text",
+          "value": "Put all your setup in initialize(): create subsystems, schedule commands, bind buttons.\n\nIt's the only method you'll normally override.\n\nThe scheduler starts running right after initialize() returns."
+        }
+      ]
+    },
+    {
+      "title": "Overriding run() when you need a loop",
+      "content": [
+        {
+          "type": "text",
+          "value": "If you really need to run code in a loop, you can override run() in CommandOpMode.\n\nBut it's strongly advised to do everything in initialize() if possible — schedule commands, set up bindings, and let the scheduler handle every tick.\n\nOverride run() only as a last resort."
+        }
+      ]
+    },
+    {
+      "title": "Start the OpMode",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode.\n\nNothing happens yet because nothing is scheduled — but it's running. The scheduler loops in the background.\n\nNext you'll learn to feed it commands."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    }
+  ]
+}

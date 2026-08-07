@@ -1,0 +1,46 @@
+{
+  "id": "05_drive_forward",
+  "title": "Drive forward",
+  "starterOpMode": "DriveForwardOpMode.java",
+  "starterFiles": ["DriveForwardOpMode.java"],
+  "steps": [
+    {
+      "title": "How motors move",
+      "content": [
+        {
+          "type": "text",
+          "value": "Setting motor power makes the wheel spin.\n\nPower ranges -1.0 (reverse) to 1.0 (forward). The motor's controller translates this into current."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get your motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private DcMotor field.\n\nIn init(), get \"front_left_motor\" from hardwareMap."
+        }
+      ]
+    },
+    {
+      "title": "Set motor power",
+      "content": [
+        {
+          "type": "text",
+          "value": "In loop(), set the motor power to 0.5. This drives at half speed forward."
+        }
+      ],
+      "check": { "type": "motor_power", "name": "front_left_motor", "target": 0.5, "tolerance": 0.1 }
+    },
+    {
+      "title": "Stop after 2 seconds",
+      "content": [
+        {
+          "type": "text",
+          "value": "Use getRuntime() to check elapsed time.\n\nWhen it exceeds 2.0 seconds, set motor power to 0.0.\n\nThis stops without blocking. The OpMode stays responsive."
+        }
+      ],
+      "check": { "type": "motor_power", "name": "front_left_motor", "target": 0.0, "tolerance": 0.05 }
+    }
+  ]
+}

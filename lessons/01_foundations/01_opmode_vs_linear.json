@@ -1,0 +1,54 @@
+{
+  "id": "01_opmode_vs_linear",
+  "title": "OpMode vs LinearOpMode",
+  "starterOpMode": null,
+  "starterFiles": [],
+  "steps": [
+    {
+      "title": "What is an OpMode?",
+      "content": [
+        {
+          "type": "text",
+          "value": "An OpMode is the base class for every robot program in FTC.\n\nIt controls the lifecycle of your robot code: initialization, match start, the main loop (50+ times per second), and finally stop.\n\nEvery program you write extends either OpMode or LinearOpMode."
+        }
+      ]
+    },
+    {
+      "title": "LinearOpMode: the simple way",
+      "content": [
+        {
+          "type": "text",
+          "value": "LinearOpMode runs top-to-bottom on a single thread.\n\nYou call waitForStart() to wait for the start button, then use while(opModeIsActive()) to loop until the match ends.\n\nBeginners find it easy. Code flows like a recipe.\n\nBut if any step gets stuck, the whole robot freezes."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "@TeleOp\npublic class MyLinearOp extends LinearOpMode {\n    @Override\n    public void runOpMode() {\n        waitForStart();\n        while (opModeIsActive()) {\n            // Your code runs here in a loop\n        }\n    }\n}"
+        }
+      ]
+    },
+    {
+      "title": "OpMode: the non-blocking way",
+      "content": [
+        {
+          "type": "text",
+          "value": "OpMode has lifecycle methods that the SDK calls automatically: init() runs once when you press INIT, and loop() is called repeatedly after START.\n\nBecause each loop() call is non-blocking, you return quickly and let the SDK handle the next frame.\n\nThis fits the command scheduler model used in Module 2."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "@TeleOp\npublic class MyOpMode extends OpMode {\n    @Override\n    public void init() {\n        // Setup runs once\n    }\n    @Override\n    public void loop() {\n        // Called repeatedly by the SDK\n    }\n}"
+        }
+      ]
+    },
+    {
+      "title": "Why we use OpMode",
+      "content": [
+        {
+          "type": "text",
+          "value": "From this point forward, every lesson uses OpMode, not LinearOpMode.\n\nOpMode avoids stuck-loop pitfalls because each loop() call must return.\n\nIt also works with the command scheduler you'll learn in Module 2, where commands submit work and the scheduler drives it each frame.\n\nKnowing both models helps you understand why OpMode is the better foundation."
+        }
+      ]
+    }
+  ]
+}

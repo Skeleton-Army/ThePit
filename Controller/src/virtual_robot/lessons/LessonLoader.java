@@ -65,7 +65,7 @@ public class LessonLoader {
         for (Path file : lessonFiles) {
             try {
                 Map<String, Object> map = (Map<String, Object>) JsonParser.parse(readFile(file));
-                lessons.add(Lesson.fromMap(map));
+                lessons.add(Lesson.fromMap(map, topicId));
             } catch (Exception e) {
                 System.err.println("Failed to load lesson: " + file);
                 e.printStackTrace();

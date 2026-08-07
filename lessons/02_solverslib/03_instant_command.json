@@ -1,0 +1,60 @@
+{
+  "id": "03_instant_command",
+  "title": "InstantCommand",
+  "starterOpMode": "InstantCommandOpMode.java",
+  "starterFiles": ["InstantCommandOpMode.java"],
+  "steps": [
+    {
+      "title": "What is InstantCommand?",
+      "content": [
+        {
+          "type": "text",
+          "value": "InstantCommand runs an action once and finishes immediately. It's the simplest command.\n\nYou pass it a Runnable lambda — a block of code wrapped in () -> { ... }."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get your motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private DcMotor field.\n\nIn initialize(), get \"front_left_motor\" from hardwareMap.\n\nYou've done this many times — type it from memory."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Schedule an InstantCommand to start the motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "In initialize(), use schedule() with an InstantCommand. The lambda sets motor power to 0.5."
+        }
+      ],
+      "check": { "type": "motor_power", "name": "front_left_motor", "target": 0.5, "tolerance": 0.1 }
+    },
+    {
+      "title": "Stop the motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Add a second schedule() call with another InstantCommand that sets motor power to 0.0.\n\nBoth commands run — the first starts the motor, the second stops it.\n\nInstantCommand finishes so fast you might not see a full rotation. Later you'll learn commands that control timing and duration."
+        }
+      ]
+    },
+    {
+      "title": "What you can do with InstantCommand",
+      "content": [
+        {
+          "type": "text",
+          "value": "InstantCommand is one of many built-in command types.\n\nSolversLib also provides ConditionalCommand (runs one of two commands based on a condition), ProxyCommand (defers command creation until scheduled), and others.\n\nThe next few lessons cover WaitCommand, WaitUntilCommand, RunCommand, and the group containers — but there's more beyond that."
+        },
+        {
+          "type": "link",
+          "label": "Full Command Reference",
+          "url": "https://docs.seattlesolvers.com/command-base/command-system/convenience-commands"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": "11_button_binding",
+  "title": "Gamepad Button Binding",
+  "starterOpMode": "ButtonBindingOpMode.java",
+  "starterFiles": ["ButtonBindingOpMode.java"],
+  "steps": [
+    {
+      "title": "Buttons trigger commands",
+      "content": [
+        {
+          "type": "text",
+          "value": "GamepadEx wraps a gamepad and provides GamepadButton objects for each button.\n\nA GamepadButton monitors the physical button and can automatically schedule a command when pressed.\n\nThis is called button binding."
+        }
+      ]
+    },
+    {
+      "title": "Create a GamepadEx",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private GamepadEx field called driver.\n\nIn initialize(), create it with: driver = new GamepadEx(gamepad1)."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get a motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private DcMotor field for motor.\n\nIn initialize(), get \"front_left_motor\" from hardwareMap."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Bind the A button",
+      "content": [
+        {
+          "type": "text",
+          "value": "Use driver.getGamepadButton(GamepadKeys.Button.A).whenPressed() to schedule an InstantCommand when A is pressed.\n\nThe InstantCommand sets the motor to 1.0.\n\nwhenPressed() fires on the rising edge — the moment the button goes from not pressed to pressed."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "Start the OpMode and press A",
+      "content": [
+        {
+          "type": "text",
+          "value": "Add a second binding: driver.getGamepadButton(GamepadKeys.Button.B).whenPressed() with an InstantCommand that stops the motor.\n\nNow A starts it, B stops it.\n\nwhileHeld() is another option — it runs a command while held and cancels on release."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    }
+  ]
+}

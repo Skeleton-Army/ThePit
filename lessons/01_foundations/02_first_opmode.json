@@ -1,0 +1,45 @@
+{
+  "id": "02_first_opmode",
+  "title": "Your first OpMode",
+  "starterOpMode": "FirstOpMode.java",
+  "starterFiles": ["FirstOpMode.java"],
+  "steps": [
+    {
+      "title": "The @TeleOp annotation",
+      "content": [
+        {
+          "type": "text",
+          "value": "@TeleOp tells the Driver Station this OpMode should appear in the TeleOp list.\n\nIt has a 'name' parameter (what shows on screen) and a 'group' parameter (how OpModes are organized in the dropdown).\n\nAutonomous OpModes use @Autonomous instead.\n\nYour starter already has @TeleOp(name = \"First OpMode\", group = \"Lessons\")."
+        }
+      ]
+    },
+    {
+      "title": "Look at the skeleton",
+      "content": [
+        {
+          "type": "text",
+          "value": "The starter file already has the full OpMode skeleton: it extends OpMode, has @TeleOp, and has stubs for init() and loop().\n\ninit() runs once on INIT, loop() runs repeatedly after START."
+        }
+      ]
+    },
+    {
+      "title": "The init() method",
+      "content": [
+        {
+          "type": "text",
+          "value": "init() is called once when you press the INIT button.\n\nThis is where you set up hardware: getting motors, configuring sensors.\n\nFor now, init() is empty and that's fine."
+        }
+      ]
+    },
+    {
+      "title": "The loop() method",
+      "content": [
+        {
+          "type": "text",
+          "value": "loop() runs repeatedly after you press START.\n\nThis is your main code.\n\nFor now, add telemetry.addData(\"Status\", \"Running\"); inside loop() to confirm the OpMode is alive."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    }
+  ]
+}

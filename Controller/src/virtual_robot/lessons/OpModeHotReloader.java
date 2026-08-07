@@ -56,7 +56,7 @@ public class OpModeHotReloader {
     public void start() {
         if (!Files.exists(TEAMCODE_SRC)) {
             System.out.println("[HotReload] TeamCode source dir not found: "
-                    + TEAMCODE_SRC.toAbsolutePath() + " — auto-compile disabled.");
+                    + TEAMCODE_SRC.toAbsolutePath() + " - auto-compile disabled.");
             return;
         }
 
@@ -82,6 +82,25 @@ public class OpModeHotReloader {
 
     // ─── Polling & Live compilation ──────────────────────────────────────────
 
+    private void cleanupStaleClasses() {
+        if (!Files.exists(TEAMCODE_OUT)) return;
+        try (java.util.stream.Stream<Path> stream = Files.walk(TEAMCODE_OUT)) {
+            stream.filter(p -> p.toString().endsWith(".class")).forEach(clsPath -> {
+                String relPath = TEAMCODE_OUT.relativize(clsPath).toString();
+                String javaRelPath = relPath.replace(".class", ".java")
+                        .replace("\\", "/");
+                Path javaPath = TEAMCODE_SRC.resolve(javaRelPath);
+                if (!Files.exists(javaPath)) {
+                    try {
+                        Files.delete(clsPath);
+                    } catch (IOException ignored) {}
+                }
+            });
+        } catch (IOException e) {
+            // ignore
+        }
+    }
+
     private void pollAndReload() {
         // Skip hot reloading completely if an OpMode is currently running or initialized
         if (controller.getOpModeInitialized()) {
@@ -90,7 +109,10 @@ public class OpModeHotReloader {
 
         boolean recompiled = false;
 
-        // 1. Check for Java file changes and compile them
+        // 1. Clean up stale .class files whose .java sources were deleted
+        cleanupStaleClasses();
+
+        // 2. Check for Java file changes and compile them
         long currentJavaMod = latestJavaModified();
         if (currentJavaMod > lastJavaModifiedSnapshot) {
             lastJavaModifiedSnapshot = currentJavaMod;
@@ -119,7 +141,7 @@ public class OpModeHotReloader {
         long currentClassMod = latestClassModified();
         if (currentClassMod > lastClassModifiedSnapshot) {
             lastClassModifiedSnapshot = currentClassMod;
-            System.out.println("[HotReload] Class changes detected — reloading OpModes...");
+            System.out.println("[HotReload] Class changes detected - reloading OpModes...");
             
             // Ensure flag is set in case class compile happened externally (e.g. IDE built it)
             controller.setHotReloading(true);

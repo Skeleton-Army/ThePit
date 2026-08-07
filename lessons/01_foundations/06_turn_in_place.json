@@ -1,0 +1,45 @@
+{
+  "id": "06_turn_in_place",
+  "title": "Turn in place",
+  "starterOpMode": "TurnInPlaceOpMode.java",
+  "starterFiles": ["TurnInPlaceOpMode.java"],
+  "steps": [
+    {
+      "title": "Differential drive",
+      "content": [
+        {
+          "type": "text",
+          "value": "To spin in place, set all left-side motors forward and all right-side motors backward.\n\nWith a mecanum drive, use ALL 4 motors: front_left + back_left go one direction, front_right + back_right go the opposite. Pure rotation."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get four motors",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare four private DcMotor fields: frontLeft, backLeft, frontRight, backRight.\n\nIn init(), get all four from hardwareMap using their names: \"front_left_motor\", \"back_left_motor\", \"front_right_motor\", \"back_right_motor\"."
+        }
+      ]
+    },
+    {
+      "title": "Spin clockwise",
+      "content": [
+        {
+          "type": "text",
+          "value": "In loop(), set the left motors to 0.5 and the right motors to -0.5. This spins the robot clockwise."
+        }
+      ],
+      "check": { "type": "heading", "target": 90.0, "tolerance": 25.0 }
+    },
+    {
+      "title": "Stop after 1.5 seconds",
+      "content": [
+        {
+          "type": "text",
+          "value": "Use getRuntime() to detect when 1.5 seconds have passed, then set all four motors to 0.0.\n\nThe robot should end up facing roughly 90 degrees from its start."
+        }
+      ]
+    }
+  ]
+}

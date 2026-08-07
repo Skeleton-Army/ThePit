@@ -42,7 +42,7 @@ public class ThePitApplication extends Application {
             Parent root = loader.load();
             controllerHandle = loader.getController();
 
-            primaryStage.setTitle("Virtual Robot — The Pit");
+            primaryStage.setTitle("Virtual Robot - The Pit");
             primaryStage.setScene(new Scene(root));
             primaryStage.setResizable(false);
             primaryStage.show();

@@ -1,7 +1,6 @@
 package virtual_robot.lessons.ui;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -35,11 +34,10 @@ public class LessonPanel {
     private Label stepTitleLabel;
     private Label stepCountLabel;
     private VBox  contentArea;
-    private Button hintButton;
-    private Label  hintLabel;
+    private Button continueButton;
+    private Button backButton;
     private Circle completionDot;
     private Label  completionLabel;
-    private Label  noOpModeWarning;
     private ProgressBar progressBar;
 
     private AnimationTimer checkTimer;
@@ -71,12 +69,12 @@ public class LessonPanel {
         if (!lesson.starterFiles.isEmpty()) {
             boolean copied = StarterFileManager.copyStarterFiles(lesson);
             if (copied && !StarterFileManager.lessonFolderExists(lesson)) {
-                System.out.println("[ThePit] Starter files copied — rebuild (Ctrl+F9) to see the OpMode.");
+                System.out.println("[ThePit] Starter files copied - rebuild (Ctrl+F9) to see the OpMode.");
             }
         }
 
         panelStage = new Stage();
-        panelStage.setTitle("The Pit — " + lesson.title);
+        panelStage.setTitle("The Pit - " + lesson.title);
         panelStage.setResizable(true);
         panelStage.setMinWidth(PANEL_WIDTH);
         panelStage.setMinHeight(400);
@@ -97,12 +95,10 @@ public class LessonPanel {
         // ── Alt-tab sync (one-way, safe) ──
         // When the user alt-tabs to the lesson panel, raise the simulator behind it
         // so both windows surface together. We deliberately do NOT touch the simulator's
-        // focus — the simulator→panel direction would call toFront() during button clicks
+        // focus, the simulator to panel direction would call toFront() during button clicks
         // and break them on Windows (toFront steals focus on that platform).
         panelStage.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
             if (isFocused && simulatorStage.isShowing()) {
-                simulatorStage.toFront();
-                // Keep the lesson panel on top of the simulator
                 panelStage.toFront();
             }
         });
@@ -163,52 +159,9 @@ public class LessonPanel {
         VBox.setVgrow(contentScroll, Priority.ALWAYS);
         root.getChildren().add(contentScroll);
 
-        // ── Hint section ──
-        VBox hintSection = new VBox(6);
-        hintSection.setPadding(new Insets(10, 16, 10, 16));
-        hintSection.setStyle("-fx-background-color: " + BG_MANTLE + ";");
-
-        hintButton = new Button("💡 Show Hint");
-        styleButton(hintButton, false);
-        hintLabel = new Label();
-        hintLabel.setStyle(
-                "-fx-text-fill: " + YELLOW + ";" +
-                "-fx-background-color: " + BG_SURFACE + ";" +
-                "-fx-padding: 10 12;" +
-                "-fx-background-radius: 6;");
-        hintLabel.setWrapText(true);
-        hintLabel.setMaxWidth(Double.MAX_VALUE);
-        hintLabel.setVisible(false);
-        hintLabel.setManaged(false);
-        hintButton.setOnAction(e -> {
-            boolean show = !hintLabel.isVisible();
-            hintLabel.setVisible(show);
-            hintLabel.setManaged(show);
-            hintButton.setText(show ? "💡 Hide Hint" : "💡 Show Hint");
-            if (show) {
-                FadeTransition ft = new FadeTransition(Duration.millis(200), hintLabel);
-                ft.setFromValue(0); ft.setToValue(1); ft.play();
-            }
-        });
-        hintSection.getChildren().addAll(hintButton, hintLabel);
-        root.getChildren().add(hintSection);
-
         // ── Status / completion footer ──
         root.getChildren().add(makeDivider());
         root.getChildren().add(buildStatusBar());
-
-        // ── NoOpMode warning (hidden by default) ──
-        noOpModeWarning = new Label(
-                "⚠  You need an OpMode to get started.\n" +
-                "Add a Java class to org.firstinspires.ftc.teamcode extending LinearOpMode or OpMode, " +
-                "then rebuild the project (Ctrl+F9).");
-        noOpModeWarning.setWrapText(true);
-        noOpModeWarning.setMaxWidth(Double.MAX_VALUE);
-        noOpModeWarning.setStyle(
-                "-fx-text-fill: " + RED + ";" +
-                "-fx-background-color: " + BG_SURFACE + ";" +
-                "-fx-padding: 12;" +
-                "-fx-background-radius: 8;");
 
         renderStep();
         return root;
@@ -221,7 +174,7 @@ public class LessonPanel {
         header.setAlignment(Pos.CENTER_LEFT);
         header.setStyle("-fx-background-color: " + BG_MANTLE + ";");
 
-        Button backBtn = new Button("← Back");
+        Button backBtn = new Button("← Back to Menu");
         backBtn.setStyle(
                 "-fx-background-color: " + BG_SURFACE + ";" +
                 "-fx-text-fill: " + TEXT_SUB + ";" +
@@ -234,7 +187,6 @@ public class LessonPanel {
             stopChecking();
             panelStage.close();
             Stage menuStage = new Stage();
-            menuStage.initOwner(simulatorStage);
             LessonMenuScreen menu = new LessonMenuScreen(topics, progress);
             menu.show(menuStage, selected -> {
                 menuStage.close();
@@ -277,7 +229,33 @@ public class LessonPanel {
         completionLabel = new Label("Waiting...");
         completionLabel.setStyle("-fx-text-fill: " + TEXT_SUB + "; -fx-font-size: 12;");
 
-        bar.getChildren().addAll(completionDot, completionLabel);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        backButton = new Button("← Back");
+        styleButton(backButton, false);
+        backButton.setVisible(false);
+        backButton.setManaged(false);
+        backButton.setOnAction(e -> {
+            if (stepIndex > 0) {
+                stepIndex--;
+                progress.setCurrentStep(lesson.id, stepIndex);
+                stopChecking();
+                renderStep();
+                startChecking();
+            }
+        });
+
+        continueButton = new Button("Continue →");
+        styleButton(continueButton, true);
+        continueButton.setVisible(false);
+        continueButton.setManaged(false);
+        continueButton.setOnAction(e -> {
+            stopChecking();
+            advance();
+        });
+
+        bar.getChildren().addAll(completionDot, completionLabel, spacer, backButton, continueButton);
         return bar;
     }
 
@@ -291,19 +269,6 @@ public class LessonPanel {
     // ─── Step rendering ─────────────────────────────────────────────────────
 
     private void renderStep() {
-        // No-OpMode gate
-        if (lesson.starterFiles.isEmpty() && !OpModeScanner.hasAnyOpMode()) {
-            stepCountLabel.setText("Prerequisites");
-            stepTitleLabel.setText("Create an OpMode first");
-            stepTitleLabel.setStyle("-fx-text-fill: " + RED + ";");
-            contentArea.getChildren().setAll(noOpModeWarning);
-            hintButton.setVisible(false);
-            hintButton.setManaged(false);
-            progressBar.setProgress(0);
-            setStatus(false, "Waiting for OpMode...");
-            return;
-        }
-
         if (stepIndex >= lesson.steps.size()) {
             showCompletion();
             return;
@@ -323,17 +288,14 @@ public class LessonPanel {
             contentArea.getChildren().add(renderBlock(block));
         }
 
-        boolean hasHint = step.hint != null && !step.hint.isEmpty();
-        hintButton.setVisible(hasHint);
-        hintButton.setManaged(hasHint);
-        if (hasHint) {
-            hintLabel.setText(step.hint);
-            hintLabel.setVisible(false);
-            hintLabel.setManaged(false);
-            hintButton.setText("💡 Show Hint");
-        }
+        boolean hasCheck = step.check != null;
+        backButton.setVisible(stepIndex > 0);
+        backButton.setManaged(stepIndex > 0);
+        continueButton.setVisible(true);
+        continueButton.setManaged(true);
+        continueButton.setText("Next →");
 
-        setStatus(false, "Waiting for completion...");
+        setStatus(false, hasCheck ? "Complete the task or click Next..." : "Read and continue...");
     }
 
     private Node renderBlock(ContentBlock block) {
@@ -416,16 +378,12 @@ public class LessonPanel {
                 if (now - lastCheck < 250_000_000L) return;
                 lastCheck = now;
 
-                if (lesson.starterFiles.isEmpty() && !OpModeScanner.hasAnyOpMode()) {
-                    renderStep();
-                    return;
-                }
-                if ("Prerequisites".equals(stepCountLabel.getText())) {
-                    renderStep();
-                }
-
                 if (stepIndex >= lesson.steps.size()) return;
                 LessonStep step = lesson.steps.get(stepIndex);
+                if (step.check == null) {
+                    setStatus(false, "Read and continue...");
+                    return;
+                }
                 boolean done = CheckEvaluator.evaluate(step.check, SimState.getInstance());
                 setStatus(done, done ? "✓ Complete!" : "Waiting...");
 
@@ -466,7 +424,7 @@ public class LessonPanel {
 
         contentArea.getChildren().clear();
         Label msg = new Label(
-                "You've completed \"" + lesson.title + "\"!\n\nGreat work — head back to the menu to pick your next lesson.");
+                "You've completed \"" + lesson.title + "\"!\n\nHead back to the menu to pick your next lesson.");
         msg.setWrapText(true);
         msg.setStyle("-fx-text-fill: " + TEXT_MAIN + "; -fx-font-size: 13;");
 
@@ -480,8 +438,10 @@ public class LessonPanel {
                 "-fx-border-width: 1.5;");
         contentArea.getChildren().add(card);
 
-        hintButton.setVisible(false);
-        hintButton.setManaged(false);
+        backButton.setVisible(false);
+        backButton.setManaged(false);
+        continueButton.setVisible(false);
+        continueButton.setManaged(false);
         setStatus(true, "All steps complete!");
         completionLabel.setStyle("-fx-text-fill: " + GREEN + "; -fx-font-size: 12;");
     }

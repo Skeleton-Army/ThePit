@@ -1,0 +1,46 @@
+{
+  "id": "11_servos",
+  "title": "Servos",
+  "starterOpMode": "ServoOpMode.java",
+  "starterFiles": ["ServoOpMode.java"],
+  "steps": [
+    {
+      "title": "What is a servo?",
+      "content": [
+        {
+          "type": "text",
+          "value": "A servo moves to an absolute position and holds it.\n\nUnlike a DC motor that counts relative ticks from wherever it started (quadrature encoder), a servo knows its angle directly. Tell it 0.5 and it goes to the middle every time, no resetting needed.\n\nFTC servos typically have a 270-degree range.\n\nPosition 0.0 is one end, 1.0 is the other.\n\nYou can also program a servo to be continuous rotation, which makes it spin like a motor instead of going to a fixed angle.\n\nYou set the position with setPosition()."
+        }
+      ]
+    },
+    {
+      "title": "Declare the servo",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private Servo field at the class level.\n\nServos and motors are different hardware: a motor spins continuously and counts relative ticks, a servo moves to an absolute position and holds it.\n\nBut you get both from hardwareMap the same way."
+        }
+      ]
+    },
+    {
+      "title": "Get the servo from hardwareMap",
+      "content": [
+        {
+          "type": "text",
+          "value": "In init(), type servo = hardwareMap.get(Servo.class, \"back_servo\"); to get the servo.\n\nThe device name \"back_servo\" is from the robot configuration, just like motor names.\n\nThe type is Servo.class instead of DcMotor.class."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "Set servo positions",
+      "content": [
+        {
+          "type": "text",
+          "value": "In loop(), set the servo to positions across its range.\n\nWrite servo.setPosition(0.0) to go to one end, then change it to 1.0 to go to the other.\n\nTry 0.5 for center.\n\nThe servo rotates to exactly the angle you request and stays there, no need to stop it like a motor."
+        }
+      ],
+      "check": { "type": "servo_position", "name": "back_servo", "target": 1.0, "tolerance": 0.1 }
+    }
+  ]
+}

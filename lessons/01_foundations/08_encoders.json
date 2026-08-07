@@ -1,0 +1,46 @@
+{
+  "id": "08_encoders",
+  "title": "Encoders 101",
+  "starterOpMode": "EncoderOpMode.java",
+  "starterFiles": ["EncoderOpMode.java"],
+  "steps": [
+    {
+      "title": "What are encoders?",
+      "content": [
+        {
+          "type": "text",
+          "value": "Encoders count motor rotations in ticks. They let you measure distance precisely instead of guessing with timing.\n\ngetCurrentPosition() returns the accumulated tick count."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare private DcMotor motor.\n\nIn init(), get \"front_left_motor\" from hardwareMap."
+        }
+      ]
+    },
+    {
+      "title": "Read encoder ticks",
+      "content": [
+        {
+          "type": "text",
+          "value": "In loop(), call motor.getCurrentPosition() and display it with telemetry.addData(\"Encoder\", ticks)."
+        }
+      ],
+      "check": { "type": "encoder_ticks", "name": "front_left_motor", "minimum": 100 }
+    },
+    {
+      "title": "Drive to 1000 ticks",
+      "content": [
+        {
+          "type": "text",
+          "value": "Set power to 0.5 while getCurrentPosition() < 1000, then stop.\n\nThis is position-based control. More accurate than timing."
+        }
+      ],
+      "check": { "type": "encoder_ticks", "name": "front_left_motor", "minimum": 800 }
+    }
+  ]
+}

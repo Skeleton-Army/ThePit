@@ -1,0 +1,46 @@
+{
+  "id": "09_sensors",
+  "title": "Sensors 101",
+  "starterOpMode": "SensorOpMode.java",
+  "starterFiles": ["SensorOpMode.java"],
+  "steps": [
+    {
+      "title": "Robot sensors",
+      "content": [
+        {
+          "type": "text",
+          "value": "Sensors give your robot perception.\n\nColor sensors detect RGB values (0-255 each). The simulator has a virtual color sensor built into most robot models."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get the sensor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private ColorSensor field.\n\nThen in init(), type colorSensor = hardwareMap.colorSensor.get(\"color_sensor\");\n\nThe name \"color_sensor\" matches the robot configuration."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "color_sensor" }
+    },
+    {
+      "title": "Read color values",
+      "content": [
+        {
+          "type": "text",
+          "value": "In loop(), display readings: telemetry.addData(\"Red\", colorSensor.red());\n\nDo the same for green() and blue(). Each returns 0-255."
+        }
+      ],
+      "check": { "type": "sensor_value", "name": "color_sensor_red", "minimumValue": 1, "maximumValue": 255 }
+    },
+    {
+      "title": "Understanding RGB",
+      "content": [
+        {
+          "type": "text",
+          "value": "(255,0,0)=red, (0,255,0)=green, (0,0,255)=blue, (255,255,0)=yellow. The sensor reads whatever is in front of it."
+        }
+      ]
+    }
+  ]
+}

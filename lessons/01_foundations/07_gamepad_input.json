@@ -1,0 +1,45 @@
+{
+  "id": "07_gamepad_input",
+  "title": "Gamepad input",
+  "starterOpMode": "GamepadDriveOpMode.java",
+  "starterFiles": ["GamepadDriveOpMode.java"],
+  "steps": [
+    {
+      "title": "The gamepad",
+      "content": [
+        {
+          "type": "text",
+          "value": "The FTC Driver Station supports two gamepads: gamepad1 and gamepad2.\n\ngamepad1 is usually the driver. In this simulator, only gamepad1 is available.\n\nEach joystick axis returns -1.0 to 1.0. left_stick_y is forward/back, left_stick_x is strafe, right_stick_x is turn."
+        }
+      ]
+    },
+    {
+      "title": "Mecanum drive",
+      "content": [
+        {
+          "type": "text",
+          "value": "Mecanum wheels let the robot move in any direction.\n\nThe standard mecanum drive formula uses four motors:\n\nfrontLeft = forward + strafe + turn\nfrontRight = forward - strafe - turn\nbackLeft = forward - strafe + turn\nbackRight = forward + strafe - turn\n\nWhere forward = -left_stick_y, strafe = left_stick_x, turn = right_stick_x."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get four motors",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare four private DcMotor fields: frontLeft, frontRight, backLeft, backRight.\n\nIn init(), get all four from hardwareMap: \"front_left_motor\", \"front_right_motor\", \"back_left_motor\", \"back_right_motor\"."
+        }
+      ]
+    },
+    {
+      "title": "Write the drive code",
+      "content": [
+        {
+          "type": "text",
+          "value": "In loop(), compute forward = -gamepad1.left_stick_y, strafe = gamepad1.left_stick_x, turn = gamepad1.right_stick_x.\n\nApply the mecanum formula to set all four motors."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    }
+  ]
+}

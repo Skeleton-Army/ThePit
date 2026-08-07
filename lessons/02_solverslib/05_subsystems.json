@@ -1,0 +1,64 @@
+{
+  "id": "05_subsystems",
+  "title": "Subsystems",
+  "starterOpMode": "SubsystemOpMode.java",
+  "starterFiles": ["SubsystemOpMode.java", "DriveSubsystem.java"],
+  "steps": [
+    {
+      "title": "What a Subsystem is",
+      "content": [
+        {
+          "type": "text",
+          "value": "A Subsystem represents one hardware mechanism: the drivetrain, an arm, or a claw.\n\nIt owns the motors and sensors for that mechanism.\n\nOther code accesses the hardware only through the subsystem's public methods.\n\nEvery subsystem in SolversLib extends SubsystemBase."
+        }
+      ]
+    },
+    {
+      "title": "Look at DriveSubsystem.java",
+      "content": [
+        {
+          "type": "text",
+          "value": "Open DriveSubsystem.java.\n\nIt extends SubsystemBase and has an empty constructor, empty drive() and stop() methods, and an empty periodic().\n\nRight now it's a skeleton — you'll fill it in."
+        }
+      ]
+    },
+    {
+      "title": "Declare the motor fields",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare two private DcMotor fields: leftMotor and rightMotor.\n\nOnly this subsystem should touch its own motors, so keep them private."
+        }
+      ]
+    },
+    {
+      "title": "Get the motors",
+      "content": [
+        {
+          "type": "text",
+          "value": "In the constructor, get \"front_left_motor\" and \"front_right_motor\" from the HardwareMap."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Add the drive() method",
+      "content": [
+        {
+          "type": "text",
+          "value": "Fill in drive() with two parameters: forward and turn.\n\nSet leftMotor to forward + turn and rightMotor to forward - turn.\n\nThis is the same arcade drive you've used before."
+        }
+      ]
+    },
+    {
+      "title": "Add stop() and leave periodic() empty",
+      "content": [
+        {
+          "type": "text",
+          "value": "Fill in stop() — set both motors to 0.\n\nLeave periodic() empty for now. It's called every tick by the scheduler and is where you'd read sensors or update state.\n\nIn SubsystemOpMode.java, create a DriveSubsystem in initialize() — the constructor auto-registers it with the scheduler."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    }
+  ]
+}

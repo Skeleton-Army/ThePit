@@ -48,7 +48,10 @@ public class LessonStep {
 
         CompletionCheck check = null;
         if (map.containsKey("check")) {
-            check = CompletionCheck.fromMap((Map<String, Object>) map.get("check"));
+            Object checkObj = map.get("check");
+            if (checkObj != null) {
+                check = CompletionCheck.fromMap((Map<String, Object>) checkObj);
+            }
         }
         return new LessonStep(title, hint, blocks, check);
     }

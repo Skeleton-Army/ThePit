@@ -1,0 +1,56 @@
+{
+  "id": "08_sequential_command",
+  "title": "SequentialCommandGroup",
+  "starterOpMode": "SequentialCommandOpMode.java",
+  "starterFiles": ["SequentialCommandOpMode.java"],
+  "steps": [
+    {
+      "title": "Running commands in order",
+      "content": [
+        {
+          "type": "text",
+          "value": "SequentialCommandGroup runs a list of commands one after another.\n\nEach command must finish before the next one starts.\n\nThis solves the problem you saw in the WaitCommand lesson — where all commands ran at once."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get your motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private DcMotor field.\n\nIn initialize(), get \"front_left_motor\" from hardwareMap."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Build a sequence with InstantCommand and WaitCommand",
+      "content": [
+        {
+          "type": "text",
+          "value": "Create a SequentialCommandGroup with three commands: an InstantCommand that sets motor power to 0.5, a WaitCommand with duration 2000, and an InstantCommand that sets power to 0.0.\n\nUse schedule() on the SequentialCommandGroup.\n\nNow the order is guaranteed: start, wait 2 seconds, stop."
+        }
+      ],
+      "check": { "type": "elapsed_time", "minimumValue": 2.0 }
+    },
+    {
+      "title": "Add more steps",
+      "content": [
+        {
+          "type": "text",
+          "value": "Add another WaitCommand(1000) and an InstantCommand that starts the motor again to the sequence.\n\nThe full sequence: start, run 2s, stop, pause 1s, start.\n\nEach command waits for the previous to finish. SequentialCommandGroup respects the order of the list you give it."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "Sequencing is the backbone of auton",
+      "content": [
+        {
+          "type": "text",
+          "value": "This is how autonomous routines are built.\n\nSmall commands for each action, chained in a SequentialCommandGroup. Each command waits for the previous to finish.\n\nYou can chain InstantCommands and WaitCommands to build any timed sequence, and later use decorators like withTimeout() to add even more control."
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,8 @@ import java.util.Map;
 
 public class CompletionCheck {
     public enum Type {
-        OPMODE_RUNNING, HARDWARE_MAPPED, MOTOR_POWER, ENCODER_TICKS, SERVO_POSITION, ROBOT_POSITION
+        OPMODE_RUNNING, HARDWARE_MAPPED, MOTOR_POWER, ENCODER_TICKS, SERVO_POSITION,
+        ROBOT_POSITION, HEADING, VOLTAGE, SENSOR_VALUE, ELAPSED_TIME
     }
 
     public final Type type;
@@ -14,9 +15,11 @@ public class CompletionCheck {
     public final double x;
     public final double y;
     public final int minimum;
+    public final double minimumValue;
+    public final double maximumValue;
 
     private CompletionCheck(Type type, String name, double target, double tolerance,
-                             double x, double y, int minimum) {
+                             double x, double y, int minimum, double minimumValue, double maximumValue) {
         this.type = type;
         this.name = name;
         this.target = target;
@@ -24,6 +27,8 @@ public class CompletionCheck {
         this.x = x;
         this.y = y;
         this.minimum = minimum;
+        this.minimumValue = minimumValue;
+        this.maximumValue = maximumValue;
     }
 
     @SuppressWarnings("unchecked")
@@ -37,6 +42,10 @@ public class CompletionCheck {
             case "encoder_ticks":    type = Type.ENCODER_TICKS;   break;
             case "servo_position":   type = Type.SERVO_POSITION;  break;
             case "robot_position":   type = Type.ROBOT_POSITION;  break;
+            case "heading":          type = Type.HEADING;         break;
+            case "voltage":          type = Type.VOLTAGE;         break;
+            case "sensor_value":     type = Type.SENSOR_VALUE;    break;
+            case "elapsed_time":     type = Type.ELAPSED_TIME;    break;
             default: throw new IllegalArgumentException("Unknown check type: " + typeStr);
         }
         String name    = (String) map.getOrDefault("name", "");
@@ -45,7 +54,9 @@ public class CompletionCheck {
         double x       = toDouble(map.get("x"));
         double y       = toDouble(map.get("y"));
         int minimum    = map.containsKey("minimum") ? (int) toDouble(map.get("minimum")) : 0;
-        return new CompletionCheck(type, name, target, tolerance, x, y, minimum);
+        double minVal  = toDouble(map.get("minimumValue"));
+        double maxVal  = toDouble(map.get("maximumValue"));
+        return new CompletionCheck(type, name, target, tolerance, x, y, minimum, minVal, maxVal);
     }
 
     private static double toDouble(Object o) {

@@ -35,6 +35,28 @@ public class CheckEvaluator {
                 double dy = state.getRobotY() - check.y;
                 return Math.sqrt(dx * dx + dy * dy) <= check.tolerance;
             }
+
+            case HEADING: {
+                double heading = state.getRobotHeadingDegrees();
+                double target = check.target;
+                double diff = Math.abs(heading - target);
+                if (diff > 180.0) diff = 360.0 - diff;
+                return diff <= check.tolerance;
+            }
+
+            case VOLTAGE: {
+                double v = state.getVoltage();
+                return v >= check.minimumValue && v <= check.maximumValue;
+            }
+
+            case SENSOR_VALUE: {
+                double val = state.getSensorValue(check.name);
+                return val >= check.minimumValue && val <= check.maximumValue;
+            }
+
+            case ELAPSED_TIME: {
+                return state.getElapsedTime() >= check.minimumValue;
+            }
         }
         return false;
     }

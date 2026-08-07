@@ -1,0 +1,4 @@
+{
+  "title": "Command-Based",
+  "description": "Learn the command-based architecture using SolversLib. Start with the scheduler and core command types, then build up to full TeleOp with subsystems, default commands, and button bindings."
+}

@@ -7,21 +7,23 @@ import java.util.Map;
 public class Lesson {
     public final String id;
     public final String title;
+    public final String topicId;
     public final String starterOpMode;
     public final List<String> starterFiles;
     public final List<LessonStep> steps;
 
-    private Lesson(String id, String title, String starterOpMode,
+    private Lesson(String id, String title, String topicId, String starterOpMode,
                    List<String> starterFiles, List<LessonStep> steps) {
         this.id = id;
         this.title = title;
+        this.topicId = topicId;
         this.starterOpMode = starterOpMode;
         this.starterFiles = starterFiles;
         this.steps = steps;
     }
 
     @SuppressWarnings("unchecked")
-    public static Lesson fromMap(Map<String, Object> map) {
+    public static Lesson fromMap(Map<String, Object> map, String topicId) {
         String id    = (String) map.get("id");
         String title = (String) map.get("title");
         String starterOpMode = (String) map.getOrDefault("starterOpMode", null);
@@ -39,6 +41,6 @@ public class Lesson {
                 steps.add(LessonStep.fromMap((Map<String, Object>) stepObj));
             }
         }
-        return new Lesson(id, title, starterOpMode, starterFiles, steps);
+        return new Lesson(id, title, topicId, starterOpMode, starterFiles, steps);
     }
 }

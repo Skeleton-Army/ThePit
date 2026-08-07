@@ -1,0 +1,46 @@
+{
+  "id": "09_parallel_command",
+  "title": "ParallelCommandGroup",
+  "starterOpMode": "ParallelCommandOpMode.java",
+  "starterFiles": ["ParallelCommandOpMode.java"],
+  "steps": [
+    {
+      "title": "Running commands at the same time",
+      "content": [
+        {
+          "type": "text",
+          "value": "ParallelCommandGroup runs all its commands simultaneously.\n\nIt finishes only when every command inside it is done.\n\nUnlike SequentialCommandGroup, all commands start on the same tick."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get two motors",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare two private DcMotor fields: frontLeft and frontRight.\n\nIn initialize(), get \"front_left_motor\" and \"front_right_motor\" from hardwareMap."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Build two sequences and run them together",
+      "content": [
+        {
+          "type": "text",
+          "value": "Create two SequentialCommandGroups.\n\nThe first for frontLeft: InstantCommand (set power 0.5), WaitCommand(2000), InstantCommand (set power 0.0).\n\nThe second for frontRight: InstantCommand (set power 0.3), WaitCommand(1000), InstantCommand (set power 0.0).\n\nWrap both in a ParallelCommandGroup and schedule it.\n\nBoth motors start together. The shorter sequence finishes first, the longer one keeps going. The group finishes when both are done — after 2 seconds."
+        }
+      ],
+      "check": { "type": "elapsed_time", "minimumValue": 2.0 }
+    },
+    {
+      "title": "Nest groups",
+      "content": [
+        {
+          "type": "text",
+          "value": "You can nest groups. A SequentialCommandGroup with a ParallelCommandGroup inside runs the parallel block, then continues.\n\nFor example: drive forward for 2 seconds, then turn AND spin together for 1 second, then stop. Each group is a building block that composes cleanly."
+        }
+      ]
+    }
+  ]
+}

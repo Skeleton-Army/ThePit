@@ -1,0 +1,60 @@
+{
+  "id": "12_command_decorators",
+  "title": "Command Decorators",
+  "starterOpMode": "CommandDecoratorsOpMode.java",
+  "starterFiles": ["CommandDecoratorsOpMode.java"],
+  "steps": [
+    {
+      "title": "Look at the starter file",
+      "content": [
+        {
+          "type": "text",
+          "value": "Open CommandDecoratorsOpMode.java.\n\nIt declares a motor, gets it from hardwareMap, and has three examples in initialize().\n\nRun the OpMode and look at Example 1 — a RunCommand with .withTimeout(3000) chained on. The motor runs at half power for 3 seconds and stops, even though RunCommand normally never finishes."
+        }
+      ]
+    },
+    {
+      "title": "Read the other examples",
+      "content": [
+        {
+          "type": "text",
+          "value": "Example 2 shows asProxy() — it defers command creation until the command is actually scheduled. This is useful for button bindings where you want a fresh command instance each press.\n\nExample 3 shows until() — it takes a BooleanSupplier and stops the command when the condition becomes true, checked every tick."
+        }
+      ]
+    },
+    {
+      "title": "Write withTimeout() on a SequentialCommandGroup",
+      "content": [
+        {
+          "type": "text",
+          "value": "Remove the schedule() call from Example 1.\n\nWrite your own: a SequentialCommandGroup with an InstantCommand that sets power to 0.5, a WaitCommand with duration 5000, and an InstantCommand that sets power to 0.0.\n\nChain .withTimeout(2000) onto the SequentialCommandGroup. Schedule it.\n\nThe motor starts, runs for only 2 seconds (the timeout overrides the 5-second wait), then stops."
+        }
+      ],
+      "check": { "type": "elapsed_time", "minimumValue": 1.5 }
+    },
+    {
+      "title": "Write withTimeout() on a RunCommand",
+      "content": [
+        {
+          "type": "text",
+          "value": "Remove the previous schedule() call.\n\nWrite a new one: a RunCommand that sets motor power to 0.3. Chain .withTimeout(3000) onto it. Schedule it.\n\nThe motor runs at 30% power for exactly 3 seconds and stops."
+        }
+      ],
+      "check": { "type": "elapsed_time", "minimumValue": 2.5 }
+    },
+    {
+      "title": "Read the docs for the rest",
+      "content": [
+        {
+          "type": "text",
+          "value": "SolversLib also provides .beforeStarting(), .andThen(), .deadlineWith(), .alongWith(), .withInterrupt(), and .repeatedly().\n\nEvery one works on any command type.\n\nChain them together for exactly the behavior you need."
+        },
+        {
+          "type": "link",
+          "label": "Full command reference",
+          "url": "https://docs.seattlesolvers.com/command-base/command-system/convenience-commands"
+        }
+      ]
+    }
+  ]
+}

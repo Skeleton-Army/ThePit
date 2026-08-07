@@ -400,11 +400,16 @@ public class VirtualRobotController {
     }
 
     private void setupCbxOpModes(){
-        Reflections reflections = new Reflections("");
-//        Reflections reflections = new Reflections("org.firstinspires.ftc.teamcode");
+        Reflections reflections = new Reflections("org.firstinspires.ftc.teamcode");
         Set<Class<?>> opModes = new HashSet<>();
         opModes.addAll(reflections.getTypesAnnotatedWith(TeleOp.class));
-        opModes.addAll(reflections.getTypesAnnotatedWith(Autonomous.class));//Lists of OpMode classes and OpMode Names
+        opModes.addAll(reflections.getTypesAnnotatedWith(Autonomous.class));
+        // Fallback: also scan the full classpath if teamcode scan found nothing
+        if (opModes.isEmpty()) {
+            Reflections fallback = new Reflections("");
+            opModes.addAll(fallback.getTypesAnnotatedWith(TeleOp.class));
+            opModes.addAll(fallback.getTypesAnnotatedWith(Autonomous.class));
+        }
         ObservableList<Class<?>> nonDisabledOpModeClasses = FXCollections.observableArrayList();
         for (Class<?> c : opModes){
             if (c.getAnnotation(Disabled.class) == null && OpMode.class.isAssignableFrom(c)){
@@ -425,6 +430,9 @@ public class VirtualRobotController {
         });
 
         cbxOpModes.setItems(nonDisabledOpModeClasses);
+        if (!nonDisabledOpModeClasses.isEmpty()) {
+            cbxOpModes.setValue(nonDisabledOpModeClasses.get(0));
+        }
 
         cbxOpModes.setCellFactory(new Callback<ListView<Class<?>>, ListCell<Class<?>>>() {
             @Override
@@ -462,8 +470,6 @@ public class VirtualRobotController {
                 setText(getNameFromAnnotationOrOpmode(cl));
             }
         });
-
-        cbxOpModes.setValue(cbxOpModes.getItems().get(0));
     }
 
 

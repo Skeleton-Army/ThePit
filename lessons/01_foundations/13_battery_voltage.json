@@ -1,0 +1,46 @@
+{
+  "id": "13_battery_voltage",
+  "title": "Reading the battery voltage",
+  "starterOpMode": "BatteryVoltageOpMode.java",
+  "starterFiles": ["BatteryVoltageOpMode.java"],
+  "steps": [
+    {
+      "title": "The voltage sensor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Every robot has a built-in voltage sensor.\n\nIn the simulator, it's always present. It reports the battery voltage in volts."
+        }
+      ]
+    },
+    {
+      "title": "Get the sensor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private VoltageSensor field.\n\nThen in init(), type battery = hardwareMap.voltageSensor.iterator().next();\n\nThis retrieves the default voltage sensor built into the robot."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "Read and display",
+      "content": [
+        {
+          "type": "text",
+          "value": "In loop(), add telemetry.addData(\"Battery\", battery.getVoltage());\n\nThe value is in volts."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "Healthy ranges",
+      "content": [
+        {
+          "type": "text",
+          "value": "11V or below = too low, charge battery.\n\n12-13V = fine.\n\n13V+ = fully charged.\n\nThe simulator shows ~14V. On a real robot, watch for sag under heavy motor load."
+        }
+      ]
+    }
+  ]
+}

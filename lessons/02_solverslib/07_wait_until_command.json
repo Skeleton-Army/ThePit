@@ -1,0 +1,46 @@
+{
+  "id": "07_wait_until_command",
+  "title": "WaitUntilCommand",
+  "starterOpMode": "WaitUntilCommandOpMode.java",
+  "starterFiles": ["WaitUntilCommandOpMode.java"],
+  "steps": [
+    {
+      "title": "Wait for a condition instead of a duration",
+      "content": [
+        {
+          "type": "text",
+          "value": "WaitUntilCommand waits until a BooleanSupplier returns true, then finishes.\n\nUnlike WaitCommand, which waits a fixed number of milliseconds, WaitUntilCommand waits for something to happen — a sensor reading, an encoder count, or any condition you can check."
+        }
+      ]
+    },
+    {
+      "title": "Delcare and get your motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private DcMotor field.\n\nIn initialize(), get \"front_left_motor\" from hardwareMap."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Wait until the encoder counts up",
+      "content": [
+        {
+          "type": "text",
+          "value": "Create a SequentialCommandGroup with three commands: an InstantCommand that sets motor power to 0.5, a WaitUntilCommand with the condition () -> motor.getCurrentPosition() > 500, and an InstantCommand that stops the motor.\n\nSchedule the group.\n\nThe motor runs until its encoder passes 500 ticks, then stops — regardless of how long that takes."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "WaitUntil vs WaitCommand",
+      "content": [
+        {
+          "type": "text",
+          "value": "WaitCommand waits a fixed time. WaitUntilCommand waits for a condition.\n\nUse WaitUntilCommand when the duration depends on the robot's state — like waiting for a limit switch to trigger, a sensor to detect an object, or the motor to reach a position. The condition is checked every tick."
+        }
+      ]
+    }
+  ]
+}

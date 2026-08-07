@@ -1,0 +1,64 @@
+{
+  "id": "13_motor_ex",
+  "title": "MotorEx",
+  "starterOpMode": "MotorExOpMode.java",
+  "starterFiles": ["MotorExOpMode.java"],
+  "steps": [
+    {
+      "title": "Motor vs MotorEx",
+      "content": [
+        {
+          "type": "text",
+          "value": "SolversLib provides Motor and MotorEx wrappers.\n\nMotor wraps DcMotor with run modes and encoder utilities.\n\nMotorEx extends Motor using DcMotorEx, with better velocity control, corrected velocity (fixes overflow bugs), and power caching.\n\nBoth are in com.seattlesolvers.solverslib.hardware.motors."
+        }
+      ]
+    },
+    {
+      "title": "Create a MotorEx",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private MotorEx field.\n\nIn initialize(), create it with: motor = new MotorEx(hardwareMap, \"front_left_motor\"). That's it — no separate hardwareMap.get() call needed.\n\nMotorEx gets the DcMotorEx from the hardware map internally."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "RunModes: RawPower, VelocityControl, PositionControl",
+      "content": [
+        {
+          "type": "text",
+          "value": "MotorEx has three RunModes.\n\nRawPower is the default — motor.set(0.5) sets 50% voltage, same as DcMotor.setPower().\n\nVelocityControl uses encoder feedback and feedforward to hold a target speed.\n\nPositionControl drives to a target encoder position.\n\nSet the mode with motor.setRunMode(Motor.RunMode.VelocityControl).\n\nWe will touch on PID and feedforward tuning in Module 5: Control & Tuning."
+        }
+      ]
+    },
+    {
+      "title": "Try velocity control",
+      "content": [
+        {
+          "type": "text",
+          "value": "Set the run mode to VelocityControl.\n\nSet velocity PID coefficients: motor.setVeloCoefficients(0.05, 0.01, 0.31).\n\nSet feedforward: motor.setFeedforwardCoefficients(0.92, 0.47).\n\nThen schedule a SequentialCommandGroup: InstantCommand that calls motor.set(0.5) (50% of max velocity), WaitCommand(2000), InstantCommand that calls motor.set(0).\n\nThe motor holds constant speed regardless of battery level. Tuning these coefficients is covered in Module 5: Control & Tuning."
+        }
+      ],
+      "check": { "type": "elapsed_time", "minimumValue": 2.0 }
+    },
+    {
+      "title": "Built-in encoder",
+      "content": [
+        {
+          "type": "text",
+          "value": "MotorEx has a nested Encoder class accessed via motor.encoder.\n\nReset with motor.resetEncoder() — this uses an offset internally so the motor doesn't need to stop.\n\nGet position with motor.getCurrentPosition().\n\nGet velocity with motor.getVelocity() (corrected, overflow-safe).\n\nYou can also set the encoder to use another motor's encoder: motor.encoder = otherMotor.encoder."
+        }
+      ]
+    },
+    {
+      "title": "Other MotorEx features",
+      "content": [
+        {
+          "type": "text",
+          "value": "motor.setInverted(true) to reverse direction.\n\nmotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE) to brake or float when stopped.\n\nmotor.setCachingTolerance(0.01) for power caching on MotorEx — skips writes if the power change is below the threshold.\n\nmotor.motor gives you the underlying DcMotor if needed.\n\nmotor.stopAndResetEncoder() for a hardware-level reset."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "06_wait_command",
+  "title": "WaitCommand",
+  "starterOpMode": "WaitCommandOpMode.java",
+  "starterFiles": ["WaitCommandOpMode.java"],
+  "steps": [
+    {
+      "title": "WaitCommand pauses without blocking",
+      "content": [
+        {
+          "type": "text",
+          "value": "WaitCommand does nothing for a set number of milliseconds, then finishes.\n\nUnlike Thread.sleep(), it doesn't freeze the scheduler — other commands keep running while this one waits.\n\nThe duration is in milliseconds."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get your motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare a private DcMotor field.\n\nIn initialize(), get \"front_left_motor\" from hardwareMap."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Schedule InstantCommand and WaitCommand together",
+      "content": [
+        {
+          "type": "text",
+          "value": "In initialize(), schedule an InstantCommand that sets motor power to 0.5. Then schedule a WaitCommand with duration 2000. Then schedule an InstantCommand that sets power to 0.0.\n\nUse three separate schedule() calls. Start the OpMode."
+        }
+      ],
+      "check": { "type": "motor_power", "name": "front_left_motor", "target": 0.5, "tolerance": 0.1 }
+    },
+    {
+      "title": "What really happens",
+      "content": [
+        {
+          "type": "text",
+          "value": "All three commands get scheduled at the same time.\n\nThe InstantCommands finish on the first tick — so the motor starts and stops in a single tick.\n\nThe WaitCommand happily counts down in the background, but it doesn't control the ordering.\n\nTo make them run in order, you need SequentialCommandGroup — covered in an upcoming lesson."
+        }
+      ]
+    },
+    {
+      "title": "Why WaitCommand beats sleep",
+      "content": [
+        {
+          "type": "text",
+          "value": "Thread.sleep() would freeze the whole robot, stopping telemetry and disabling the stop button.\n\nWaitCommand only delays one command — the scheduler keeps running, and other commands still execute each tick.\n\nBut WaitCommand is most powerful inside a SequentialCommandGroup, which you'll learn soon."
+        }
+      ]
+    }
+  ]
+}

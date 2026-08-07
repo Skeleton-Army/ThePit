@@ -1,0 +1,62 @@
+{
+  "id": "10_motors",
+  "title": "Motor Behavior",
+  "starterOpMode": "MotorOpMode.java",
+  "starterFiles": ["MotorOpMode.java"],
+  "steps": [
+    {
+      "title": "Float vs Brake",
+      "content": [
+        {
+          "type": "text",
+          "value": "When you set motor power to 0, the motor can either coast to a stop or brake. This is called ZeroPowerBehavior. FLOAT means the motor spins freely when power is cut — it coasts. BRAKE means the motor actively resists spinning — it holds position.\n\nUse BRAKE for drivetrains (you want the robot to stop, not drift) and mechanisms that must hold position like arms and lifts. Use FLOAT for flywheels and shooting mechanisms that need to spin down naturally. You set it with: motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE)."
+        }
+      ]
+    },
+    {
+      "title": "Motor run modes",
+      "content": [
+        {
+          "type": "text",
+          "value": "Every DcMotor has a run mode that controls how it responds to setPower().\n\nThere are three:\n\nRUN_WITHOUT_ENCODER, RUN_USING_ENCODER, and RUN_TO_POSITION.\n\nYou set it with motor.setMode(). The default is RUN_WITHOUT_ENCODER."
+        }
+      ]
+    },
+    {
+      "title": "RUN_WITHOUT_ENCODER — open loop",
+      "content": [
+        {
+          "type": "text",
+          "value": "This is the default. setPower(0.5) sends roughly 50% of battery voltage to the motor.\n\nThere's no feedback — the actual speed depends on battery level, load, and friction.\n\nAt full battery, 0.5 is fast. Near the end of a match, it's noticeably slower.\n\nThis mode is fine for TeleOp driving where you constantly adjust with the gamepad, but unreliable for autonomous routines that need repeatable speeds."
+        }
+      ]
+    },
+    {
+      "title": "RUN_USING_ENCODER — why it's bad",
+      "content": [
+        {
+          "type": "text",
+          "value": "RUN_USING_ENCODER tries to maintain a target speed using the motor's encoder.\n\nHowever, the SDK's built-in velocity controller uses a basic proportional controller with fixed gains.\n\nIt doesn't account for battery voltage sag, mechanical load, or motor differences. The result is inconsistent — the same setPower() value produces different speeds as the battery drains.\n\nFor reliable velocity control, you should use your own PID implementation or the SolversLib Motor class (covered in the Command-Based module). We will touch on PID and feedforward in Module 5: Control & Tuning."
+        }
+      ]
+    },
+    {
+      "title": "RUN_TO_POSITION — why it's bad",
+      "content": [
+        {
+          "type": "text",
+          "value": "RUN_TO_POSITION tries to drive the motor to a specific encoder count. You set a target position, a power, and the SDK runs an internal PID loop.\n\nThe problem: the default PID gains are poorly tuned for FTC motors.\n\nThe motor often overshoots, oscillates, or stalls before reaching the target. There's no built-in feedforward.\n\nFor reliable position control, write your own PID loop or use SolversLib's Motor with PositionControl RunMode. We will touch on PID and feedforward in Module 5: Control & Tuning."
+        }
+      ]
+    },
+    {
+      "title": "When to use what",
+      "content": [
+        {
+          "type": "text",
+          "value": "For TeleOp driving: RUN_WITHOUT_ENCODER is fine — your thumb is the feedback controller.\n\nFor drivetrains: use BRAKE so the robot stops cleanly when you release the stick.\n\nFor flywheels and shooters: use FLOAT so the mechanism spins down naturally.\n\nFor autonomous driving with encoders: either write your own PID or use SolversLib's Motor class.\n\nThe SDK's built-in RUN_USING_ENCODER and RUN_TO_POSITION are not reliable enough for competitive robotics. Proper PID and feedforward control is covered in Module 5: Control & Tuning."
+        }
+      ]
+    }
+  ]
+}

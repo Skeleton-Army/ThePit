@@ -1,0 +1,36 @@
+{
+  "id": "04_telemetry",
+  "title": "Telemetry basics",
+  "starterOpMode": "TelemetryOpMode.java",
+  "starterFiles": ["TelemetryOpMode.java"],
+  "steps": [
+    {
+      "title": "What is telemetry?",
+      "content": [
+        {
+          "type": "text",
+          "value": "Telemetry displays live values on the Driver Station screen.\n\nUse telemetry.addData(\"label\", value) to add a line.\n\nThe SDK calls telemetry.update() automatically each loop iteration, so your data always shows."
+        }
+      ]
+    },
+    {
+      "title": "Show the runtime",
+      "content": [
+        {
+          "type": "text",
+          "value": "In loop(), write telemetry.addData(\"Runtime\", getRuntime());\n\ngetRuntime() returns the number of seconds since you pressed START. This confirms the OpMode is looping."
+        }
+      ]
+    },
+    {
+      "title": "Add more data",
+      "content": [
+        {
+          "type": "text",
+          "value": "Add another line: telemetry.addData(\"Status\", \"Running\");\n\nYou can display as many pieces of data as you want. Each addData() adds a line. No hardware needed."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    }
+  ]
+}

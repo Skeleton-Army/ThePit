@@ -72,7 +72,7 @@ public class LessonMenuScreen {
 
         Scene scene = new Scene(root, 520, 620);
         scene.setFill(Color.web(BG_BASE));
-        stage.setTitle("The Pit — FTC Learning");
+        stage.setTitle("The Pit - FTC Learning");
         stage.setScene(scene);
         stage.setResizable(true);
         stage.setMinWidth(400);
@@ -213,14 +213,12 @@ public class LessonMenuScreen {
         boolean unlocked   = progress.isLessonUnlocked(topics, topic, lesson);
         boolean inProgress = unlocked && !completed && progress.getCurrentStep(lesson.id) > 0;
 
-        // Status dot
         Circle dot = new Circle(6);
         if      (completed)   dot.setFill(Color.web(GREEN));
         else if (inProgress)  dot.setFill(Color.web(YELLOW));
         else if (unlocked)    dot.setFill(Color.web(ACCENT));
         else                  dot.setFill(Color.web(TEXT_MUTED));
 
-        // Status label (✓ / ▶ / empty / locked)
         String statusText;
         if      (completed)   statusText = "Done";
         else if (inProgress)  statusText = "In Progress";
@@ -241,16 +239,28 @@ public class LessonMenuScreen {
         HBox row = new HBox(10, dot, statusLbl, titleLbl);
         row.setAlignment(Pos.CENTER_LEFT);
         row.setPadding(new Insets(8, 10, 8, 10));
-        row.setStyle("-fx-background-color: transparent; -fx-background-radius: 7;");
+        row.setStyle("-fx-background-color: transparent; -fx-background-radius: 7; -fx-cursor: hand;");
 
-        if (unlocked) {
-            row.setStyle("-fx-background-color: transparent; -fx-background-radius: 7; -fx-cursor: hand;");
-            row.setOnMouseEntered(e -> row.setStyle(
-                    "-fx-background-color: " + BG_SURFACE + "; -fx-background-radius: 7; -fx-cursor: hand;"));
-            row.setOnMouseExited(e -> row.setStyle(
-                    "-fx-background-color: transparent; -fx-background-radius: 7; -fx-cursor: hand;"));
-            row.setOnMouseClicked(e -> onSelected.accept(lesson));
-        }
+        row.setOnMouseEntered(e -> row.setStyle(
+                "-fx-background-color: " + BG_SURFACE + "; -fx-background-radius: 7; -fx-cursor: hand;"));
+        row.setOnMouseExited(e -> row.setStyle(
+                "-fx-background-color: transparent; -fx-background-radius: 7; -fx-cursor: hand;"));
+        row.setOnMouseClicked(e -> {
+            if (unlocked) {
+                onSelected.accept(lesson);
+            } else {
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Skip ahead?");
+                confirm.setHeaderText("You haven't completed the previous lesson.");
+                confirm.setContentText("Are you sure you want to skip to \"" + lesson.title + "\"? You can come back to earlier lessons later.");
+                confirm.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        progress.markCompleted(lesson.id);
+                        onSelected.accept(lesson);
+                    }
+                });
+            }
+        });
 
         return row;
     }

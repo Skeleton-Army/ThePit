@@ -1,0 +1,47 @@
+{
+  "id": "10_run_command",
+  "title": "RunCommand",
+  "starterOpMode": "RunCommandOpMode.java",
+  "starterFiles": ["RunCommandOpMode.java"],
+  "steps": [
+    {
+      "title": "A command that never finishes",
+      "content": [
+        {
+          "type": "text",
+          "value": "RunCommand runs every tick and never finishes on its own.\n\nIt's ideal for TeleOp driving — the command runs continuously, reading the gamepad each tick and updating motor power.\n\nIt only ends when another command interrupts it."
+        }
+      ]
+    },
+    {
+      "title": "Declare and get four motors",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare four private DcMotor fields: frontLeft, frontRight, backLeft, backRight.\n\nIn initialize(), get all four from hardwareMap."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Create a RunCommand for mecanum drive",
+      "content": [
+        {
+          "type": "text",
+          "value": "Create a RunCommand with a lambda.\n\nInside, read gamepad1 sticks and compute the mecanum drive formula you learned in the gamepad input lesson: forward = -left_stick_y, strafe = left_stick_x, turn = right_stick_x. Apply it to all four motors.\n\nUse schedule() to run it."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "Drive the robot",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode and use the virtual gamepad. Left stick controls forward/back and strafe. Right stick controls turn. RunCommand drives forever — it runs every tick until the OpMode stops.\n\nNext you'll learn how to bind buttons to trigger commands."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    }
+  ]
+}

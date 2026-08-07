@@ -1,0 +1,63 @@
+{
+  "id": "03_hardware_map",
+  "title": "Reading the hardware map",
+  "starterOpMode": "HardwareMapOpMode.java",
+  "starterFiles": ["HardwareMapOpMode.java"],
+  "steps": [
+    {
+      "title": "What is a DC motor?",
+      "content": [
+        {
+          "type": "text",
+          "value": "A DC motor spins a shaft when you apply power.\n\nIn FTC, each motor is controlled by a motor controller that translates your setPower() commands into electrical current.\n\nPower values range from -1.0 (full reverse) to 0.0 (stopped) to 1.0 (full forward).\n\nMost motors also have built-in encoders that count how far they've turned."
+        }
+      ]
+    },
+    {
+      "title": "What is the hardwareMap?",
+      "content": [
+        {
+          "type": "text",
+          "value": "The hardwareMap connects your code to the robot's devices.\n\nYou ask it for motors, sensors, and servos by name."
+        }
+      ]
+    },
+    {
+      "title": "Where do the names come from?",
+      "content": [
+        {
+          "type": "text",
+          "value": "Device names are set in the robot configuration, which you create in the Driver Station app or by editing an XML file.\n\nCommon motor names include \"front_left_motor\", \"front_right_motor\", \"back_left_motor\", \"back_right_motor\".\n\nThe name must match exactly."
+        }
+      ]
+    },
+    {
+      "title": "Declare a field for your motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "At the class level, add: private DcMotor motor;\n\nFields declared with private are only accessible within this class. This is good practice."
+        }
+      ]
+    },
+    {
+      "title": "Get the motor",
+      "content": [
+        {
+          "type": "text",
+          "value": "Inside init(), type motor = hardwareMap.get(DcMotor.class, \"front_left_motor\");\n\nThe first argument is the type of device, the second is the name from the config. Assign it to the motor field."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "What just happened?",
+      "content": [
+        {
+          "type": "text",
+          "value": "The hardware map found a motor matching that name and gave you a reference.\n\nYou can now control it from anywhere in your OpMode using the motor variable.\n\nYou'll use this same pattern for every device: motors, sensors, servos."
+        }
+      ]
+    }
+  ]
+}
