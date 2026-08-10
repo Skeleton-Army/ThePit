@@ -1,0 +1,65 @@
+{
+  "id": "07_flywheel_tuning",
+  "title": "Flywheel PID + Feedforward Tuning",
+  "starterOpMode": "FlywheelTuningOpMode.java",
+  "starterFiles": ["FlywheelTuningOpMode.java", "Flywheel.java", "FlywheelConfig.java"],
+  "steps": [
+    {
+      "title": "The flywheel challenge",
+      "content": [
+        {
+          "type": "text",
+          "value": "A flywheel is a spinning mass used to launch game pieces. The goal: spin a GoBILDA 6000 RPM motor at full speed and hold it.\n\nOpen FlywheelConfig.java. All tuning constants are defined here: motor type, target RPM, and PID/feedforward coefficients — all set to zero.\n\nFlywheel.java reads from FlywheelConfig and uses voltage compensation: motor.set(14.0 / voltage) cancels battery sag so the flywheel runs the same speed regardless of battery level.\n\nFlywheelTuningOpMode.java displays the target vs actual RPM in telemetry.\n\nUse the Programming Board robot config for a single motor named \"motor\"."
+        }
+      ]
+    },
+    {
+      "title": "Why FlywheelConfig?",
+      "content": [
+        {
+          "type": "text",
+          "value": "A config file is a single source of truth for your constants.\n\nInstead of magic numbers scattered across your code — kP=0.15 in one file, target=6000 in another, motor type hidden in a constructor — you put everything in one place.\n\nBenefits:\n\nOne place to tune — change a number in FlywheelConfig, rebuild, done.\n\nNo duplicates — if targetRPM is used in telemetry, calculations, and display, you reference the constant, not copy the number.\n\nSelf-documenting — someone reading FlywheelConfig immediately sees what's tunable and what hardware you're using.\n\nCompetition-ready — after tuning, hardcode your final values here and don't touch them again."
+        }
+      ]
+    },
+    {
+      "title": "Step 1: Find kS — overcome static friction",
+      "content": [
+        {
+          "type": "text",
+          "value": "kS is the minimum voltage needed to just barely start the motor spinning, in ticks per second.\n\nThe feedforward output is in ticks/sec and gets divided by the motor's max ticks/sec to become a power value. So kS = 0.1 contributes only 0.1/2800 = 0.000036 power — invisible.\n\nIn FlywheelConfig, keep kV, kP, kI, kD at 0.\n\nIncrease kS from 0. Start at 100. Increase in steps of 50. Rebuild each time.\n\nWatch the RPM telemetry. Stop when the flywheel just barely starts to spin — RPM should be very low, 50-200.\n\nToo high: the flywheel spins faster than needed from static friction alone.\n\nToo low: the motor doesn't move at all."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "Step 2: Find kV — map velocity to power",
+      "content": [
+        {
+          "type": "text",
+          "value": "kV converts target velocity to feedforward output, in ticks per second per ticks/sec.\n\nKeep your kS value. Keep PID at 0.\n\nIncrease kV. Start at 0.0001. Target velocity at full output is ~2800 ticks/sec, so kV × 2800 should give meaningful power.\n\nWith kV=0.00015: ff = kS + 0.00015 × 2800 = kS + 0.42. That's reasonable power.\n\nIf RPM is too low, increase kV. Too high, decrease kV.\n\nGoal: feedforward alone (kS + kV, no PID) gets within ~500 RPM of target."
+        }
+      ],
+      "check": { "type": "flywheel_rpm", "name": "motor", "minimumValue": 500, "maximumValue": 7000 }
+    },
+    {
+      "title": "Step 3: Tune kP — close the gap with PID",
+      "content": [
+        {
+          "type": "text",
+          "value": "Now add kP. Feedforward got you close; PID fine-tunes.\n\nStart with kP = 0.001. Increase until RPM oscillates around the target, then back off.\n\nThe oscillation should stay within ~50 RPM of the target.\n\nGood: RPM holds steady at target with minor correction.\n\nToo high kP: wild swings, audible \"hunting\". Too low: drifts slowly.\n\nOptionally add a tiny kD (0.0001) to dampen bounce and kI (0.00001) to eliminate steady offset. But kS + kV + kP alone should get you very close."
+        }
+      ],
+      "check": { "type": "flywheel_rpm", "name": "motor", "minimumValue": 5500, "maximumValue": 6500 }
+    },
+    {
+      "title": "Tuning complete",
+      "content": [
+        {
+          "type": "text",
+          "value": "The tuning order matters:\n\nkS first: without breaking friction, nothing else works.\n\nkV second: feedforward handles most of the work, so PID's job is small.\n\nkP last: PID fills the remaining gap.\n\nYour FlywheelConfig now holds the correct constants. In a real robot, you'd tune once, save these values, and never touch them again.\n\nThe periodic() method uses motor.set(14.0 / voltage) to compensate for battery sag — the same formula from the voltage compensation lesson. Feedforward handles known physics, voltage compensation handles battery drain, PID handles the rest."
+        }
+      ]
+    }
+  ]
+}

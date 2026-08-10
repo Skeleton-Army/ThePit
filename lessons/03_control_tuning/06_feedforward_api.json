@@ -1,0 +1,65 @@
+{
+  "id": "06_feedforward_api",
+  "title": "SolversLib Motor PID + Feedforward",
+  "starterOpMode": null,
+  "starterFiles": [],
+  "steps": [
+    {
+      "title": "MotorEx's built-in controller",
+      "content": [
+        {
+          "type": "text",
+          "value": "Motor has a built-in PIDController and SimpleMotorFeedforward. You don't need to create them separately.\n\nConfigure them with:\n\nmotor.setVeloCoefficients(kP, kI, kD);\nmotor.setFeedforwardCoefficients(kS, kV);\n\nWhen you call motor.setRunMode(RunMode.VelocityControl), Motor uses these coefficients automatically.\n\nWhen you call motor.set(targetFraction), it calculates target velocity from the fraction, runs PID + feedforward, and sets the underlying motor power.\n\nThis is the same system you'd build by hand — just pre-packaged."
+        }
+      ]
+    },
+    {
+      "title": "The actual API wiring",
+      "content": [
+        {
+          "type": "text",
+          "value": "Step by step to use velocity control:\n\n1. Create the motor: motor = new Motor(hardwareMap, \"motor\");\n\n2. Set the run mode: motor.setRunMode(RunMode.VelocityControl);\n\n3. Set coefficients: motor.setVeloCoefficients(kP, kI, kD); and motor.setFeedforwardCoefficients(kS, kV);\n\n4. Drive: motor.set(0.5) means \"run at 50% of max velocity\"\n\n5. Read speed: motor.getCorrectedVelocity() returns actual velocity in ticks/sec\n\nThe controller runs internally. You just need the right constants."
+        }
+      ]
+    },
+    {
+      "title": "Code-reading: which wiring is correct?",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "To enable velocity control with PID + feedforward on a Motor, which sequence is correct?",
+          "options": [
+            "A) setRunMode(VelocityControl) → setVeloCoefficients(...) → setFeedforwardCoefficients(...) → set(target)",
+            "B) set(target) → setRunMode(VelocityControl) → setVeloCoefficients(...) → setFeedforwardCoefficients(...)",
+            "C) setVeloCoefficients(...) → setRunMode(VelocityControl) → set(target) → setFeedforwardCoefficients(...)"
+          ],
+          "correctIndex": 0
+        }
+      ]
+    },
+    {
+      "title": "Code-reading: feedforward independence",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Why does feedforward take target velocity rather than current velocity?",
+          "options": [
+            "It predicts what power should be needed for the target speed, regardless of current error.",
+            "It needs to know how far off we are to compute a correction.",
+            "It's a bug — it should use current velocity."
+          ],
+          "correctIndex": 0
+        }
+      ]
+    },
+    {
+      "title": "The tuning relationship",
+      "content": [
+        {
+          "type": "text",
+          "value": "With good feedforward, PID's job is small: just correct model inaccuracies and reject disturbances.\n\nThe P gain can be lower, which means less oscillation. The I gain can be lower, which means less windup risk.\n\nA well-tuned feedforward makes the whole system faster, more stable, and more repeatable.\n\nIn the next lesson, you'll tune these constants on a real flywheel."
+        }
+      ]
+    }
+  ]
+}

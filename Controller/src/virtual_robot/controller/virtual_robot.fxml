@@ -5,6 +5,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
@@ -25,7 +26,8 @@
 
    <!-- ── Right Panel: Controls ────────────────────────────────── -->
    <right>
-      <VBox fx:id="vbxRight" styleClass="sidebar-right" alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
+       <ScrollPane fitToWidth="true" style="-fx-background: #181825; -fx-background-color: #181825;" hbarPolicy="NEVER">
+          <VBox fx:id="vbxRight" styleClass="sidebar-right" alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
          <children>
 
             <!-- ── Robot Select ── -->
@@ -76,11 +78,13 @@
 
          </children>
       </VBox>
+       </ScrollPane>
    </right>
 
    <!-- ── Left Panel: Game & Simulation ────────────────────────── -->
    <left>
-      <VBox styleClass="sidebar-left" alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
+       <ScrollPane fitToWidth="true" style="-fx-background: #181825; -fx-background-color: #181825;" hbarPolicy="NEVER">
+          <VBox styleClass="sidebar-left" alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
          <children>
 
             <!-- ── Game ── -->
@@ -109,27 +113,35 @@
                   <Label fx:id="lblRunTime" text="0.00" styleClass="value-label" />
                   <Label text="s" styleClass="small-label" />
                </children>
-               <VBox.margin><Insets bottom="12.0" /></VBox.margin>
+               <VBox.margin><Insets bottom="8.0" /></VBox.margin>
             </HBox>
 
-            <!-- ── Motor Realism ── -->
-            <Label text="DRIVE MOTOR REALISM" styleClass="section-heading" />
-            <Separator styleClass="section-divider" />
-            <Label text="Random Error" styleClass="control-label">
-               <VBox.margin><Insets top="6.0" /></VBox.margin>
-            </Label>
-            <Slider fx:id="sldRandomMotorError" blockIncrement="0.05" majorTickUnit="0.05" max="0.25" minorTickCount="0" />
-            <Label text="Systematic Error" styleClass="control-label">
-               <VBox.margin><Insets top="4.0" /></VBox.margin>
-            </Label>
-            <Slider fx:id="sldSystematicMotorError" blockIncrement="0.02" majorTickUnit="0.02" max="0.1" minorTickCount="0" />
-            <Label text="Inertia" styleClass="control-label">
-               <VBox.margin><Insets top="4.0" /></VBox.margin>
-            </Label>
-            <Slider fx:id="sldMotorInertia" blockIncrement="0.1" majorTickUnit="0.1" max="2.0" minorTickCount="0" />
+             <!-- ── Motor Realism ── -->
+             <Label text="DRIVE MOTOR REALISM" styleClass="section-heading" />
+             <Separator styleClass="section-divider" />
+             <Label text="Random Error" styleClass="control-label">
+                <VBox.margin><Insets top="4.0" /></VBox.margin>
+             </Label>
+             <Slider fx:id="sldRandomMotorError" blockIncrement="0.05" majorTickUnit="0.05" max="0.25" minorTickCount="0" />
+             <Label text="Systematic Error" styleClass="control-label">
+                <VBox.margin><Insets top="2.0" /></VBox.margin>
+             </Label>
+             <Slider fx:id="sldSystematicMotorError" blockIncrement="0.02" majorTickUnit="0.02" max="0.1" minorTickCount="0" />
+             <Label text="Inertia" styleClass="control-label">
+                <VBox.margin><Insets top="2.0" /></VBox.margin>
+             </Label>
+             <Slider fx:id="sldMotorInertia" blockIncrement="0.1" majorTickUnit="0.1" max="2.0" minorTickCount="0" />
+
+              <!-- ── Battery Voltage ── -->
+              <Label text="BATTERY VOLTAGE" styleClass="section-heading">
+                 <VBox.margin><Insets top="6.0" /></VBox.margin>
+              </Label>
+              <Separator styleClass="section-divider" />
+              <Slider fx:id="sldVoltage" blockIncrement="0.1" majorTickUnit="0.5" max="14.0" min="10.0" minorTickCount="0" value="14.0" />
 
          </children>
       </VBox>
+       </ScrollPane>
    </left>
 
 </BorderPane>

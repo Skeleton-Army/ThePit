@@ -162,11 +162,6 @@ public class SwerveBot extends VirtualBot {
         for (int i = 0; i < 4; i++) {
             motors[i].update(millis);
             double wSpd = motors[i].getVelocity(AngleUnit.RADIANS) * wheelRadius;
-            boolean mtRev = MOTOR_TYPE.REVERSED;
-            boolean dirRev = motors[i].getDirection() == DcMotorSimple.Direction.REVERSE;
-            if (i<2 && (mtRev && dirRev || !mtRev && !dirRev) || i>=2 && (mtRev && !dirRev || !mtRev && dirRev)) {
-                wSpd = -wSpd;
-            }
             steerEncoders[i].update(Math.toRadians(crServos[i].updatePositionDegrees(millis)), millis);
             double steer = Math.toRadians(crServos[i].getPositionDegrees());
             Vector2 w = new Vector2(-wSpd * Math.sin(steer+headingRadians), wSpd * Math.cos(steer+headingRadians));

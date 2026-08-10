@@ -72,6 +72,7 @@ public class VirtualRobotController {
     @FXML private Slider sldRandomMotorError;
     @FXML private Slider sldSystematicMotorError;
     @FXML private Slider sldMotorInertia;
+    @FXML private Slider sldVoltage;
     @FXML private TextArea txtTelemetry;
     @FXML private CheckBox checkBoxGamePad1;
     @FXML private CheckBox checkBoxGamePad2;
@@ -185,6 +186,9 @@ public class VirtualRobotController {
         sldRandomMotorError.valueProperty().addListener(sliderChangeListener);
         sldSystematicMotorError.valueProperty().addListener(sliderChangeListener);
         sldMotorInertia.valueProperty().addListener(sliderChangeListener);
+
+        sldVoltage.valueProperty().addListener((obs, oldVal, newVal) ->
+                virtual_robot.lessons.SimState.getInstance().setDynamicVoltage(newVal.doubleValue()));
 
         if (Config.USE_VIRTUAL_GAMEPAD){
             vbxRight.getChildren().remove(hbxGamePads);

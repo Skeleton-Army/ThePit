@@ -44,7 +44,11 @@ public class ThePitApplication extends Application {
 
             primaryStage.setTitle("Virtual Robot - The Pit");
             primaryStage.setScene(new Scene(root));
-            primaryStage.setResizable(false);
+            primaryStage.setResizable(true);
+            primaryStage.setMinWidth(1100);
+            primaryStage.setMinHeight(700);
+            primaryStage.setWidth(1300);
+            primaryStage.setHeight(850);
             primaryStage.show();
             controllerHandle.setConfig(null);
 

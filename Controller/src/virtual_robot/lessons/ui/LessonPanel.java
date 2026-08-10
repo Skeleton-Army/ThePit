@@ -20,6 +20,7 @@ import virtual_robot.lessons.*;
 
 import java.awt.Desktop;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -41,6 +42,9 @@ public class LessonPanel {
     private ProgressBar progressBar;
 
     private AnimationTimer checkTimer;
+
+    private final List<Boolean> quizPassed = new ArrayList<>();
+    private int quizRenderIndex;
 
     private static final int PANEL_WIDTH  = 400;
     private static final int PANEL_HEIGHT = 740;
@@ -284,18 +288,28 @@ public class LessonPanel {
         progressBar.setProgress(frac);
 
         contentArea.getChildren().clear();
+        quizPassed.clear();
+        quizRenderIndex = 0;
         for (ContentBlock block : step.content) {
+            if (block.type == ContentBlock.Type.QUIZ) {
+                quizPassed.add(false);
+            }
             contentArea.getChildren().add(renderBlock(block));
         }
 
         boolean hasCheck = step.check != null;
+        boolean hasQuiz = !quizPassed.isEmpty();
         backButton.setVisible(stepIndex > 0);
         backButton.setManaged(stepIndex > 0);
         continueButton.setVisible(true);
         continueButton.setManaged(true);
         continueButton.setText("Next →");
 
-        setStatus(false, hasCheck ? "Complete the task or click Next..." : "Read and continue...");
+        if (hasQuiz) {
+            setStatus(false, "Answer the quiz question to continue...");
+        } else {
+            setStatus(false, hasCheck ? "Complete the task or click Next..." : "Read and continue...");
+        }
     }
 
     private Node renderBlock(ContentBlock block) {
@@ -363,6 +377,70 @@ public class LessonPanel {
                 });
                 return link;
             }
+            case QUIZ: {
+                int quizIdx = quizRenderIndex;
+                quizRenderIndex++;
+                int correctIdx = block.correctIndex;
+
+                VBox quizBox = new VBox(8);
+                quizBox.setStyle(
+                        "-fx-background-color: " + BG_MANTLE + ";" +
+                        "-fx-padding: 12;" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-border-color: " + BG_SURFACE + ";" +
+                        "-fx-border-radius: 8;");
+
+                Label questionLbl = new Label("Q: " + block.question);
+                questionLbl.setWrapText(true);
+                questionLbl.setStyle("-fx-text-fill: " + TEXT_MAIN + "; -fx-font-size: 13; -fx-font-weight: bold;");
+
+                ToggleGroup group = new ToggleGroup();
+                VBox optionsBox = new VBox(4);
+                for (int i = 0; i < block.options.size(); i++) {
+                    RadioButton rb = new RadioButton(block.options.get(i));
+                    rb.setToggleGroup(group);
+                    rb.setStyle("-fx-text-fill: " + TEXT_MAIN + "; -fx-font-size: 12;");
+                    optionsBox.getChildren().add(rb);
+                }
+
+                Label feedbackLbl = new Label();
+                feedbackLbl.setStyle("-fx-text-fill: " + YELLOW + "; -fx-font-size: 12;");
+                feedbackLbl.setVisible(false);
+
+                Button submitBtn = new Button("Submit");
+                styleButton(submitBtn, false);
+                submitBtn.setOnAction(ev -> {
+                    RadioButton selected = (RadioButton) group.getSelectedToggle();
+                    if (selected == null) {
+                        feedbackLbl.setVisible(true);
+                        feedbackLbl.setText("Select an answer first.");
+                        feedbackLbl.setStyle("-fx-text-fill: " + YELLOW + "; -fx-font-size: 12;");
+                        return;
+                    }
+                    int selectedIdx = block.options.indexOf(selected.getText());
+                    if (selectedIdx == correctIdx) {
+                        feedbackLbl.setVisible(true);
+                        feedbackLbl.setText("Correct!");
+                        feedbackLbl.setStyle("-fx-text-fill: " + GREEN + "; -fx-font-size: 12;");
+                        submitBtn.setDisable(true);
+                        group.getToggles().forEach(t -> ((RadioButton) t).setDisable(true));
+                        quizBox.setStyle(quizBox.getStyle().replace(
+                                "-fx-border-color: " + BG_SURFACE + ";",
+                                "-fx-border-color: " + GREEN + ";"));
+                        if (quizIdx >= 0 && quizIdx < quizPassed.size()) {
+                            quizPassed.set(quizIdx, true);
+                        }
+                        checkAllQuizzes();
+                    } else {
+                        feedbackLbl.setVisible(true);
+                        feedbackLbl.setText("Incorrect. Try again.");
+                        feedbackLbl.setStyle("-fx-text-fill: " + RED + "; -fx-font-size: 12;");
+                    }
+                });
+
+                quizBox.getChildren().addAll(questionLbl, optionsBox, submitBtn, feedbackLbl);
+                return quizBox;
+            }
         }
         return new Label("?");
     }
@@ -380,19 +458,18 @@ public class LessonPanel {
 
                 if (stepIndex >= lesson.steps.size()) return;
                 LessonStep step = lesson.steps.get(stepIndex);
+
+                if (!allQuizzesPassed()) {
+                    setStatus(false, "Answer the quiz question to continue...");
+                    return;
+                }
+
                 if (step.check == null) {
                     setStatus(false, "Read and continue...");
                     return;
                 }
                 boolean done = CheckEvaluator.evaluate(step.check, SimState.getInstance());
                 setStatus(done, done ? "✓ Complete!" : "Waiting...");
-
-                if (done) {
-                    stop();
-                    PauseTransition pause = new PauseTransition(Duration.millis(600));
-                    pause.setOnFinished(e -> advance());
-                    pause.play();
-                }
             }
         };
         checkTimer.start();
@@ -456,6 +533,18 @@ public class LessonPanel {
         completionDot.setFill(Color.web(done ? GREEN : BG_OVERLAY));
         completionLabel.setText(text);
         completionLabel.setStyle("-fx-text-fill: " + (done ? GREEN : TEXT_SUB) + "; -fx-font-size: 12;");
+    }
+
+    private boolean allQuizzesPassed() {
+        for (boolean p : quizPassed) { if (!p) return false; }
+        return true;
+    }
+
+    private void checkAllQuizzes() {
+        if (allQuizzesPassed()) {
+            boolean hasCheck = lesson.steps.get(stepIndex).check != null;
+            setStatus(false, hasCheck ? "Quiz passed! Complete the task or click Next..." : "Quiz passed! Click Next to continue...");
+        }
     }
 
     private void styleButton(Button btn, boolean primary) {

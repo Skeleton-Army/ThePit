@@ -57,6 +57,37 @@ public class CheckEvaluator {
             case ELAPSED_TIME: {
                 return state.getElapsedTime() >= check.minimumValue;
             }
+
+            case FLYWHEEL_RPM: {
+                Map<String, Double> velocities = state.getMotorVelocities();
+                if (!velocities.containsKey(check.name)) return false;
+                double rpm = velocities.get(check.name) * 60.0 / 1120.0;
+                double lo = check.minimumValue;
+                double hi = check.maximumValue;
+                return lo <= rpm && rpm <= hi;
+            }
+
+            case HEADING_SETTLE: {
+                double heading = state.getRobotHeadingDegrees();
+                double target = check.target;
+                double diff = Math.abs(heading - target);
+                if (diff > 180.0) diff = 360.0 - diff;
+                boolean inBand = diff <= check.tolerance;
+                if (!inBand) {
+                    state.setHeadingSettleStart(state.getElapsedTime());
+                    state.setHeadingInTolerance(false);
+                    return false;
+                }
+                if (!state.isHeadingInTolerance()) {
+                    state.setHeadingSettleStart(state.getElapsedTime());
+                    state.setHeadingInTolerance(true);
+                }
+                return state.getElapsedTime() - state.getHeadingSettleStart() >= check.minimumValue;
+            }
+
+            case LOOP_TIME: {
+                return state.getLoopTimeNanos() > 0 && state.getLoopTimeNanos() <= check.maximumValue;
+            }
         }
         return false;
     }

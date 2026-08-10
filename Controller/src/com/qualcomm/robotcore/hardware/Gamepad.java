@@ -80,6 +80,9 @@ public class Gamepad {
     public volatile boolean right_bumper = false;
     public volatile boolean left_stick_button = false;
     public volatile boolean right_stick_button = false;
+    public volatile boolean touchpad = false;
+    public volatile boolean touchpad_finger_1 = false;
+    public volatile boolean touchpad_finger_2 = false;
     public volatile float left_trigger = 0;
     public volatile float right_trigger = 0;
 
@@ -147,6 +150,9 @@ public class Gamepad {
         right_bumper = false;
         left_stick_button = false;
         right_stick_button = false;
+        touchpad = false;
+        touchpad_finger_1 = false;
+        touchpad_finger_2 = false;
         left_trigger = 0;
         right_trigger = 0;
     }

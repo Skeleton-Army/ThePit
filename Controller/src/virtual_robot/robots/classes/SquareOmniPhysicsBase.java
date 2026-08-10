@@ -170,9 +170,6 @@ public abstract class SquareOmniPhysicsBase extends VirtualBot {
         for (int i=0; i<4; i++){
             motors[i].update(millis);
             wSpd[i] = motors[i].getVelocity(AngleUnit.RADIANS) * gearRatioWheel * wheelCircumference  / (2.0 * Math.PI);
-            boolean mtRev = MOTOR_TYPE.REVERSED;
-            boolean dirRev = motors[i].getDirection() == DcMotorSimple.Direction.REVERSE;
-            if (mtRev != dirRev) wSpd[i] = -wSpd[i];
         }
 
         /*

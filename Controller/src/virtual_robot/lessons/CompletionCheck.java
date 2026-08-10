@@ -5,7 +5,8 @@ import java.util.Map;
 public class CompletionCheck {
     public enum Type {
         OPMODE_RUNNING, HARDWARE_MAPPED, MOTOR_POWER, ENCODER_TICKS, SERVO_POSITION,
-        ROBOT_POSITION, HEADING, VOLTAGE, SENSOR_VALUE, ELAPSED_TIME
+        ROBOT_POSITION, HEADING, VOLTAGE, SENSOR_VALUE, ELAPSED_TIME,
+        FLYWHEEL_RPM, HEADING_SETTLE, LOOP_TIME
     }
 
     public final Type type;
@@ -46,6 +47,9 @@ public class CompletionCheck {
             case "voltage":          type = Type.VOLTAGE;         break;
             case "sensor_value":     type = Type.SENSOR_VALUE;    break;
             case "elapsed_time":     type = Type.ELAPSED_TIME;    break;
+            case "flywheel_rpm":     type = Type.FLYWHEEL_RPM;    break;
+            case "heading_settle":   type = Type.HEADING_SETTLE;  break;
+            case "loop_time":        type = Type.LOOP_TIME;       break;
             default: throw new IllegalArgumentException("Unknown check type: " + typeStr);
         }
         String name    = (String) map.getOrDefault("name", "");

@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 import java.util.Random;
 
+import virtual_robot.lessons.SimState;
+
 /**
  * Implementation of the DcMotor interface.
  */
@@ -211,7 +213,8 @@ public class DcMotorImpl implements DcMotor {
             double actualTargetSpeed = COEFF_PROPORTIONATE
                     * (double)(actualTargetPosition - (actualPosition - encoderBasePosition))
                     / MOTOR_TYPE.MAX_TICKS_PER_SECOND;
-            double absPower = Math.abs(power);
+            double voltageScale = SimState.getInstance().getDynamicVoltage() / 14.0;
+            double absPower = Math.abs(power) * voltageScale;
             actualTargetSpeed = Math.max(-absPower, Math.min(actualTargetSpeed, absPower));
             tentativeActualSpeedChange = (1.0 - effectiveInertia) * (actualTargetSpeed - actualSpeed);
             avgActualSpeed = (actualSpeed + tentativeActualSpeedChange / 2.0)
@@ -219,7 +222,8 @@ public class DcMotorImpl implements DcMotor {
             actualSpeedChange = 2.0 * (avgActualSpeed - actualSpeed);
             tentativeActualSpeed = actualSpeed + actualSpeedChange;
         } else {
-            double actualPower = rev? -power : power;
+            double voltageScale = SimState.getInstance().getDynamicVoltage() / 14.0;
+            double actualPower = (rev ? -power : power) * voltageScale;
             tentativeActualSpeedChange = (1.0 - effectiveInertia) * (actualPower - actualSpeed);
             avgActualSpeed = (actualSpeed + tentativeActualSpeedChange / 2.0)
                     * (1.0 + systematicErrorFrac + randomErrorFrac * random.nextGaussian());

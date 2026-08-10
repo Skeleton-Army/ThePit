@@ -1,0 +1,63 @@
+{
+  "id": "04_pid_loop",
+  "title": "PID Turn-to-Heading",
+  "starterOpMode": "PidTurnOpMode.java",
+  "starterFiles": ["PidTurnOpMode.java"],
+  "steps": [
+    {
+      "title": "A working PID controller",
+      "content": [
+        {
+          "type": "text",
+          "value": "Your starter file contains a complete PID turn-to-heading controller. The code is already wired — P, I, D, angle wrapping, and motor output.\n\nIt starts with kP=0.02 and target heading set to 90 degrees. The robot will turn right immediately when you press START.\n\nIt uses CommandOpMode with MotorEx wrappers for all four drive motors. D-pad left/right are bound via GamepadButton.whenPressed() to shift the target by 90 degrees.\n\nRun it now. The robot should turn to face 90 degrees and stop.\n\nYour job is not to write the PID code — it's to understand how each part works, then tune the constants."
+        }
+      ]
+    },
+    {
+      "title": "Error and angle wrapping",
+      "content": [
+        {
+          "type": "text",
+          "value": "Look at these three lines in the RunCommand:\n\ndouble error = targetHeading - heading;\n\nwhile (error > 180) error -= 360;\nwhile (error < -180) error += 360;\n\nError is how far off we are. Positive error means turn right, negative means turn left.\n\nBut heading wraps around at +/-180. If the robot faces 170 and the target is -170, the real error is 20 degrees — not 340.\n\nThe while loops wrap error into [-180, 180]. This guarantees the robot always takes the shortest turn.\n\nWithout wrapping, the robot would spin 340 degrees to reach a target 20 degrees away."
+        }
+      ]
+    },
+    {
+      "title": "P: Proportional — the main correction",
+      "content": [
+        {
+          "type": "text",
+          "value": "Find this line:\n\ndouble power = kP * error + kI * integral + kD * derivative;\n\nThe P term is kP * error. It produces output proportional to how far off you are.\n\nAt 90 degrees of error with kP=0.1: power = 0.1 * 90 = 9.0 (motor caps at 1.0).\n\nAt 5 degrees: power = 0.1 * 5 = 0.5 (gentle correction as you approach).\n\nThe motor's setPower() clamps to [-1.0, 1.0] internally, so no explicit clamp is needed.\n\nTry tuning: increase kP. Higher kP means faster turns but more overshoot. Find the value where the robot oscillates, then back off to ~70% of that."
+        }
+      ]
+    },
+    {
+      "title": "I: Integral — fixes the last few degrees",
+      "content": [
+        {
+          "type": "text",
+          "value": "Find these lines:\n\nintegral += error;\nif (Math.signum(error) != Math.signum(prevError)) { integral = 0; }\n\nThe I term is kI * integral. It accumulates error over time.\n\nIf the robot is stuck at 2 degrees, P alone (0.01 * 2 = 0.02) may be too weak to overcome friction. The integral builds up: 2 + 2 + 2 + ... until the accumulated correction is large enough to push through.\n\nThe signum check is the windup guard. When error crosses zero (we overshot), the integral resets. This prevents the accumulated error from fighting against our correction on the other side.\n\nTry tuning: set kI to 0.001. Watch the robot eliminate that last 1-2 degrees of steady-state error."
+        }
+      ]
+    },
+    {
+      "title": "D: Derivative — dampens the approach",
+      "content": [
+        {
+          "type": "text",
+          "value": "Find these lines:\n\ndouble derivative = error - prevError;\nprevError = error;\n\nThe D term is kD * derivative. It measures how fast the error is changing.\n\nWhen the robot approaches the target quickly, error shrinks fast, making derivative negative. This subtracts from the output — a braking force proportional to approach speed.\n\nprevError is saved BEFORE the new error is computed. derivative = currentError - previousError tells us the rate of change between ticks.\n\nTry tuning: set kD to 0.001. Increase it until the robot approaches smoothly without bouncing. Too much D will make the approach sluggish."
+        }
+      ]
+    },
+    {
+      "title": "Tune it",
+      "content": [
+        {
+          "type": "text",
+          "value": "Now tune the full controller:\n\n1. Set kI = 0 and kD = 0. Increase kP until the robot oscillates around the target, then set kP to ~70% of that value.\n\n2. Increase kD until overshoot disappears and the robot settles cleanly without bouncing.\n\n3. Increase kI just enough to eliminate any remaining steady-state error.\n\nThe robot should settle within 2 degrees of target in under 1.5 seconds. Try different targets with d-pad to verify.\n\nThis is the same PID architecture that SolversLib's PIDController uses internally. setVeloCoefficients(kP, kI, kD) on a Motor configures exactly these three terms."
+        }
+      ],
+      "check": { "type": "heading_settle", "target": 90, "tolerance": 2, "minimumValue": 1.5 }
+    }
+  ]
+}

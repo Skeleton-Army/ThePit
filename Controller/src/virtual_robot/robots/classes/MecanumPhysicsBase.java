@@ -203,11 +203,6 @@ public abstract class MecanumPhysicsBase extends VirtualBot {
         for (int i=0; i<4; i++){
             motors[i].update(millis);
             wSpd[i] = motors[i].getVelocity(AngleUnit.RADIANS) * gearRatioWheel * wheelCircumference  / (2.0 * Math.PI);
-            boolean mtRev = MOTOR_TYPE.REVERSED;
-            boolean dirRev = motors[i].getDirection() == DcMotorSimple.Direction.REVERSE;
-            if (
-                    i<2 && (mtRev && dirRev || !mtRev && !dirRev) || i>=2 && (mtRev && !dirRev || !mtRev && dirRev)
-            ) wSpd[i] = -wSpd[i];
         }
 
         /*

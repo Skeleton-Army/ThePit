@@ -15,8 +15,8 @@
     -fx-background-color: #181825;
     -fx-padding: 12 10 12 10;
     -fx-spacing: 8;
-    -fx-min-width: 220;
-    -fx-max-width: 240;
+    -fx-min-width: 300;
+    -fx-pref-width: 300;
 }
 
 /* ── Section headings ──────────────────────────────────────────────── */

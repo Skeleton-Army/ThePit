@@ -1,0 +1,62 @@
+{
+  "id": "08_loop_times",
+  "title": "Loop Times",
+  "starterOpMode": "LoopTimesOpMode.java",
+  "starterFiles": ["LoopTimesOpMode.java"],
+  "steps": [
+    {
+      "title": "Why loop times matter",
+      "content": [
+        {
+          "type": "text",
+          "value": "The more often your control loop runs, the more responsive your robot is.\n\nA fast loop means: button presses register immediately, joystick movements feel smooth, and your PID controller updates frequently enough to stay accurate and avoid oscillation.\n\nA slow loop means: inputs feel laggy, driving is jerky, and your PID controller oscillates because corrections arrive too late.\n\nOn the simulator, the loop runs at a fixed ~20ms (50 Hz) because of the physics engine. On real hardware, loop times vary based on what your code does — and that's what this lesson is about."
+        }
+      ]
+    },
+    {
+      "title": "What causes slow loops on real hardware?",
+      "content": [
+        {
+          "type": "text",
+          "value": "Most loop time is spent on hardware I/O — not your code.\n\nEvery time you read a motor encoder, call getCurrentPosition(), or read the IMU, the Expansion Hub sends an I2C command and waits for a response. Each I2C read costs about 5 milliseconds.\n\nIf your loop reads 4 encoders (4 × 5ms) and the IMU (another 5ms), that's 25ms before your PID even starts calculating. Your loop is already behind.\n\nHardware writes (setPower) also cost I2C time, though writes can be batched.\n\nThis is not simulated — in the virtual robot, reads and writes are instant. But the code patterns you learn here apply directly to real hardware."
+        }
+      ]
+    },
+    {
+      "title": "Measure loop time",
+      "content": [
+        {
+          "type": "text",
+          "value": "Your starter uses ElapsedTime to measure how long each loop iteration takes.\n\nRun the OpMode. The telemetry shows your loop time in milliseconds.\n\nIn the simulator, you'll see a steady ~20ms — that's the fixed physics engine cycle, not hardware I/O.\n\nOn a real robot, the same code would show variable times: maybe 22ms at idle, spiking to 40-50ms when reading many sensors. The goal is to bring that down as close to 20ms as possible."
+        }
+      ]
+    },
+    {
+      "title": "Fix 1: Bulk reads",
+      "content": [
+        {
+          "type": "text",
+          "value": "The biggest loop time killer on real hardware is reading sensors one at a time.\n\nBy default, every getCurrentPosition() or IMU read sends its own I2C transaction. Four encoders plus an IMU = 5 transactions = 5 × 5ms = 25ms.\n\nBulk reading fixes this. Instead of sending one command per read, you send ONE command that fetches ALL cached data at once. Then each getCurrentPosition() just returns the already-fetched value — no I2C wait.\n\nThe simplest way to enable it:\n\nList<LynxModule> hubs = hardwareMap.getAll(LynxModule.class);\nfor (LynxModule hub : hubs) {\n    hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);\n}\n\nIn AUTO mode, the SDK automatically refreshes the bulk cache once per loop iteration. Every hardware read after that just returns cached data — no manual clearBulkCache() calls needed. It's a one-time setup in init() that silently saves 20+ milliseconds per loop."
+        }
+      ]
+    },
+    {
+      "title": "Fix 2: Cache motor writes",
+      "content": [
+        {
+          "type": "text",
+          "value": "Setting a motor to 0.5 power when it's already at 0.5 sends an unnecessary I2C write. Each write costs time.\n\nThe SDK automatically skips writes when the new power equals the current power. But what if it's very close — 0.5 vs 0.51? Same physical effect, but the SDK still sends a write.\n\nMotorEx solves this: its caching tolerance (default 0.0001) skips writes when the change is below the threshold. You can increase it with setCachingTolerance().\n\nThis means rapid PID corrections that nudge the power by 0.001 don't spam unnecessary hardware writes."
+        }
+      ]
+    },
+    {
+      "title": "Summary",
+      "content": [
+        {
+          "type": "text",
+          "value": "To keep loop times fast:\n\nBulk read all sensors at the top of loop() — one I2C transaction for everything instead of one per sensor.\n\nUse MotorEx which caches writes — only sends setPower when the value meaningfully changes.\n\nRead sensor values once and store them in local variables — don't re-read the same encoder twice.\n\nDon't call hardwareMap.get() inside loop() — that's for init() only.\n\nIn the simulator, these techniques don't change your measured loop time because there's no real I2C bus. But on a real robot with an Expansion Hub, they cut loop times from 40-50ms down to 2-5ms."
+        }
+      ]
+    }
+  ]
+}

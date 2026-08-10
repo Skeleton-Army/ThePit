@@ -18,15 +18,24 @@ public class SimState {
     private double robotHeading;
     private double robotHeadingDegrees;
     private final Map<String, Double>  motorPowers    = new HashMap<>();
+    private final Map<String, Double>  motorVelocities = new HashMap<>();
     private final Map<String, Integer> encoderTicks   = new HashMap<>();
     private final Map<String, Double>  servoPositions = new HashMap<>();
     private final Map<String, Double>  sensorValues   = new HashMap<>();
     private double voltage;
+    private double dynamicVoltage = 14.0;
     private double elapsedTime;
     private final Set<String>          deviceNames    = new HashSet<>();
     private boolean opModeRunning;
-
-    private long startTimeNanos;
+    private double loopTimeNanos;
+    private double headingSettleStart;
+    private boolean headingInTolerance;
+    private double tuningP;
+    private double tuningI;
+    private double tuningD;
+    private double tuningF;
+    private double tuningKs;
+    private double tuningKv;    private long startTimeNanos;
     private boolean started;
 
     private SimState() {}
@@ -73,6 +82,7 @@ public class SimState {
 
             // Motor state, DeviceMapping.get() returns null when not yet active
             motorPowers.clear();
+            motorVelocities.clear();
             encoderTicks.clear();
             for (String name : hardwareMap.dcMotor.keySet()) {
                 try {
@@ -80,6 +90,9 @@ public class SimState {
                     if (m != null) {
                         motorPowers.put(name, m.getPower());
                         encoderTicks.put(name, m.getCurrentPosition());
+                        if (m instanceof DcMotorEx) {
+                            motorVelocities.put(name, ((DcMotorEx) m).getVelocity());
+                        }
                     }
                 } catch (Exception ignored) {}
             }
@@ -153,5 +166,68 @@ public class SimState {
     }
     public Map<String, Double> getSensorValues() {
         lock.readLock().lock(); try { return new HashMap<>(sensorValues); } finally { lock.readLock().unlock(); }
+    }
+    public Map<String, Double> getMotorVelocities() {
+        lock.readLock().lock(); try { return new HashMap<>(motorVelocities); } finally { lock.readLock().unlock(); }
+    }
+    public double getDynamicVoltage() {
+        lock.readLock().lock(); try { return dynamicVoltage; } finally { lock.readLock().unlock(); }
+    }
+    public void setDynamicVoltage(double v) {
+        lock.writeLock().lock(); try { dynamicVoltage = v; } finally { lock.writeLock().unlock(); }
+    }
+    public double getLoopTimeNanos() {
+        lock.readLock().lock(); try { return loopTimeNanos; } finally { lock.readLock().unlock(); }
+    }
+    public void setLoopTimeNanos(double ns) {
+        lock.writeLock().lock(); try { loopTimeNanos = ns; } finally { lock.writeLock().unlock(); }
+    }
+    public double getHeadingSettleStart() {
+        lock.readLock().lock(); try { return headingSettleStart; } finally { lock.readLock().unlock(); }
+    }
+    public void setHeadingSettleStart(double t) {
+        lock.writeLock().lock(); try { headingSettleStart = t; } finally { lock.writeLock().unlock(); }
+    }
+    public boolean isHeadingInTolerance() {
+        lock.readLock().lock(); try { return headingInTolerance; } finally { lock.readLock().unlock(); }
+    }
+    public void setHeadingInTolerance(boolean b) {
+        lock.writeLock().lock(); try { headingInTolerance = b; } finally { lock.writeLock().unlock(); }
+    }
+    public double getTuningP() {
+        lock.readLock().lock(); try { return tuningP; } finally { lock.readLock().unlock(); }
+    }
+    public void setTuningP(double v) {
+        lock.writeLock().lock(); try { tuningP = v; } finally { lock.writeLock().unlock(); }
+    }
+    public double getTuningI() {
+        lock.readLock().lock(); try { return tuningI; } finally { lock.readLock().unlock(); }
+    }
+    public void setTuningI(double v) {
+        lock.writeLock().lock(); try { tuningI = v; } finally { lock.writeLock().unlock(); }
+    }
+    public double getTuningD() {
+        lock.readLock().lock(); try { return tuningD; } finally { lock.readLock().unlock(); }
+    }
+    public void setTuningD(double v) {
+        lock.writeLock().lock(); try { tuningD = v; } finally { lock.writeLock().unlock(); }
+    }
+    public double getTuningF() {
+        lock.readLock().lock(); try { return tuningF; } finally { lock.readLock().unlock(); }
+    }
+    public void setTuningF(double v) {
+        lock.writeLock().lock(); try { tuningF = v; } finally { lock.writeLock().unlock(); }
+    }
+    public double getTuningKs() {
+        lock.readLock().lock(); try { return tuningKs; } finally { lock.readLock().unlock(); }
+    }
+    public void setTuningKs(double v) {
+        lock.writeLock().lock(); try { tuningKs = v; } finally { lock.writeLock().unlock(); }
+    }
+    public double getTuningKv() {
+        lock.readLock().lock(); try { return tuningKv; } finally { lock.readLock().unlock(); }
+    }
+    public void setTuningKv(double v) {
+        lock.writeLock().lock(); try { tuningKv = v; } finally { lock.writeLock().unlock(); }
     }
 }

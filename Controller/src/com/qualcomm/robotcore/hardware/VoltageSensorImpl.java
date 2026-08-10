@@ -1,5 +1,7 @@
 package com.qualcomm.robotcore.hardware;
 
+import virtual_robot.lessons.SimState;
+
 public class VoltageSensorImpl implements VoltageSensor{
 
     @Override
@@ -32,6 +34,6 @@ public class VoltageSensorImpl implements VoltageSensor{
 
     @Override
     public double getVoltage() {
-        return 14.0;
+        return SimState.getInstance().getDynamicVoltage();
     }
 }

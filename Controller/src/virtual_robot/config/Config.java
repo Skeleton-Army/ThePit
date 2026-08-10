@@ -59,7 +59,7 @@ public class Config {
     /**
      *  Default type for robot drive motors. Change this if you want something else.
      */
-    public static final MotorType DEFAULT_DRIVE_MOTOR_TYPE = MotorType.Gobilda192;
+    public static final MotorType DEFAULT_DRIVE_MOTOR_TYPE = MotorType.Gobilda435;
 
     /**
      *  Default Robot Configuration

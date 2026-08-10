@@ -42,6 +42,12 @@ public class LessonStep {
                                 (String) b.get("label"),
                                 (String) b.get("url")));
                         break;
+                    case "quiz":
+                        blocks.add(ContentBlock.quiz(
+                                (String) b.get("question"),
+                                (List<String>) b.get("options"),
+                                toInt(b.get("correctIndex"))));
+                        break;
                 }
             }
         }
@@ -54,5 +60,12 @@ public class LessonStep {
             }
         }
         return new LessonStep(title, hint, blocks, check);
+    }
+
+    private static int toInt(Object o) {
+        if (o == null) return -1;
+        if (o instanceof Integer) return (Integer) o;
+        if (o instanceof Double) return ((Double) o).intValue();
+        return -1;
     }
 }

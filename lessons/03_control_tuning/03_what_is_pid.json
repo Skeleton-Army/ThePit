@@ -1,0 +1,100 @@
+{
+  "id": "03_what_is_pid",
+  "title": "What is PID?",
+  "starterOpMode": null,
+  "starterFiles": [],
+  "steps": [
+    {
+      "title": "The problem: how do you get to a target?",
+      "content": [
+        {
+          "type": "text",
+          "value": "Imagine you want the robot to face exactly 90 degrees. You could:\n\n1. Set a fixed power and stop when close (open-loop, inaccurate)\n\n2. Constantly adjust power based on how far you are from 90 (closed-loop with feedback)\n\nPID is the most common feedback controller in FTC. It stands for Proportional, Integral, Derivative.\n\nEach term addresses a specific problem."
+        }
+      ]
+    },
+    {
+      "title": "P: Proportional — corrects the present error",
+      "content": [
+        {
+          "type": "text",
+          "value": "The P term is proportional to the current error.\n\nIf you're 30 degrees from the target, the controller applies power proportional to that 30. As you get closer, the power automatically decreases.\n\nBefore P control: the robot overshoots wildly or never reaches the target because power doesn't decrease.\n\nAfter P control: the robot approaches the target smoothly but may stop short (steady-state error) because at small errors, the corrective power is too small to overcome friction.\n\nFormula: output = kP x error"
+        }
+      ]
+    },
+    {
+      "title": "I: Integral — fixes steady-state error",
+      "content": [
+        {
+          "type": "text",
+          "value": "The I term accumulates error over time.\n\nIf the robot is stuck 3 degrees from target, P alone may be too weak to move it. The I term adds up the error each cycle until the accumulated correction is large enough to push through.\n\nBefore I control: robot stops a few degrees short and stays there.\n\nAfter I control: the accumulated error builds up, pushes the robot the final few degrees, then resets.\n\nDanger: if tuned too high, the I term causes overshoot and oscillation because it keeps accumulating during overshoot.\n\nFormula: output += kI x error x deltaTime"
+        }
+      ]
+    },
+    {
+      "title": "D: Derivative — dampens oscillation",
+      "content": [
+        {
+          "type": "text",
+          "value": "The D term resists change. It looks at how fast the error is changing.\n\nWhen the robot approaches the target quickly, the D term applies a braking force proportional to the approach speed.\n\nBefore D control: the robot oscillates back and forth around the target.\n\nAfter D control: the approach is dampened, reducing overshoot and settling faster.\n\nDanger: D amplifies sensor noise. A noisy gyro makes D behave erratically.\n\nFormula: output = kD x (error - prevError) / deltaTime"
+        }
+      ]
+    },
+    {
+      "title": "PID quiz: match the symptom to the term",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "The robot stops 5 degrees short of the target and won't move further. Which term fixes this?",
+          "options": ["P (Proportional)", "I (Integral)", "D (Derivative)"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "PID quiz: match the symptom to the term",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "The robot oscillates back and forth around the target. Which term dampens this?",
+          "options": ["P (Proportional)", "I (Integral)", "D (Derivative)"],
+          "correctIndex": 2
+        }
+      ]
+    },
+    {
+      "title": "PID quiz: match the symptom to the term",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "The robot approaches the target too slowly even when far away. Which term should be increased?",
+          "options": ["P (Proportional)", "I (Integral)", "D (Derivative)"],
+          "correctIndex": 0
+        }
+      ]
+    },
+    {
+      "title": "See it in action",
+      "content": [
+        {
+          "type": "text",
+          "value": "Watch this short demo of a real PID controller tuning a motor in real time:"
+        },
+        {
+          "type": "link",
+          "label": "PID Controller Demo (YouTube)",
+          "url": "https://www.youtube.com/watch?v=qKy98Cbcltw"
+        },
+        {
+          "type": "text",
+          "value": "\n\nThen try tuning a PID controller yourself with this interactive simulator — drag the sliders and watch the response change live:"
+        },
+        {
+          "type": "link",
+          "label": "Interactive PID Simulator",
+          "url": "https://www.luisllamas.es/en/pid-controller-simulator/"
+        }
+      ]
+    }
+  ]
+}

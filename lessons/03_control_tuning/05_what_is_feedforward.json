@@ -1,0 +1,95 @@
+{
+  "id": "05_what_is_feedforward",
+  "title": "What is Feedforward?",
+  "starterOpMode": null,
+  "starterFiles": [],
+  "steps": [
+    {
+      "title": "Beyond PID: predicting instead of reacting",
+      "content": [
+        {
+          "type": "text",
+          "value": "PID is reactive — it only corrects after measuring an error. It must wait for the flywheel to fall below the target before it applies more power.\n\nFeedforward is predictive — it estimates what output is needed before any error exists.\n\nFeedforward is not one specific formula. It's a concept: you model the physics of your system, and your model tells you what output to apply for a given target. The model can be anything — a linear equation, a lookup table, or a physics equation.\n\nThis lesson covers the most common FTC feedforward model: a DC motor driving a flywheel. But the same idea applies to an arm fighting gravity, an elevator lifting a load, or a drivetrain accelerating."
+        }
+      ]
+    },
+    {
+      "title": "The flywheel feedforward model",
+      "content": [
+        {
+          "type": "text",
+          "value": "For a flywheel (a spinning mass shooting game pieces), the feedforward model has three components:\n\n1. Static friction: the minimum voltage needed to just start spinning\n\n2. Velocity: the voltage needed to maintain a given speed\n\n3. Acceleration: the extra voltage needed to speed up or slow down\n\nThese three components are parameterized by kS, kV, and kA. Together, the feedforward output is:\n\nff = kS × sign(velocity) + kV × velocity + kA × acceleration\n\nThis feedforward runs alongside PID. Feedforward handles the known physics; PID handles what the model misses."
+        }
+      ]
+    },
+    {
+      "title": "kS: Static friction",
+      "content": [
+        {
+          "type": "text",
+          "value": "A motor at rest needs a minimum voltage to overcome static friction and start spinning.\n\nkS is that minimum voltage. In the SimpleMotorFeedforward API, kS is in ticks per second — the feedforward output is in ticks/sec, which Motor divides by ACHIEVABLE_MAX_TICKS_PER_SECOND to convert to power.\n\nWithout kS: the flywheel sits still until the PID integral builds up enough error to push through friction. That takes time.\n\nWith kS: as soon as you set a target, the feedforward applies kS × sign(target). The flywheel starts moving immediately.\n\nFor a GoBILDA motor, try starting at kS = 100.\n\nFeedforward contribution: ff_S = kS × sign(targetVelocity)"
+        }
+      ]
+    },
+    {
+      "title": "kV: Velocity gain",
+      "content": [
+        {
+          "type": "text",
+          "value": "Once a motor is spinning, the voltage needed is roughly proportional to the desired speed.\n\nkV converts target velocity (in ticks/sec) into feedforward output (also ticks/sec). It answers: \"at this speed, how much feedforward do I need?\"\n\nFeedforward contribution: ff_V = kV × targetVelocity\n\nIf your motor maxes out at ~2800 ticks/sec at full power, then kV = 1.0/2800 = 0.00036 would give ff_V = 1.0 at full speed. Lower kV means the feedforward contributes less.\n\nkV is the primary feedforward term — without it, PID has to supply all the steady-state power, which slows response and increases oscillation."
+        }
+      ]
+    },
+    {
+      "title": "kA: Acceleration gain",
+      "content": [
+        {
+          "type": "text",
+          "value": "Changing speed requires extra power to overcome the flywheel's rotational inertia.\n\nkA accounts for this: the faster you want the speed to change, the more extra power you need.\n\nFeedforward contribution: ff_A = kA × targetAcceleration\n\nIn FTC, kA is often omitted entirely — kS + kV covers most flywheels, and PID handles any remaining acceleration lag. But for heavy flywheels with large mass, tuning kA noticeably improves responsiveness when changing speed.\n\nMotorEx accepts kA as an optional third argument: setFeedforwardCoefficients(kS, kV, kA)."
+        }
+      ]
+    },
+    {
+      "title": "Feedforward quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "The motor doesn't start spinning until PID builds up enough integral error. Which feedforward term fixes this?",
+          "options": ["kS (static friction)", "kV (velocity)", "kA (acceleration)"],
+          "correctIndex": 0
+        }
+      ]
+    },
+    {
+      "title": "Feedforward quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "At a constant target speed, the motor needs a consistent power level. Which term provides this?",
+          "options": ["kS (static friction)", "kV (velocity)", "kA (acceleration)"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "Feedforward quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "A heavy flywheel lags when changing from 1000 to 3000 RPM. Which term would help the most during the transition?",
+          "options": ["kS (static friction)", "kV (velocity)", "kA (acceleration)"],
+          "correctIndex": 2
+        }
+      ]
+    },
+    {
+      "title": "PID + Feedforward: the complete picture",
+      "content": [
+        {
+          "type": "text",
+          "value": "For a flywheel, the total motor output is:\n\noutput = kS × sign(target) + kV × target + kA × accel + PID(error)\n\nFeedforward predicts the output based on the physics model. PID corrects whatever the model gets wrong.\n\nWith good feedforward, PID's job shrinks to just fixing small errors — which means lower gains, less oscillation, and faster settling.\n\nMotorEx combines both internally: setVeloCoefficients(kP, kI, kD) for PID and setFeedforwardCoefficients(kS, kV) for feedforward."
+        }
+      ]
+    }
+  ]
+}

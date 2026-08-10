@@ -1,0 +1,55 @@
+{
+  "id": "02_voltage_compensation",
+  "title": "Voltage Compensation",
+  "starterOpMode": "VoltageCompensationOpMode.java",
+  "starterFiles": ["VoltageCompensationOpMode.java"],
+  "steps": [
+    {
+      "title": "Why battery voltage matters",
+      "content": [
+        {
+          "type": "text",
+          "value": "A motor's actual speed depends on the battery voltage. At 14V, a motor given 50% power runs faster than at 11V.\n\nMotor.set(0.5) means \"use 50% of whatever voltage the battery has right now\". As a match goes on and voltage sags, your autonomous routine runs slower and stops short.\n\nYour starter file creates a Motor and schedules a RunCommand that reads the voltage and displays velocity. Run it and watch."
+        }
+      ]
+    },
+    {
+      "title": "See the problem",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode. Watch the Velocity telemetry.\n\nNow use the BATTERY VOLTAGE slider (left panel) to drop the voltage from 14V to 11V. Watch the velocity fall.\n\nAt 14V with 0.5 power: the motor spins fast.\n\nAt 11V with 0.5 power: the motor spins noticeably slower.\n\nYour autonomous routine tuned at 14V won't work the same at 11V."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "The compensation formula",
+      "content": [
+        {
+          "type": "text",
+          "value": "The fix is simple. The motor's effective power is automatically scaled by voltage / 14.0 in the simulator.\n\nTo cancel this, divide your desired voltage by the actual voltage:\n\nmotor.set(7.0 / voltage);\n\n7.0 is the voltage you want — 50% of the nominal 14V battery.\n\nAt 14V: 7.0 / 14.0 = 0.5 (no change)\n\nAt 11V: 7.0 / 11.0 = 0.636 (boosted to compensate)\n\nThe simulator then scales by voltage / 14.0, giving:\n\n(0.636) × (11 / 14) = 0.5 — exactly the effective power you wanted.\n\nResult: the motor always gets 7V worth of power, regardless of battery level."
+        }
+      ]
+    },
+    {
+      "title": "Implement compensation",
+      "content": [
+        {
+          "type": "text",
+          "value": "In your RunCommand lambda, replace motor.set(0.5) with:\n\nmotor.set(7.0 / voltage);\n\nDrop the voltage slider again. The velocity should now stay much more consistent.\n\n7.0 is the desired voltage on the motor. Change it to other values (5.0, 10.0) and verify the velocity changes but stays consistent as voltage varies."
+        }
+      ],
+      "check": { "type": "motor_power", "name": "front_left_motor", "target": 0.5, "tolerance": 0.35 }
+    },
+    {
+      "title": "SolversLib does this automatically",
+      "content": [
+        {
+          "type": "text",
+          "value": "In real FTC code, voltage compensation is NOT built into SolversLib's Motor — feedforward predicts output for a target speed assuming constant voltage. When the battery sags, that prediction becomes wrong and PID has to fight to catch up.\n\nThis is why understanding the principle matters: manually scaling output by voltage keeps motor behavior consistent, reducing how hard PID has to work as the battery drains."
+        }
+      ]
+    }
+  ]
+}

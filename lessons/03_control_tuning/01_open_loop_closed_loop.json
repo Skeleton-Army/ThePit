@@ -1,0 +1,55 @@
+{
+  "id": "01_open_loop_closed_loop",
+  "title": "Open-loop vs Closed-loop",
+  "starterOpMode": "OpenLoopClosedLoopOpMode.java",
+  "starterFiles": ["OpenLoopClosedLoopOpMode.java"],
+  "steps": [
+    {
+      "title": "Two ways to move",
+      "content": [
+        {
+          "type": "text",
+          "value": "There are two fundamental ways to control a motor:\n\nOpen-loop means you set a power and hope for the best. No feedback. No correction. If the battery sags or the floor changes, the robot behaves differently.\n\nClosed-loop means you measure what's happening and adjust. You set a target (like an encoder position) and the controller constantly corrects toward it.\n\nWhich one will get you to the same spot every time?"
+        }
+      ]
+    },
+    {
+      "title": "Run the open-loop version",
+      "content": [
+        {
+          "type": "text",
+          "value": "Your starter file is a working open-loop drive.\n\nIt schedules two commands:\n\n1. A SequentialCommandGroup: WaitUntilCommand to wait for the opmode to go active, then an InstantCommand that sets 0.3 power, a WaitCommand for 2 seconds, and a final InstantCommand that stops both motors.\n\n2. A RunCommand that displays telemetry continuously — position, runtime, and current mode.\n\nMotorEx is SolversLib's wrapper around DcMotorEx. It handles hardwareMap lookup so you don't call hardwareMap.get().\n\nRun the OpMode. Press START. Watch the left motor's encoder position tick up in telemetry, then hold steady after 2 seconds.\n\nRun it a few times. How consistent is the final tick count?"
+        }
+      ],
+      "check": { "type": "elapsed_time", "minimumValue": 2.0 }
+    },
+    {
+      "title": "Observe the inconsistency",
+      "content": [
+        {
+          "type": "text",
+          "value": "Now increase the Motor Inertia slider in the simulator's left panel. Run again.\n\nWith more inertia, the motors take longer to spin up. The robot covers less distance in the same 2 seconds. The final position changes each run.\n\nOpen-loop control is fragile. Any change to the system (battery, load, friction, inertia) changes the result.\n\nThis is why we need closed-loop control."
+        }
+      ]
+    },
+    {
+      "title": "Switch to closed-loop: PositionControl",
+      "content": [
+        {
+          "type": "text",
+          "value": "Replace the SequentialCommandGroup with an InstantCommand that sets up closed-loop PositionControl.\n\nIn the InstantCommand:\n\nCall leftMotor.setRunMode(RunMode.PositionControl) and the same for rightMotor.\n\nCall resetEncoder() on both motors.\n\nCall setTargetPosition(1000) on both motors.\n\nCall set(0.3) on both motors.\n\nThe RunCommand stays — it continues displaying telemetry, which now shows the encoder counting toward 1000.\n\nThe motor's built-in position controller now closes the loop — it compares encoder count to the target and adjusts power automatically.\n\nRun it multiple times. The final position is the same every time."
+        }
+      ],
+      "check": { "type": "robot_position", "x": 50, "y": 50, "tolerance": 60 }
+    },
+    {
+      "title": "Why closed-loop wins",
+      "content": [
+        {
+          "type": "text",
+          "value": "Closed-loop control is more accurate and repeatable because it constantly measures and corrects.\n\nThe controller sees \"I'm at 800 ticks, target is 1000, need 200 more\" and keeps driving.\n\nIt sees \"I'm at 1000, target reached\" and stops.\n\nMotor's PositionControl uses the setPositionCoefficient() value (defaults to 0.05). You can adjust it with setPositionCoefficient().\n\nThis feedback loop is the foundation of everything that follows: PID, feedforward, and flywheel control."
+        }
+      ]
+    }
+  ]
+}
