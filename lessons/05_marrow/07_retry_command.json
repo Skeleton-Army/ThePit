@@ -1,0 +1,81 @@
+{
+  "id": "07_retry_command",
+  "title": "RetryCommand",
+  "starterOpMode": "RetryCommandOpMode.java",
+  "starterFiles": ["RetryCommandOpMode.java"],
+  "steps": [
+    {
+      "title": "When commands fail",
+      "content": [
+        {
+          "type": "text",
+          "value": "Not every command succeeds on the first try — a claw misses, vision alignment fails, a sensor doesn't trigger.\n\nRetryCommand wraps any command and re-runs it up to N times if a success condition isn't met. SolverLib includes it natively."
+        }
+      ]
+    },
+    {
+      "title": "RetryCommand constructors",
+      "content": [
+        {
+          "type": "text",
+          "value": "RetryCommand(Command, BooleanSupplier, int maxRetries) — runs the command, checks the condition, retries if false.\n\nRetryCommand(Command, Command alt, BooleanSupplier, int) — uses a different command on retries (e.g., vision-assisted grab), then checks the condition.\n\nWhen the condition becomes true, it finishes immediately — no unnecessary retries."
+        }
+      ]
+    },
+    {
+      "title": "Example: retrying a grab",
+      "content": [
+        {
+          "type": "text",
+          "value": "A simulated grab increments a counter each attempt. isGrabbed() returns true once 3 attempts have been made. RetryCommand keeps trying up to 5 times."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "private boolean isGrabbed() {\n    return grabAttempts >= 3;\n}\n\n// In initialize():\nnew RetryCommand(\n    new InstantCommand(() -> {\n        grabAttempts++;\n        telemetry.addData(\"Grab\", \"Attempt \" + grabAttempts);\n    }),\n    () -> isGrabbed(),\n    5\n)"
+        }
+      ]
+    },
+    {
+      "title": "Run it",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode. Watch telemetry: \"Attempt 1\", \"Attempt 2\", \"Attempt 3\" appear as RetryCommand re-runs the grab.\n\nAfter attempt 3, isGrabbed() returns true and RetryCommand finishes — the remaining 2 retries are never used.\n\nOn a real robot, isGrabbed() would check a touch sensor or current spike instead of a counter."
+        }
+      ]
+    },
+    {
+      "title": "RetryCommand quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "What happens when the success condition returns true before max retries?",
+          "options": [
+            "The command keeps retrying until max",
+            "RetryCommand finishes immediately",
+            "The OpMode crashes",
+            "The condition is ignored"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "RetryCommand quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "What is the optional second-command parameter used for?",
+          "options": [
+            "A command for when the condition is true",
+            "A different command to use on retry attempts",
+            "Cleanup after all retries",
+            "Runs only on the first attempt"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ]
+}

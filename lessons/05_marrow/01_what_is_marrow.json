@@ -1,0 +1,38 @@
+{
+  "id": "01_what_is_marrow",
+  "title": "What is Marrow?",
+  "steps": [
+    {
+      "title": "Beyond deterministic robots",
+      "content": [
+        {
+          "type": "text",
+          "value": "Most autonomous programs are deterministic — they follow a fixed sequence of commands with no awareness of what's happening around them.\n\nIf something goes slightly wrong, the robot keeps executing the same plan blindly.\n\nMarrow gives your robot real-time awareness: spatial awareness (where am I?), time awareness (how much time is left?), and tools to configure and debug behavior without redeploying code."
+        }
+      ]
+    },
+    {
+      "title": "What Marrow provides",
+      "content": [
+        {
+          "type": "text",
+          "value": "Marrow is an open-source library by Skeleton Army 23644. It's designed to work alongside SolversLib and other command-based libraries.\n\nKey features:\n\nZones — define geometric regions on the field (polygons, circles) and react when the robot enters or exits them.\n\nPrompter — a pre-match configuration screen that lets drivers pick alliance, starting position, and strategy using the gamepad before autonomous starts.\n\nSettings — persistent key-value storage saved to the Control Hub, so values survive robot restarts.\n\nTimerEx — an extended timer with convenience methods for time-based branching in autonomous.\n\nOpModeManager — static access to the active OpMode, telemetry, and hardware map from anywhere — especially useful for debugging subsystems."
+        }
+      ]
+    },
+    {
+      "title": "How Marrow fits with SolversLib",
+      "content": [
+        {
+          "type": "text",
+          "value": "Marrow doesn't replace SolversLib — it extends it.\n\nYou still use CommandOpMode, SubsystemBase, MotorEx, and the command scheduler.\n\nMarrow adds awareness layers on top: spatial awareness (Zones), time awareness (TimerEx), and runtime configuration (Prompter, Settings).\n\nYou'll use Marrow classes inside your existing SolversLib CommandOpModes, not instead of them."
+        },
+        {
+          "type": "link",
+          "label": "Marrow Documentation",
+          "url": "https://marrow.skeletonarmyftc.com/"
+        }
+      ]
+    }
+  ]
+}

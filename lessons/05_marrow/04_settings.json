@@ -1,0 +1,86 @@
+{
+  "id": "04_settings",
+  "title": "Settings",
+  "starterOpMode": "SettingsLessonOpMode.java",
+  "starterFiles": ["SettingsLessonOpMode.java", "DriveSubsystem.java"],
+  "steps": [
+    {
+      "title": "What Settings are",
+      "content": [
+        {
+          "type": "text",
+          "value": "Settings provide persistent key-value storage saved to FIRST/marrow/settings.json on the Control Hub. They survive robot restarts and are available across OpModes.\n\nCommon uses: debug mode toggles, tunable constants, storing Prompter results for other OpModes to read."
+        }
+      ]
+    },
+    {
+      "title": "Defining settings",
+      "content": [
+        {
+          "type": "text",
+          "value": "Extend SettingsOpMode and implement defineSettings(). Each add(key, displayName, prompt) registers one setting the driver can edit from the Driver Hub.\n\nPrompt types are the same as Prompter — BooleanPrompt, OptionPrompt, ValuePrompt."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "@Override\npublic void defineSettings() {\n    add(\"debug_mode\", \"Debug Mode\",\n        new BooleanPrompt(\"Enable debug mode?\", false));\n    add(\"max_speed\", \"Max Speed\",\n        new ValuePrompt(\"Max Speed\", Double.class, 0.0, 1.0, 0.8, 0.1));\n    add(\"alliance\", \"Alliance\",\n        new OptionPrompt(\"Select Alliance\", Alliance.class));\n}"
+        }
+      ]
+    },
+    {
+      "title": "Reading settings from a subsystem",
+      "content": [
+        {
+          "type": "text",
+          "value": "Settings.get(key, defaultValue) reads a value anywhere — including inside a subsystem. No need to pass references around.\n\nHere, max_speed is read once in the constructor and multiplied against every motor power in drive(). The driver can change it from the Driver Hub between matches."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "public DriveSubsystem(HardwareMap hardwareMap) {\n    frontLeft = new MotorEx(hardwareMap, \"front_left_motor\");\n    frontRight = new MotorEx(hardwareMap, \"front_right_motor\");\n    backLeft = new MotorEx(hardwareMap, \"back_left_motor\");\n    backRight = new MotorEx(hardwareMap, \"back_right_motor\");\n\n    speedLimit = Settings.get(\"max_speed\", 0.8);\n}\n\npublic void drive(double forward, double strafe, double turn) {\n    frontLeft.set((forward + strafe + turn) * speedLimit);\n    frontRight.set((forward - strafe - turn) * speedLimit);\n    backLeft.set((forward - strafe + turn) * speedLimit);\n    backRight.set((forward + strafe - turn) * speedLimit);\n}"
+        }
+      ]
+    },
+    {
+      "title": "Single source of truth",
+      "content": [
+        {
+          "type": "text",
+          "value": "Without Settings, you'd hardcode speedLimit = 0.8. Changing it means recompiling and redeploying.\n\nWith Settings, the driver adjusts max speed from the Driver Hub between matches — no code changes, no redeploy.\n\nSame principle as config files: single source of truth, no magic numbers — but interactive and persistent.\n\nNote: Settings won't save in the simulator (it expects a Control Hub file system). The pattern is what matters."
+        }
+      ]
+    },
+    {
+      "title": "Settings quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Where are settings saved on a real robot?",
+          "options": [
+            "In RAM",
+            "In a JSON file on the Control Hub",
+            "Inside the Java source file",
+            "On the Driver Station phone"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "Settings quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Why use Settings.get(\"max_speed\", 0.8) instead of a hardcoded constant?",
+          "options": [
+            "Faster at runtime",
+            "Driver can change the value without recompiling",
+            "Constants aren't allowed in subsystems",
+            "Required by the FTC SDK"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ]
+}

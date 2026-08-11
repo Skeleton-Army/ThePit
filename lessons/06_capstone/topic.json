@@ -1,0 +1,4 @@
+{
+  "title": "Capstone",
+  "description": "Put it all together. Build a complete mechanism-driven OpMode with Subsystems, Commands, PID+feedforward control, voltage compensation, Zones, Pedro Pathing, and loop-time monitoring."
+}

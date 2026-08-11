@@ -1,0 +1,93 @@
+{
+  "id": "05_timer_ex",
+  "title": "TimerEx",
+  "starterOpMode": "TimerExAutoOpMode.java",
+  "starterFiles": ["TimerExAutoOpMode.java"],
+  "steps": [
+    {
+      "title": "Why time awareness matters",
+      "content": [
+        {
+          "type": "text",
+          "value": "A 30-second autonomous can't do everything. As time runs out, the robot needs to skip optional actions and just park.\n\nWithout time awareness, the robot blindly follows its fixed sequence and runs out of time mid-action.\n\nTimerEx gives you methods to check remaining time and trigger different behaviors at the right moment."
+        }
+      ]
+    },
+    {
+      "title": "TimerEx API",
+      "content": [
+        {
+          "type": "text",
+          "value": "new TimerEx(30) — a 30-second timer.\n\n.start() — starts counting (safe to call multiple times, only starts once).\n\n.getElapsed() — seconds since start.\n\n.getRemaining() — seconds until duration ends.\n\n.isDone() — true when timer hits 0.\n\n.isMoreThan(seconds) — true when more than N seconds remain.\n\n.isLessThan(seconds) — true when fewer than N seconds remain.\n\n.restart() / .pause() / .resume()"
+        }
+      ]
+    },
+    {
+      "title": "Displaying remaining time",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the timer in initialize() and display the remaining time each tick with a RunCommand."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "private TimerEx matchTime = new TimerEx(30);\n\n// In initialize():\nmatchTime.start();\n\nschedule(new RunCommand(() -> {\n    telemetry.addData(\"Time Remaining\", matchTime.getRemaining());\n    telemetry.update();\n}));"
+        }
+      ]
+    },
+    {
+      "title": "Branching on time with ConditionalCommand",
+      "content": [
+        {
+          "type": "text",
+          "value": "ConditionalCommand(onTrue, onFalse, condition) picks a branch each execution based on a BooleanSupplier.\n\nHere, when more than 2 seconds remain, the full sequence runs. When time is short, a single parking message runs instead.\n\nThe condition is re-evaluated at schedule time — if the timer had more than 2 seconds at the start, the full sequence runs to completion even if time drops below 2 mid-sequence."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "schedule(new ConditionalCommand(\n    new SequentialCommandGroup(\n        new InstantCommand(() -> telemetry.addData(\"Step\", \"Starting auto\")),\n        new WaitCommand(1000),\n        new InstantCommand(() -> telemetry.addData(\"Step\", \"1 second passed\")),\n        new WaitCommand(1000),\n        new InstantCommand(() -> telemetry.addData(\"Step\", \"2 seconds passed\")),\n        new WaitCommand(1000),\n        new InstantCommand(() -> telemetry.addData(\"Step\", \"3 seconds passed\")),\n        new InstantCommand(() -> telemetry.addData(\"Step\", \"Auto finished\"))\n    ),\n    new InstantCommand(() -> telemetry.addData(\"Step\", \"Skipping — parking instead\")),\n    () -> matchTime.isMoreThan(2)\n));"
+        }
+      ]
+    },
+    {
+      "title": "Run it",
+      "content": [
+        {
+          "type": "text",
+          "value": "The autonomous runs a 3-second sequence. Watch the \"Time Remaining\" count down from 30.\n\nSince more than 2 seconds remain when the ConditionalCommand evaluates, the full sequence runs.\n\nNotice: the condition is checked once at schedule time, not continuously. If you wanted continuous time-checking, you'd use a WaitUntilCommand inside the sequence instead."
+        }
+      ]
+    },
+    {
+      "title": "TimerEx quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "What does isMoreThan(5) check?",
+          "options": [
+            "If exactly 5 seconds have passed",
+            "If more than 5 seconds remain on the timer",
+            "If a command ran for more than 5 seconds",
+            "If the timer was paused for more than 5 seconds"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "TimerEx quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "ConditionalCommand evaluates its BooleanSupplier once when scheduled. True or false?",
+          "options": [
+            "True — the branch is chosen at schedule time",
+            "False — it continuously re-evaluates every tick"
+          ],
+          "correctIndex": 0
+        }
+      ]
+    }
+  ]
+}

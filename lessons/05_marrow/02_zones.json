@@ -1,0 +1,104 @@
+{
+  "id": "02_zones",
+  "title": "Zones",
+  "starterOpMode": "ZoneCommandOpMode.java",
+  "starterFiles": ["ZoneCommandOpMode.java"],
+  "steps": [
+    {
+      "title": "What a Zone is",
+      "content": [
+        {
+          "type": "text",
+          "value": "A Zone is a geometric region on the field — a rectangle, polygon, or circle.\n\nZones represent real field elements like scoring areas, parking zones, or launch regions. Instead of guessing where the robot is, you check zone membership: \"is the robot inside the launch zone?\"\n\nMarrow provides PolygonZone, CircleZone, and CompositeZone."
+        }
+      ]
+    },
+    {
+      "title": "The Zone interface",
+      "content": [
+        {
+          "type": "text",
+          "value": "All zone types implement Zone.\n\ncontains(Point p) — is a single point inside the zone?\n\nisInside(Zone other) — does this zone overlap with another? Use when the robot is also a zone.\n\nisFullyInside(Zone other) — is this zone completely inside another? Stricter than isInside().\n\ndistanceTo(Point p) — shortest distance to the boundary. Returns 0 if inside.\n\ndistanceTo(Zone other) — shortest distance between two zone boundaries.\n\ndistanceToBoundary(Point p) — distance to the edge, even when inside.\n\nmoveBy(dx, dy) / setPosition(x, y) — translate the zone."
+        }
+      ]
+    },
+    {
+      "title": "Defining field zones",
+      "content": [
+        {
+          "type": "text",
+          "value": "PolygonZone is created from points. Here, a triangle represents the close launch zone from the 2025–2026 DECODE field."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "private final PolygonZone closeLaunchZone = new PolygonZone(\n    new Point(0, 141.5),\n    new Point(70.75, 70.75),\n    new Point(141.5, 141.5)\n);"
+        }
+      ]
+    },
+    {
+      "title": "Representing the robot as a zone",
+      "content": [
+        {
+          "type": "text",
+          "value": "The robot itself is a PolygonZone — an 18x18 inch square. Its position is synced to the follower's pose every tick in run(), so it moves with the robot."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "private final PolygonZone robotZone = new PolygonZone(18, 18);\n\n// In run():\nrobotZone.setPosition(\n    follower.getPose().getX(),\n    follower.getPose().getY()\n);\nrobotZone.setRotation(follower.getPose().getHeading());"
+        }
+      ]
+    },
+    {
+      "title": "Trigger: enter fires a command, exit cancels",
+      "content": [
+        {
+          "type": "text",
+          "value": "Trigger wraps a BooleanSupplier. whileActiveContinuous() schedules the command when the condition becomes true and cancels when it becomes false.\n\nNo wasInside boolean. No manual state tracking. Trigger handles edge detection."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "new Trigger(() -> robotZone.isInside(closeLaunchZone))\n    .whileActiveContinuous(new InstantCommand(() ->\n        telemetry.addData(\"Zone\", \"Inside close launch zone\")\n    ));"
+        }
+      ]
+    },
+    {
+      "title": "Run it",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode. Drive the robot with the gamepad.\n\nThe close launch zone is a triangle between (0, 141.5), (70.75, 70.75), and (141.5, 141.5).\n\nDrive into it — \"Inside close launch zone\" appears in telemetry. Drive out — it disappears. The Trigger handles the enter/exit transition automatically."
+        }
+      ]
+    },
+    {
+      "title": "Zones quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Which method checks if one zone overlaps another?",
+          "options": ["contains(Point)", "isInside(Zone)", "isFullyInside(Zone)", "distanceTo(Zone)"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "Zones quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "What's the difference between isInside() and isFullyInside()?",
+          "options": [
+            "No difference",
+            "isInside needs partial overlap; isFullyInside needs the entire zone inside",
+            "isInside checks points; isFullyInside checks zones",
+            "isFullyInside also checks distance"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ]
+}

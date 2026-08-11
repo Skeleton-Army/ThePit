@@ -1,0 +1,79 @@
+{
+  "id": "08_lynx_util",
+  "title": "LynxUtil",
+  "steps": [
+    {
+      "title": "The problem: slow hardware reads",
+      "content": [
+        {
+          "type": "text",
+          "value": "Every time you call motor.getCurrentPosition() or read a sensor, the Control Hub sends a command over the Lynx bus to the Expansion Hub and waits for a response.\n\nIf you read 8 motors and 4 sensors every loop, that's 12 individual bus transactions — each taking roughly 3ms. That's 36ms per loop just reading hardware, leaving only 14ms for actual logic in a 50ms loop.\n\nBulk caching solves this: instead of 12 individual reads, the system reads all cached values in one transaction. This cuts read time from ~36ms to ~3ms."
+        }
+      ]
+    },
+    {
+      "title": "What LynxUtil does",
+      "content": [
+        {
+          "type": "text",
+          "value": "LynxUtil is Marrow's one-liner for configuring bulk caching. It has two static methods:\n\nLynxUtil.setBulkCachingMode(hardwareMap, mode) — sets the caching mode for all Lynx modules attached to this robot.\n\nLynxUtil.clearBulkCache(hardwareMap) — clears the cached data, forcing fresh reads on the next access.\n\nBoth methods operate on all Lynx modules found in the HardwareMap — you don't need to iterate over them yourself."
+        }
+      ]
+    },
+    {
+      "title": "AUTO mode — fire and forget",
+      "content": [
+        {
+          "type": "text",
+          "value": "LynxUtil.setBulkCachingMode(hardwareMap, LynxModule.BulkCachingMode.AUTO);\n\nIn AUTO mode, the Lynx module automatically refreshes its cached data every hardware cycle. You just call this once during init and never think about it again.\n\nThis is the easiest mode — the cached data is always fresh, and every sensor read returns up-to-date values.\n\nCall it once at the top of your OpMode's init() or initialize() and you're done."
+        }
+      ]
+    },
+    {
+      "title": "MANUAL mode — you control when reads happen",
+      "content": [
+        {
+          "type": "text",
+          "value": "LynxUtil.setBulkCachingMode(hardwareMap, LynxModule.BulkCachingMode.MANUAL);\n\nIn MANUAL mode, cached data only updates when you explicitly clear the cache. Between clears, reads return the same cached value.\n\nThis gives you precise control — you can read all motor encoders in one consistent snapshot, then process them without worrying about values changing mid-calculation.\n\nAfter clearing, call LynxUtil.clearBulkCache(hardwareMap) to refresh. Typically you'd clear once at the top of each loop iteration.\n\nThis lesson is instructional only — bulk caching won't demonstrate in the simulator since it depends on Lynx hardware."
+        },
+        {
+          "type": "link",
+          "label": "GM0: Bulk Reads Explained",
+          "url": "https://gm0.org/en/latest/docs/software/tutorials/bulk-reads.html"
+        }
+      ]
+    },
+    {
+      "title": "LynxUtil quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Why does bulk caching improve loop performance?",
+          "options": [
+            "It overclocks the motors",
+            "It combines many individual hardware reads into one bus transaction",
+            "It disables unused sensors",
+            "It skips every other loop iteration"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "LynxUtil quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "In MANUAL mode, when should you call clearBulkCache()?",
+          "options": [
+            "Never — it's handled automatically",
+            "At the start of each loop iteration to get fresh data",
+            "Only at the end of the OpMode",
+            "After every single motor read"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ]
+}

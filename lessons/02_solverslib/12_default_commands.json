@@ -1,0 +1,65 @@
+{
+  "id": "12_default_commands",
+  "title": "Default Commands",
+  "starterOpMode": "DefaultCommandOpMode.java",
+  "starterFiles": ["DefaultCommandOpMode.java", "DriveSubsystem.java"],
+  "steps": [
+    {
+      "title": "What a default command is",
+      "content": [
+        {
+          "type": "text",
+          "value": "A default command runs automatically on a subsystem whenever no other command needs it.\n\nThink of your drivetrain: you spend most of the match driving manually. The drive subsystem should always respond to joysticks unless a path-following command takes over.\n\nInstead of schedule()-ing a RunCommand that runs forever, you set it as the default command: subsystem.setDefaultCommand(command).\n\nThe scheduler interrupts the default command when any other command requires the subsystem. When that command finishes, the default resumes automatically. No manual scheduling, no restarting after interruptions."
+        }
+      ]
+    },
+    {
+      "title": "Look at the skeletons",
+      "content": [
+        {
+          "type": "text",
+          "value": "Open DefaultCommandOpMode.java. It extends CommandOpMode with an empty initialize().\n\nOpen DriveSubsystem.java. It extends SubsystemBase with empty constructor, drive(), stop(), and periodic().\n\nYou'll fill in both."
+        }
+      ]
+    },
+    {
+      "title": "Fill in the DriveSubsystem",
+      "content": [
+        {
+          "type": "text",
+          "value": "Declare two private DcMotor fields: leftMotor and rightMotor.\n\nIn the constructor, get front_left_motor and front_right_motor from the HardwareMap.\n\nFill in drive() with forward and turn parameters — set leftMotor to forward + turn, rightMotor to forward - turn.\n\nFill in stop() — set both motors to 0. Leave periodic() empty."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Set the default command",
+      "content": [
+        {
+          "type": "text",
+          "value": "In DefaultCommandOpMode's initialize(), create a DriveSubsystem and a GamepadEx from gamepad1.\n\nCall drive.setDefaultCommand() with a RunCommand. The RunCommand reads gamepad1's left stick Y (negated, for forward) and right stick X (for turn), and calls drive.drive(forward, turn) each tick.\n\nNo schedule() call needed — the default command runs automatically.\n\nAlso add telemetry display and telemetry.update() inside the RunCommand so you can see it's running."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    },
+    {
+      "title": "Add an interrupting command",
+      "content": [
+        {
+          "type": "text",
+          "value": "Bind the A button using GamepadEx. When pressed, schedule a command that requires the drive subsystem.\n\nUse a SequentialCommandGroup: an InstantCommand that sets both motors to -0.5 (backward), a WaitCommand of 2000ms, and an InstantCommand that calls drive.stop().\n\nRequiring the drive subsystem means the scheduler must interrupt the default command — you can't have two commands using the same subsystem.\n\nWhen the sequence finishes, the default drive command resumes automatically."
+        }
+      ]
+    },
+    {
+      "title": "Run it",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode. Drive with the gamepad sticks — the default command is running.\n\nPress A — the robot drives backward for 2 seconds. The default command pauses automatically.\n\nAfter 2 seconds, control returns to the gamepad. The default command resumes without you doing anything.\n\nThis is why real teams use default commands for their drivetrain: drive normally with joysticks, and autonomous sequences take over temporarily without breaking manual control."
+        }
+      ],
+      "check": { "type": "opmode_running" }
+    }
+  ]
+}

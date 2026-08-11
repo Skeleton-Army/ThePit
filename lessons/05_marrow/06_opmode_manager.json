@@ -1,0 +1,95 @@
+{
+  "id": "06_opmode_manager",
+  "title": "OpModeManager",
+  "starterOpMode": "DebugOpMode.java",
+  "starterFiles": ["DebugOpMode.java", "BuggySubsystem.java"],
+  "steps": [
+    {
+      "title": "Why OpModeManager matters",
+      "content": [
+        {
+          "type": "text",
+          "value": "Subsystems don't normally have access to telemetry — only the OpMode does. To debug a subsystem, you'd pass references around or expose getters.\n\nOpModeManager solves this with static access to the active telemetry, hardware map, and OpMode — from anywhere."
+        }
+      ]
+    },
+    {
+      "title": "Key methods",
+      "content": [
+        {
+          "type": "text",
+          "value": "OpModeManager.getTelemetry() — the active telemetry object. Call telemetry.addData() from inside a subsystem.\n\nOpModeManager.getActiveOpMode() — the current OpMode.\n\nOpModeManager.getHardwareMap() — the active hardware map.\n\nOpModeManager.getRobotState() — INIT, RUNNING, or STOPPED."
+        }
+      ]
+    },
+    {
+      "title": "A bugged proportional controller",
+      "content": [
+        {
+          "type": "text",
+          "value": "BuggySubsystem has a MotorEx and a simple proportional controller. Each tick, error = targetPower - currentPower, then currentPower += error * 0.02.\n\nThis is a geometric decay — it approaches the target but never quite reaches it. Without a deadband, the motor is forever inching toward the target."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "public void runControl() {\n    error = targetPower - currentPower;\n    if (Math.abs(error) < 0.01) {\n        currentPower = targetPower;\n        error = 0;\n    } else {\n        currentPower += error * 0.02;\n    }\n    motor.set(currentPower);\n}"
+        }
+      ]
+    },
+    {
+      "title": "Surface debug values from the subsystem",
+      "content": [
+        {
+          "type": "text",
+          "value": "In periodic(), after runControl(), use OpModeManager.getTelemetry() to output internal state. No references needed — the subsystem accesses telemetry on its own."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "@Override\npublic void periodic() {\n    runControl();\n\n    Telemetry telemetry = OpModeManager.getTelemetry();\n    telemetry.addData(\"Buggy/currentPower\", currentPower);\n    telemetry.addData(\"Buggy/targetPower\", targetPower);\n    telemetry.addData(\"Buggy/error\", error);\n}"
+        }
+      ]
+    },
+    {
+      "title": "The pattern",
+      "content": [
+        {
+          "type": "text",
+          "value": "Before OpModeManager: to see subsystem state, the OpMode would need getters and manual telemetry wiring for every subsystem.\n\nAfter OpModeManager: each subsystem writes its own debug telemetry. Adding a new subsystem doesn't touch existing debugging code.\n\nStart the OpMode and watch Buggy/currentPower converge to targetPower, with the deadband snapping it to the target once error drops below 0.01."
+        }
+      ]
+    },
+    {
+      "title": "OpModeManager quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Why use OpModeManager.getTelemetry() instead of passing telemetry into the constructor?",
+          "options": [
+            "Faster at runtime",
+            "Every subsystem gets telemetry without manual wiring — cleaner as the robot grows",
+            "The SDK requires it",
+            "Passing telemetry isn't allowed"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "OpModeManager quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "What was the root cause of the motor never reaching its target before the fix?",
+          "options": [
+            "The motor was inverted",
+            "Geometric decay — error halves each tick but never reaches zero without a deadband",
+            "The hardwareMap wasn't initialized",
+            "MotorEx can't run proportional control"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ]
+}

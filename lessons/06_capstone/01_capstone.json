@@ -1,0 +1,80 @@
+{
+  "id": "01_capstone",
+  "title": "Capstone",
+  "starterOpMode": "CapstoneOpMode.java",
+  "starterFiles": ["CapstoneOpMode.java"],
+  "steps": [
+    {
+      "title": "What to build",
+      "content": [
+        {
+          "type": "text",
+          "value": "This is the capstone. Build a complete OpMode with everything you've learned across all five modules — subsystems, commands, PID + feedforward, voltage compensation, Pedro Pathing, Zones, and loop-time monitoring.\n\nYou'll create two subsystems: one for the drivetrain and one for an arm mechanism. The arm uses a motor and a servo. You'll bind gamepad controls, follow a PathChain on a button press, and make the robot react automatically to field position.\n\nUse the Programming Board robot config for the arm. Switch to Mecanum Bot for drive + PathChain."
+        }
+      ]
+    },
+    {
+      "title": "Arm mechanism requirements",
+      "content": [
+        {
+          "type": "text",
+          "value": "The robot needs an arm mechanism with these capabilities:\n\nA motor named arm_motor that lifts the arm up and down.\n\nA servo named hand_servo that opens and closes to grab game elements.\n\nArm motor must use MotorEx with PositionControl run mode, tuned PID coefficients (P, I, D), and feedforward (kS, kV).\n\nVoltage compensation must be applied so the arm behaves the same regardless of battery level.\n\nPut all constants — motor type, arm positions, servo positions, nominal voltage, PID/FF coefficients — in a separate config file. Refer to those constants from the subsystem; never use magic numbers."
+        }
+      ]
+    },
+    {
+      "title": "Drive subsystem requirements",
+      "content": [
+        {
+          "type": "text",
+          "value": "The robot needs a mecanum drive subsystem with these capabilities:\n\nFour motors — front_left_motor, front_right_motor, back_left_motor, back_right_motor — wrapped in MotorEx.\n\nA drive method that accepts forward, strafe, and turn inputs and computes mecanum wheel powers.\n\nA stop method that sets all four motors to zero.\n\nVoltage compensation applied before motor power reaches the hardware. Store desired powers and apply the compensation scale in periodic().\n\nA Follower created inside the subsystem from Constants.createFollower(hardwareMap). Call follower.update() in periodic() — not from the OpMode. The subsystem owns the Follower.\n\nA method to accept a PathChain and tell the Follower to follow it.\n\nAn 18-inch square robot PolygonZone synced to the follower's pose in periodic(). Expose a way to check whether this zone overlaps another Zone."
+        }
+      ]
+    },
+    {
+      "title": "Gamepad controls",
+      "content": [
+        {
+          "type": "text",
+          "value": "All input must go through GamepadEx with SolverLib bindings — never read gamepad values inside a loop.\n\nY button: arm moves up.\n\nA button: arm moves down.\n\nRight bumper: hand closes (grab).\n\nLeft bumper: hand opens (release).\n\nLeft joystick Y (negated) = forward, left joystick X = strafe, right joystick X (negated) = turn for mecanum drive — set as the drive subsystem's default command using a RunCommand."
+        }
+      ]
+    },
+    {
+      "title": "PathChain on button press",
+      "content": [
+        {
+          "type": "text",
+          "value": "When the B button is pressed, the robot must follow a PathChain.\n\nThe PathChain must have at least two segments — drive up and then strafe right — starting near field center.\n\nUse BezierLine segments, constant heading interpolation, and global deceleration.\n\nThe button handler calls the drive subsystem's path-following method. The Follower lives in the subsystem and updates in periodic() — the OpMode only triggers the path."
+        }
+      ]
+    },
+    {
+      "title": "Red base zone auto-trigger",
+      "content": [
+        {
+          "type": "text",
+          "value": "Find the red alliance base zone coordinates. This is a rectangular area on the field where the red alliance starts. Look up the corner coordinates in the game manual or use the Pedro Pathing Visualizer.\n\nCreate a PolygonZone for it.\n\nWhen the robot enters the red base zone, the arm must raise. When the robot exits, the arm must lower.\n\nUse two Triggers — one for enter, one for exit — against the robot zone from the drive subsystem. No manual state tracking. The Trigger handles edge detection."
+        }
+      ]
+    },
+    {
+      "title": "Loop-time monitoring",
+      "content": [
+        {
+          "type": "text",
+          "value": "Override run() in the OpMode — call super.run() first so the scheduler runs, which calls all subsystem periodic() methods (including the Follower update).\n\nAfter super.run(), measure and display the loop time in milliseconds using ElapsedTime. Reset the timer after each measurement.\n\nDisplay a warning in telemetry if the loop time exceeds a 50ms budget.\n\nEnd each iteration by calling telemetry.update()."
+        }
+      ]
+    },
+    {
+      "title": "Verify it all works",
+      "content": [
+        {
+          "type": "text",
+          "value": "Run the OpMode and verify every requirement:\n\nDrive with joysticks — mecanum should work with voltage compensation applied.\n\nPress Y and A — arm moves up and down.\n\nPress bumpers — hand opens and closes.\n\nPress B — robot follows the PathChain autonomously.\n\nDrive into the red base zone — the arm raises automatically. Drive out — the arm lowers.\n\nLoop time displays in telemetry every tick. It should stay well under 50ms in the simulator. On real hardware, it would stay under budget if you used bulk reads and MotorEx caching."
+        }
+      ]
+    }
+  ]
+}

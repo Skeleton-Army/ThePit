@@ -1,0 +1,118 @@
+{
+  "id": "03_prompter",
+  "title": "Prompter",
+  "starterOpMode": "PrompterOpMode.java",
+  "starterFiles": ["PrompterOpMode.java"],
+  "steps": [
+    {
+      "title": "Why pre-match prompts matter",
+      "content": [
+        {
+          "type": "text",
+          "value": "Without Prompter, teams create separate OpModes for every configuration — RedLeftAuto, BlueRightAuto, RedCenterPark.\n\nEach combination is another OpMode. Prompter replaces all of them: the driver picks alliance, starting position, and strategy on the Driver Hub before the match, using gamepad buttons and telemetry."
+        }
+      ]
+    },
+    {
+      "title": "How Prompter works",
+      "content": [
+        {
+          "type": "text",
+          "value": "Prompter displays prompts as telemetry. The driver navigates with the D-Pad and confirms with A.\n\nPrompt types:\n\nOptionPrompt — pick one from a list.\n\nBooleanPrompt — yes/no toggle.\n\nMultiOptionPrompt — select multiple items.\n\nValuePrompt — enter a numeric value.\n\nPrompts can be conditional: .showIf(\"key\", value) hides a prompt unless a previous prompt matches the value.\n\nResults are retrieved in .onComplete(), which runs after all prompts are answered."
+        }
+      ]
+    },
+    {
+      "title": "Prompt chain",
+      "content": [
+        {
+          "type": "text",
+          "value": "Each .prompt(key, prompt) takes a key for retrieving the value and a Prompt. Passing Alliance.class auto-populates all enum constants. Chaining builds the sequence the driver walks through."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "prompter\n    .prompt(\"alliance\", new OptionPrompt<>(\"Select Alliance\", Alliance.class))\n    .prompt(\"start_pos\", new OptionPrompt<>(\"Start Position\", StartPosition.class))\n    .prompt(\"enable_delay\", new BooleanPrompt(\"Enable Start Delay?\", false))\n        .label(\"Start Delay\")"
+        }
+      ]
+    },
+    {
+      "title": "Conditional prompts with showIf",
+      "content": [
+        {
+          "type": "text",
+          "value": ".showIf(\"park\", true) makes Park Location only appear when the driver answered yes to Enable Parking. The driver won't see it at all if they chose false.\n\n.label() sets a readable name for the summary screen."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "    .prompt(\"park\", new BooleanPrompt(\"Enable Parking?\", true))\n    .prompt(\"park_location\", new OptionPrompt<>(\"Park Location\", 1, 2, 3))\n        .label(\"Park Location\")\n        .showIf(\"park\", true)"
+        }
+      ]
+    },
+    {
+      "title": "Retrieving results",
+      "content": [
+        {
+          "type": "text",
+          "value": ".onComplete() runs once all prompts are finished. Values are guaranteed to be set here.\n\nUse getOrDefault() for prompts that might have been hidden by showIf — it returns the fallback if the prompt was never shown."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "    .onComplete(() -> {\n        Alliance alliance = prompter.get(\"alliance\");\n        StartPosition startPos = prompter.get(\"start_pos\");\n        boolean enableDelay = prompter.get(\"enable_delay\");\n        boolean park = prompter.get(\"park\");\n        int parkLocation = prompter.getOrDefault(\"park_location\", 0);\n\n        telemetry.addData(\"Alliance\", alliance);\n        telemetry.addData(\"Start Pos\", startPos);\n        telemetry.addData(\"Delay\", enableDelay);\n        telemetry.addData(\"Park\", park);\n        telemetry.addData(\"Park Loc\", parkLocation);\n        telemetry.update();\n    });"
+        }
+      ]
+    },
+    {
+      "title": "Gating with isCompleted()",
+      "content": [
+        {
+          "type": "text",
+          "value": "In a CommandOpMode, the run() override checks isCompleted(). While prompts are pending, it calls prompter.run() to drive the UI. Once done, it falls through to normal autonomous behavior."
+        },
+        {
+          "type": "code",
+          "language": "java",
+          "value": "@Override\npublic void run() {\n    if (!prompter.isCompleted()) {\n        prompter.run();\n        return;\n    }\n    super.run();\n}"
+        }
+      ]
+    },
+    {
+      "title": "Run it",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode. Answer the prompts with the D-Pad and A button.\n\nTry: pick no for parking — Park Location is hidden. Restart, pick yes — it appears.\n\nAfter the last prompt, onComplete fires and all five values appear in telemetry."
+        }
+      ]
+    },
+    {
+      "title": "Prompter quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Which method hides a prompt based on a previous answer?",
+          "options": [".label()", ".onComplete()", ".showIf()", ".or()"],
+          "correctIndex": 2
+        }
+      ]
+    },
+    {
+      "title": "Prompter quiz",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Why use getOrDefault() instead of get() for a prompt hidden by showIf?",
+          "options": [
+            "It validates the value type",
+            "It returns a fallback if the prompt was never shown",
+            "It casts the value automatically",
+            "It saves the value to settings"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ]
+}
