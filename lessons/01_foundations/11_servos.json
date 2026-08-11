@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In init(), type servo = hardwareMap.get(Servo.class, \"back_servo\"); to get the servo.\n\nThe device name \"back_servo\" is from the robot configuration, just like motor names.\n\nThe type is Servo.class instead of DcMotor.class."
+          "value": "In init(), type servo = hardwareMap.get(Servo.class, \"hand_servo\"); to get the servo.\n\nThe device name \"hand_servo\" is from the robot configuration, just like motor names.\n\nThe type is Servo.class instead of DcMotor.class."
         }
       ],
       "check": { "type": "opmode_running" }
@@ -40,7 +40,7 @@
           "value": "In loop(), set the servo to positions across its range.\n\nWrite servo.setPosition(0.0) to go to one end, then change it to 1.0 to go to the other.\n\nTry 0.5 for center.\n\nThe servo rotates to exactly the angle you request and stays there, no need to stop it like a motor."
         }
       ],
-      "check": { "type": "servo_position", "name": "back_servo", "target": 1.0, "tolerance": 0.1 }
+      "check": { "type": "servo_position", "name": "hand_servo", "target": 1.0, "tolerance": 0.1 }
     }
   ]
 }

@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import virtual_robot.controller.Game;
 import virtual_robot.controller.VirtualBot;
 import virtual_robot.games.Decode;
-import virtual_robot.robots.classes.MecanumBot;
+import virtual_robot.robots.classes.MecDynamicBot;
 
 /**
  * Class for configuring field (width and image), and gamepad (virtual vs. real)
@@ -64,5 +64,5 @@ public class Config {
     /**
      *  Default Robot Configuration
      */
-    public static final Class<? extends VirtualBot> DEFAULT_BOT = MecanumBot.class;
+    public static final Class<? extends VirtualBot> DEFAULT_BOT = MecDynamicBot.class;
 }

@@ -1,0 +1,4 @@
+{
+  "title": "Motion & Localization",
+  "description": "Master the fundamentals of robot localization and autonomous path following. Build odometry from scratch, understand why dead reckoning drifts, and learn Pedro Pathing to follow precise trajectories with Beziers and heading interpolation."
+}

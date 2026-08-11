@@ -1,0 +1,86 @@
+{
+  "id": "04_intro_to_pedro_pathing",
+  "title": "Intro to Pedro Pathing",
+  "starterOpMode": "PedroIntroOpMode.java",
+  "starterFiles": ["PedroIntroOpMode.java"],
+  "steps": [
+    {
+      "title": "What is the Follower?",
+      "content": [
+        {
+          "type": "text",
+          "value": "The Follower is the core of Pedro Pathing. It's an object that knows your robot's current position (from the localizer), knows where you want to go (from the path), and computes the motor powers to get there.\n\nIt handles:\n\nMecanum kinematics — the same wheel power calculations you wrote by hand. The Follower does them automatically.\n\nPIDF control — adjusting motor powers in real time to stay on the path and correct for errors.\n\nPath following — accelerating, cruising, decelerating through waypoints without you writing any timing or encoder logic.\n\nThe project already has a Constants.java in the pedroPathing package with all the tuning values. On a real robot, you'd tune these yourself following the Pedro Pathing documentation. In the simulation, they're already set."
+        }
+      ]
+    },
+    {
+      "title": "Why mecanum is faster forward than strafing",
+      "content": [
+        {
+          "type": "text",
+          "value": "Mecanum wheels use rollers mounted at 45° on the wheel hub. When driving forward or backward, the main wheel drives the robot directly — the rollers don't slip because the force is aligned with the wheel's rotation.\n\nWhen strafing sideways, the wheels spin but the force goes through the rollers at an angle. The rollers must spin freely to allow sideways motion, which wastes energy in friction. This makes strafing slower and less efficient than forward/back.\n\nIn practice, a mecanum robot's top speed strafing is only 60-70% of its forward speed. Pedro Pathing accounts for this automatically through the xVelocity and yVelocity constants in your config."
+        }
+      ]
+    },
+    {
+      "title": "startTeleopDrive()",
+      "content": [
+        {
+          "type": "text",
+          "value": "Before calling setTeleOpDrive, you must call follower.startTeleopDrive(). This tells the Follower to switch into manual drive mode instead of path-following mode.\n\nIt takes an optional boolean parameter: startTeleopDrive(true) enables brake mode (motors brake when joysticks are released). startTeleopDrive(false) or just startTeleopDrive() uses the default from your drive constants.\n\nYour starter calls startTeleopDrive() — no brake mode override."
+        }
+      ]
+    },
+    {
+      "title": "Robot-centric vs field-centric drive",
+      "content": [
+        {
+          "type": "text",
+          "value": "setTeleOpDrive has an extra parameter for drive mode:\n\nsetTeleOpDrive(forward, strafe, turn, true) — robot-centric. Forward = toward the robot's front, regardless of field orientation. If the robot faces up, pushing forward moves up on the field.\n\nsetTeleOpDrive(forward, strafe, turn, false) — field-centric. Forward = toward the top of the field, no matter which way the robot faces. The Follower automatically translates based on heading.\n\nWhen no fourth parameter is given, the default is robot-centric."
+        }
+      ]
+    },
+    {
+      "title": "Why we use robot-centric",
+      "content": [
+        {
+          "type": "text",
+          "value": "Robot-centric is generally better:\n\nFaster — you can orient the robot toward your target (rotation is instant) and then drive forward at full speed. With field-centric, you might spend most of the match strafing sideways, which is slower.\n\nMore control — forward always means where the robot is pointing. Experienced drivers turn to face the action and drive forward.\n\nField-centric is easier to learn — forward on the joystick is always the same direction on the field, regardless of orientation. Beginners like this because they don't have to think about the robot's heading.\n\nBut speed wins matches. Once you're comfortable, robot-centric lets you push the robot to its mechanical limits."
+        }
+      ]
+    },
+    {
+      "title": "The Pedro Pathing Visualizer",
+      "content": [
+        {
+          "type": "text",
+          "value": "Typing Pose coordinates by hand works, but it's hard to visualize where your robot will actually go.\n\nThe Pedro Pathing Visualizer is a free web tool that lets you draw paths on a virtual FTC field and export the code.\n\nYou click to place waypoints, drag control points to shape Bezier curves, set heading interpolation for each segment, and it generates the Java code for you.\n\nNote on field size: each FTC tile is 24 inches, but the tabs on the tiles near the wall are cut off. The actual field is 141.5 inches (not 144). The center of the field is at (70.75, 70.75). Your starter OpMode starts the robot at the field center.\n\nThis is how real teams build their autonomous routines — design visually, export the code, paste it into their OpMode."
+        },
+        {
+          "type": "link",
+          "label": "Pedro Pathing Visualizer",
+          "url": "https://visualizer.pedropathing.com"
+        }
+      ]
+    },
+    {
+      "title": "Open the TeleOp",
+      "content": [
+        {
+          "type": "text",
+          "value": "Open PedroIntroOpMode.java.\n\nIt's a ready-to-run TeleOp. Look at what it does:\n\nConstants.createFollower(hardwareMap) builds a Follower.\n\nfollower.setPose(new Pose(70.75, 70.75, Math.toRadians(90))) places the robot at the center of the field, facing up.\n\nBefore starting: left-click and drag the robot on the field, then right-click to set its heading — position it near the center facing up.\n\nstartTeleopDrive() initializes manual drive mode.\n\nEach loop: setTeleOpDrive() takes joystick values, follower.update() reads the pose and applies the drive.\n\nfollower.getPose() returns (x, y, heading) in telemetry."
+        }
+      ]
+    },
+    {
+      "title": "Drive with the Follower",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode. Use the virtual gamepad to drive.\n\nLeft stick controls forward and strafe. Right stick controls turn.\n\nWatch the telemetry — the Follower reports its position estimate every loop."
+        }
+      ],
+      "check": { "type": "robot_position", "x": 30, "y": 0, "tolerance": 80 }
+    }
+  ]
+}

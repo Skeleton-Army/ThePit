@@ -1,0 +1,76 @@
+{
+  "id": "02_why_pose_drifts",
+  "title": "Why Pose Drifts",
+  "starterOpMode": null,
+  "starterFiles": [],
+  "steps": [
+    {
+      "title": "Even dead wheels aren't perfect",
+      "content": [
+        {
+          "type": "text",
+          "value": "Dead wheels are much better than drive encoders, but they still have error.\n\nOver a 120-inch path, drive encoders might be off by 6+ inches. Dead wheels might be off by half an inch — way better, but not zero.\n\nWhy? The pod can skip over tile seams, the omni wheel can slide sideways during fast strafes, encoder ticks are discrete, and the wheel diameter wears down over time."
+        }
+      ]
+    },
+    {
+      "title": "Starting position error",
+      "content": [
+        {
+          "type": "text",
+          "value": "If the starting pose you give the localizer doesn't match where the robot is physically placed, everything goes wrong.\n\nPosition error: you say (0, 0) but the robot is at (0.5, -0.3). Every waypoint in your path is now off by that amount.\n\nHeading error: you say 0° but the robot is rotated 3°. Now every forward drive goes in the wrong direction. After 120 inches, that 3° error means you're over 6 inches off target — and it gets worse the farther you go."
+        }
+      ]
+    },
+    {
+      "title": "Quiz: starting position",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "You set the starting heading to 0° but the robot is actually at 2°. After driving 120 inches forward, how far off from the intended position will it be?",
+          "options": [
+            "Not at all — heading error only matters when turning",
+            "About 4 inches — the heading error projects the drive into the wrong direction",
+            "Exactly 120 inches off",
+            "The localizer automatically corrects for this"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "Heading drift",
+      "content": [
+        {
+          "type": "text",
+          "value": "Position drifts. Heading drifts too — and it's worse.\n\nPinpoint uses two dead wheel pods (forward + strafe) and gets heading from its built-in IMU. A three-pod setup without Pinpoint gets heading from the difference between the two forward pods — any encoder error in either pod becomes a heading error.\n\nEither way, heading drift kills you because it projects your forward drive into the wrong direction, multiplying position error over distance.\n\nNote: IMU heading also drifts over time. Gyroscope bias accumulates slowly, the magnetometer can be thrown off by metal near the robot, and vibrations from mechanisms like flywheels or launchers introduce noise into the gyro readings. It's better than pod-only heading, but not perfect."
+        }
+      ]
+    },
+    {
+      "title": "Quiz: IMU heading",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Does an IMU heading drift over time?",
+          "options": [
+            "No — IMU heading is always perfectly accurate",
+            "Yes — gyroscope bias accumulates and magnetometer can be affected by nearby metal",
+            "Only on carpet fields",
+            "Only when the battery is low"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "The fix: sensor fusion",
+      "content": [
+        {
+          "type": "text",
+          "value": "No single sensor is perfect. The solution is combining them:\n\nDead wheels → accurate distance, low slip. Handles position.\n\nIMU → absolute heading reference. Slower to drift than pod-only heading.\n\nAprilTags / vision → occasional absolute position fixes from field landmarks. Resets accumulated drift.\n\nPedro Pathing's Follower also helps — it constantly corrects motor powers to steer back toward the path. Small errors get fixed before they grow.\n\nWith dead wheels + IMU + a good path follower, drift becomes manageable enough for reliable autonomous."
+        }
+      ]
+    }
+  ]
+}

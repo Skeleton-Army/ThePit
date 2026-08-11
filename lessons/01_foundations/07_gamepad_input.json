@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "The FTC Driver Station supports two gamepads: gamepad1 and gamepad2.\n\ngamepad1 is usually the driver. In this simulator, only gamepad1 is available.\n\nEach joystick axis returns -1.0 to 1.0. left_stick_y is forward/back, left_stick_x is strafe, right_stick_x is turn."
+          "value": "The FTC Driver Station supports two gamepads: gamepad1 and gamepad2.\n\ngamepad1 is usually the driver. In this simulator, only gamepad1 is available.\n\nEach joystick axis returns -1.0 to 1.0. left_stick_y is forward/back, left_stick_x is strafe, right_stick_x is turn.\n\nYou can control the virtual joysticks with the keyboard: WASD moves the left stick, arrow keys move the right stick."
         }
       ]
     },

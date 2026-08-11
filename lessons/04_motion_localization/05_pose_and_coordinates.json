@@ -1,0 +1,60 @@
+{
+  "id": "05_pose_and_coordinates",
+  "title": "Pose and Coordinate Systems",
+  "starterOpMode": null,
+  "starterFiles": [],
+  "steps": [
+    {
+      "title": "What is a Pose?",
+      "content": [
+        {
+          "type": "text",
+          "value": "A Pose represents a robot's full 2D state: where it is and which direction it faces.\n\nnew Pose(x, y, heading)\n\nX — forward position (positive = forward).\n\nY — lateral position (positive = left).\n\nHeading — orientation. Use Math.toRadians(degrees).\n\nExamples:\n\nnew Pose(0, 0, Math.toRadians(0)) — origin, facing right.\n\nnew Pose(24, 12, Math.toRadians(90)) — 24\" forward, 12\" left, facing up.\n\nnew Pose(36, -12, Math.toRadians(45)) — 36\" forward, 12\" right, facing 45°.\n\nGetters: pose.getX(), pose.getY(), pose.getHeading()."
+        }
+      ]
+    },
+    {
+      "title": "Quiz: constructing poses",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "A robot starts at (0, 0) facing 0°. You want it to go 20\" behind it, still facing 0°. What is the target Pose?",
+          "options": [
+            "new Pose(20, 0, 0)",
+            "new Pose(-20, 0, 0)",
+            "new Pose(0, 20, 0)",
+            "new Pose(0, -20, 0)"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "Heading conventions",
+      "content": [
+        {
+          "type": "text",
+          "value": "0° = +X (right)\n90° = +Y (up)\n180° = -X (left)\n-90° or 270° = -Y (down)\n\nUse Math.toRadians() — Pedro Pathing expects radians internally."
+        }
+      ]
+    },
+    {
+      "title": "Field-centric vs. robot-centric",
+      "content": [
+        {
+          "type": "text",
+          "value": "Field-centric — X and Y are fixed to the field. (5, 10) always means the same spot.\n\nRobot-centric — axes move with the robot. (5, 0) means 5\" in front of wherever the robot faces.\n\nPedro Pathing paths are field-centric. A waypoint at (24, 0) means 24\" forward on the field, not 24\" in front of the robot.\n\nThe Follower converts between the two internally using the robot's current heading."
+        }
+      ]
+    },
+    {
+      "title": "Alliance-relative paths (mirroring)",
+      "content": [
+        {
+          "type": "text",
+          "value": "In competition, you write one autonomous and need it to work on both the red and blue alliances. The field is symmetrical — the blue side is a mirror of the red side.\n\nInstead of writing two different autos, use mirroring:\n\nPose mirrored = pose.mirror();\n\nThe mirror() method flips the X coordinate across the field center (defaults to 141.5). Heading is automatically adjusted to face the mirrored direction.\n\nPattern: store your poses in an array, then call .mirror() on each one when you're on the red alliance. One set of waypoints, both alliances."
+        }
+      ]
+    }
+  ]
+}

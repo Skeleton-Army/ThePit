@@ -66,7 +66,8 @@ public class LessonPanel {
         this.lesson    = lesson;
         this.progress  = progress;
         this.topics    = topics;
-        this.stepIndex = progress.getCurrentStep(lesson.id);
+        int saved = progress.getCurrentStep(lesson.id);
+        this.stepIndex = Math.min(saved, Math.max(0, lesson.steps.size() - 1));
     }
 
     public void show(Stage simulatorStage) {

@@ -1,0 +1,64 @@
+{
+  "id": "06_building_a_pathchain",
+  "title": "Building a PathChain",
+  "starterOpMode": "PathChainOpMode.java",
+  "starterFiles": ["PathChainOpMode.java"],
+  "steps": [
+    {
+      "title": "From a point to a path",
+      "content": [
+        {
+          "type": "text",
+          "value": "A PathChain is a sequence of paths the Follower executes one after another. The robot completes segment 1, then smoothly transitions to segment 2.\n\nYou build one with follower.pathBuilder(), chaining .addPath() and .set*HeadingInterpolation() calls, then .build().\n\nAlways call .setGlobalDeceleration() before .build() — it's more optimized than the default deceleration, even for single-path chains."
+        }
+      ]
+    },
+    {
+      "title": "Example PathChain",
+      "content": [
+        {
+          "type": "text",
+          "value": "Starting from the field center (70.75, 70.75) facing 90° (up). Here's a two-segment chain:\n\nPathChain chain = follower.pathBuilder()\n    .addPath(new BezierLine(\n        new Pose(70.75, 70.75, 0),\n        new Pose(70.75, 118.75, 0)\n    ))\n    .setConstantHeadingInterpolation(0)\n    .addPath(new BezierLine(\n        new Pose(70.75, 118.75, 0),\n        new Pose(34.75, 118.75, 0)\n    ))\n    .setConstantHeadingInterpolation(0)\n    .setGlobalDeceleration()\n    .build();\n\nSegment 1 drives forward 48\". Segment 2 strafes left 36\". setConstantHeadingInterpolation keeps the robot facing right the whole time.\n\nRun it with: schedule(new FollowPathCommand(follower, chain))"
+        }
+      ]
+    },
+    {
+      "title": "Look at the skeleton",
+      "content": [
+        {
+          "type": "text",
+          "value": "Open PathChainOpMode.java.\n\nThe skeleton has a private Follower field and empty initialize().\n\nCreate the Follower with Constants.createFollower(hardwareMap). Set its pose with follower.setPose(new Pose(70.75, 70.75, 0)).\n\nPosition the robot before starting: left-click drag near center, right-click to set heading to 0° (right)."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Build a three-segment path",
+      "content": [
+        {
+          "type": "text",
+          "value": "Build a PathChain with three BezierLine segments starting from the field center:\n\nSegment 1: (70.75, 70.75, 0) to (118.75, 70.75, 0) — 48\" forward.\n\nSegment 2: (118.75, 70.75, 0) to (118.75, 106.75, 0) — 36\" left.\n\nSegment 3: (118.75, 106.75, 0) to (70.75, 70.75, 0) — return.\n\nUse setConstantHeadingInterpolation(0) on each. End with .setGlobalDeceleration().\n\nSchedule: new FollowPathCommand(follower, chain)."
+        }
+      ]
+    },
+    {
+      "title": "Interrupting a path early",
+      "content": [
+        {
+          "type": "text",
+          "value": "Sometimes you need to stop a path before it finishes — for example, when a color sensor detects a game element.\n\nInstead of letting the path run to completion, add a condition to the command:\n\nFollowPathCommand cmd = new FollowPathCommand(follower, chain);\ncmd.interruptOn(() -> colorSensor.red() > 100);\nschedule(cmd);\n\nWhen the condition returns true, the path stops immediately and the Follower holds position. This is how teams react to sensor input mid-path without writing complex state machines."
+        }
+      ]
+    },
+    {
+      "title": "Run the path",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode. The Follower drives all three segments in sequence. If it overshoots, the PIDF gains in Constants.java need adjustment."
+        }
+      ],
+      "check": { "type": "robot_position", "x": 0, "y": 0, "tolerance": 60 }
+    }
+  ]
+}

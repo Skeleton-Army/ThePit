@@ -1,0 +1,69 @@
+{
+  "id": "07_bezier_curves",
+  "title": "Bezier Curves in Pedro Pathing",
+  "starterOpMode": "BezierCurveOpMode.java",
+  "starterFiles": ["BezierCurveOpMode.java"],
+  "steps": [
+    {
+      "title": "Straight lines aren't always best",
+      "content": [
+        {
+          "type": "text",
+          "value": "Turning 90 degrees at a corner requires the robot to decelerate, rotate, and accelerate again. A smooth curve lets the robot carry speed through the turn.\n\nBezierCurve takes three poses: start, control, end. The curve bends toward the control point but doesn't pass through it."
+        }
+      ]
+    },
+    {
+      "title": "How Bezier curves work",
+      "content": [
+        {
+          "type": "text",
+          "value": "A Bezier curve uses a parameter t that goes from 0 to 1 as the robot moves:\n\nAt t=0: robot is at the start point.\n\nAt t=0.5: robot is pulled halfway toward the control point.\n\nAt t=1: robot arrives at the end point.\n\nThe control point acts like a magnet — the closer t gets to 0.5, the stronger the pull. That's what creates the curve shape."
+        }
+      ]
+    },
+    {
+      "title": "Try the Visualizer",
+      "content": [
+        {
+          "type": "text",
+          "value": "Typing control point coordinates by hand is hard. Use the Pedro Pathing Visualizer instead:\n\nClick to place start and end points. Drag the control point to shape the curve. See it update in real time. Export the Java code and paste it into your OpMode.\n\nTeams don't guess control point positions — they design visually."
+        },
+        {
+          "type": "link",
+          "label": "Pedro Pathing Visualizer",
+          "url": "https://visualizer.pedropathing.com"
+        }
+      ]
+    },
+    {
+      "title": "Look at the skeleton",
+      "content": [
+        {
+          "type": "text",
+          "value": "Open BezierCurveOpMode.java.\n\nThe skeleton has a private Follower field.\n\nCreate the Follower with Constants.createFollower(hardwareMap). Set its pose with follower.setPose(new Pose(70.75, 70.75, 0)).\n\nPosition the robot: left-click drag near center, right-click to face 0° (right)."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Create an S-curve",
+      "content": [
+        {
+          "type": "text",
+          "value": "Build a PathChain with a single BezierCurve:\n\nnew BezierCurve(\n    new Pose(70.75, 70.75, 0),\n    new Pose(70.75, 120.75, 0),\n    new Pose(70.75, 170.75, 0)\n)\n\nUse setTangentHeadingInterpolation() so the robot faces the direction of the curve.\n\nAlways add .setGlobalDeceleration() before .build().\n\nSchedule: new FollowPathCommand(follower, chain)."
+        }
+      ]
+    },
+    {
+      "title": "Watch the curve",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode. The robot follows a smooth arc.\n\nTry changing the control point in the Visualizer — farther from the line for a deeper bend, closer for a shallower one."
+        }
+      ],
+      "check": { "type": "robot_position", "x": 450, "y": 0, "tolerance": 60 }
+    }
+  ]
+}

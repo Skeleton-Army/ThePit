@@ -1,0 +1,71 @@
+{
+  "id": "08_heading_interpolation",
+  "title": "Heading Interpolation",
+  "starterOpMode": "HeadingInterpolationOpMode.java",
+  "starterFiles": ["HeadingInterpolationOpMode.java"],
+  "steps": [
+    {
+      "title": "Three ways to turn",
+      "content": [
+        {
+          "type": "text",
+          "value": "Pedro Pathing gives you three ways to control heading along a path:\n\nConstant — heading stays fixed. setConstantHeadingInterpolation(heading). Best for strafing sideways or keeping an intake aimed at the field.\n\nLinear — heading changes smoothly from start to end. setLinearHeadingInterpolation(start, end). Good for predictable turns.\n\nTangent — heading follows the curve's slope. setTangentHeadingInterpolation(). The robot faces the direction it's moving. Best for high-speed curves."
+        }
+      ]
+    },
+    {
+      "title": "Quiz: heading modes",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Which interpolation makes the robot face the direction it's traveling at every point?",
+          "options": [
+            "setConstantHeadingInterpolation()",
+            "setLinearHeadingInterpolation()",
+            "setTangentHeadingInterpolation()",
+            "None of the above"
+          ],
+          "correctIndex": 2
+        }
+      ]
+    },
+    {
+      "title": "Look at the skeleton",
+      "content": [
+        {
+          "type": "text",
+          "value": "Open HeadingInterpolationOpMode.java.\n\nThe skeleton has a private Follower field.\n\nCreate the Follower with Constants.createFollower(hardwareMap). Set its pose with follower.setPose(new Pose(70.75, 70.75, 0)).\n\nPosition the robot: left-click drag near center, right-click to face 0° (right)."
+        }
+      ],
+      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+    },
+    {
+      "title": "Build a path with all three modes",
+      "content": [
+        {
+          "type": "text",
+          "value": "Starting from (70.75, 70.75, 0):\n\nSegment 1: BezierLine to (142.75, 70.75, 0) with setConstantHeadingInterpolation(0) — drive right while facing right.\n\nSegment 2: BezierLine to (142.75, 142.75, Math.toRadians(90)) with setLinearHeadingInterpolation(0, Math.toRadians(90)) — drive up while turning.\n\nSegment 3: BezierCurve from there to (70.75, 70.75, 0) with control at (106.75, 106.75, 0) and setTangentHeadingInterpolation().\n\nAdd .setGlobalDeceleration() before .build().\n\nSchedule: new FollowPathCommand(follower, chain)."
+        }
+      ]
+    },
+    {
+      "title": "Piecewise heading interpolation",
+      "content": [
+        {
+          "type": "text",
+          "value": "You can combine multiple interpolations within a single path segment using piecewise:\n\nPATH.setHeadingInterpolation(\n    HeadingInterpolator.piecewise(\n        new PiecewiseNode(0, 0.3, HeadingInterpolator.linear(0, Math.toRadians(180))),\n        new PiecewiseNode(0.3, 1, HeadingInterpolator.tangent)\n    )\n);\n\nThis turns 180° in the first 30% of the path, then follows the curve tangentially for the rest. Piecewise is useful when you need different behaviors at different stages of one segment."
+        }
+      ]
+    },
+    {
+      "title": "Observe the heading changes",
+      "content": [
+        {
+          "type": "text",
+          "value": "Start the OpMode.\n\nSegment 1: robot drives right while facing right — constant heading.\n\nSegment 2: robot smoothly turns while driving diagonally — linear interpolation.\n\nSegment 3: robot follows the curved path, facing its direction of travel — tangent."
+        }
+      ],
+      "check": { "type": "robot_position", "x": 318, "y": 318, "tolerance": 80 }
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": "01_what_is_odometry",
+  "title": "What is Odometry?",
+  "starterOpMode": null,
+  "starterFiles": [],
+  "steps": [
+    {
+      "title": "The problem: where am I?",
+      "content": [
+        {
+          "type": "text",
+          "value": "A robot that doesn't know where it is can't plan where to go.\n\nOdometry is the technique of estimating robot position by tracking how far the robot has moved across the ground.\n\nThe right way to do it is with dead wheels — unpowered, spring-loaded encoder wheels that ride along the ground. They're not driven by motors, so they don't suffer from wheel slip.\n\nWhy not use the drive motor encoders? Because drive wheels slip. When a wheel spins under power, it can lose traction. The encoder says the wheel turned 500 ticks, but the robot only moved 400 ticks' worth of distance. That error accumulates into drift."
+        }
+      ]
+    },
+    {
+      "title": "Dead wheels: how they work",
+      "content": [
+        {
+          "type": "text",
+          "value": "A dead wheel is an omni wheel attached to an encoder, mounted on a spring-loaded arm that presses it against the ground.\n\nBecause it's not driven by a motor, it only turns when the robot actually moves. No motor torque means no slip.\n\nTwo common setups:\n\nTwo-pod: one forward pod + one strafe pod + an IMU for heading. This is what Pinpoint uses.\n\nThree-pod: two forward pods (left and right) + one strafe pod. The forward pods' difference gives you heading — no IMU needed.\n\nBoth track the robot's full 2D position using unpowered encoder wheels."
+        }
+      ]
+    },
+    {
+      "title": "Quiz: dead wheels vs. drive encoders",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Why are dead wheels better than drive motor encoders for odometry?",
+          "options": [
+            "Dead wheels are cheaper",
+            "Dead wheels don't slip because they're not powered — they only turn when the robot actually moves",
+            "Dead wheels have higher RPM",
+            "Dead wheels are required by FTC rules"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "title": "You need a starting position",
+      "content": [
+        {
+          "type": "text",
+          "value": "Odometry is relative — it tracks movement from a starting point.\n\nYou must give the localizer a starting pose: (startX, startY, startHeading). If that initial value doesn't match where the robot actually sits on the field, every position estimate afterwards will be off by the same amount.\n\nA one-inch error at the start means a one-inch error for the entire match."
+        }
+      ]
+    },
+    {
+      "title": "Libraries handle the math",
+      "content": [
+        {
+          "type": "text",
+          "value": "Under the hood, the localizer reads ticks from each dead wheel every cycle, converts them to distances, and updates an (x, y, heading) pose.\n\nYou don't write that math. Localization libraries (like Pedro Pathing's localizer) handle it:\n\nYou configure the dead wheel positions, wheel diameter, and ticks-per-revolution. The library reads the encoders, applies IMU fusion if available, and gives you a clean pose every cycle.\n\nPinpoint does the same thing — but on its own chip, reporting the finished pose over I2C.\n\nYour job: configure the hardware correctly and trust the pose you get back."
+        }
+      ]
+    },
+    {
+      "title": "Quiz: localization libraries",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "What does a localization library do for you?",
+          "options": [
+            "Writes the OpMode for you",
+            "Reads dead wheel encoders, runs the math, applies sensor fusion, and returns a clean pose — you just configure it",
+            "Tunes PID coefficients automatically",
+            "Controls the drive motors"
+          ],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ]
+}

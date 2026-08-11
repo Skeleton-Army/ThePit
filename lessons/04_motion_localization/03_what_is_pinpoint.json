@@ -1,0 +1,60 @@
+{
+  "id": "03_what_is_pinpoint",
+  "title": "What is Pinpoint Odometry?",
+  "starterOpMode": null,
+  "starterFiles": [],
+  "steps": [
+    {
+      "title": "The odometry problem, revisited",
+      "content": [
+        {
+          "type": "text",
+          "value": "The previous lesson showed why dead reckoning from drive encoders drifts. Every source of error — slip, backlash, encoder resolution — adds up over time.\n\nThe solution: dedicated odometry hardware that measures ground truth more accurately and fuses data from multiple sensors.\n\nThis is where Pinpoint comes in."
+        }
+      ]
+    },
+    {
+      "title": "What is a Pinpoint computer?",
+      "content": [
+        {
+          "type": "text",
+          "value": "The GoBILDA Pinpoint is a dedicated odometry computer — a small board with its own microcontroller (STM32) that connects to two odometry pods and an IMU.\n\nOdometry pods are unpowered, spring-loaded wheels that ride along the ground. Because they're not driving the robot, they don't slip — they measure true ground distance.\n\nPinpoint runs at roughly 0.75 ms per pose update, about 1,333 Hz. Your main robot loop runs at maybe 50-100 Hz. Pinpoint is over 10x faster.\n\nIt fuses encoder data with the built-in IMU using sensor fusion algorithms, then reports a single clean pose over I2C."
+        }
+      ]
+    },
+    {
+      "title": "Pinpoint vs. hand-rolled odometry",
+      "content": [
+        {
+          "type": "quiz",
+          "question": "Which of these is NOT an advantage of Pinpoint over hand-rolled odometry?",
+          "options": [
+            "Higher update rate (1,333 Hz vs. ~50 Hz main loop)",
+            "Dedicated odometry pods reduce wheel slip error",
+            "Offloads localization processing from the main robot controller",
+            "It eliminates the need for drive motor encoders entirely"
+          ],
+          "correctIndex": 3
+        }
+      ]
+    },
+    {
+      "title": "What Pinpoint provides",
+      "content": [
+        {
+          "type": "text",
+          "value": "Pinpoint returns a full 2D pose: (x, y, heading) in inches and radians.\n\nIt tracks two odometry pods — one forward/backward, one sideways — plus the IMU.\n\nThe forward pod measures forward travel. The strafe pod measures sideways travel. The IMU provides absolute heading.\n\nBecause Pinpoint runs on its own chip, it doesn't use CPU time on your main robot controller. Your OpMode just reads the latest pose whenever it needs it.\n\nThe pose is computed from three fused sensor inputs, making it much more accurate than encoder-only dead reckoning."
+        }
+      ]
+    },
+    {
+      "title": "Using Pinpoint in code",
+      "content": [
+        {
+          "type": "text",
+          "value": "Pedro Pathing wraps Pinpoint into its localization layer. Instead of writing raw I2C reads, you configure PinpointConstants and let the Follower handle everything.\n\nFrom the Pedro Pathing perspective, Pinpoint is just one localizer option among several — you can also use drive encoders, two-wheel, three-wheel, or other setups.\n\nPedro Pathing also provides DeadWheelLocalizer which tracks unpowered dead wheel odometry pods instead of dedicated hardware, useful when you don't have a Pinpoint chip."
+        }
+      ]
+    }
+  ]
+}
