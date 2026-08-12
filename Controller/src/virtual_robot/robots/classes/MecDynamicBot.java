@@ -1,7 +1,7 @@
 package virtual_robot.robots.classes;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorExDynImpl;
+import com.qualcomm.robotcore.hardware.DcMotorExImpl;
 import com.qualcomm.robotcore.hardware.GyroSensorImpl;
 import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.hardware.configuration.MotorType;
@@ -28,7 +28,7 @@ import java.util.HashMap;
 @BotConfig(name = "MecDynamic Bot", filename = "mec_dynamic_bot")
 public class MecDynamicBot extends DynamicMecanumBase {
 
-    private DcMotorExDynImpl armMotor = null;
+    private DcMotorExImpl armMotor = null;
     private ServoImpl handServo = null;
 
     @FXML
@@ -74,7 +74,7 @@ public class MecDynamicBot extends DynamicMecanumBase {
         super.initialize();
         hardwareMap.setActive(true);
 
-        armMotor = (DcMotorExDynImpl) hardwareMap.get(DcMotorEx.class, "arm_motor");
+        armMotor = (DcMotorExImpl) hardwareMap.get(DcMotorEx.class, "arm_motor");
         armMotor.setActualPositionLimits(0, 2240);
         armMotor.setPositionLimitsEnabled(true);
 
@@ -122,14 +122,14 @@ public class MecDynamicBot extends DynamicMecanumBase {
     protected void createHardwareMap() {
         super.createHardwareMap();
         hardwareMap.put("gyro_sensor", new GyroSensorImpl(this));
-        hardwareMap.put("arm_motor", new DcMotorExDynImpl(MotorType.Neverest40, motorController1, 0));
+        hardwareMap.put("arm_motor", new DcMotorExImpl(MotorType.Neverest40, motorController1, 0));
         hardwareMap.put("hand_servo", new ServoImpl());
     }
 
     public synchronized void updateStateAndSensors(double millis) {
         super.updateStateAndSensors(millis);
 
-        armMotor.update(millis, 0);
+        armMotor.update(millis);
         armTranslation = armMotor.getActualPosition() * 50.0 / 2240.0 * (botWidth / 75.0);
         armSlide.setPosition(armTranslation);
 
