@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "A DC motor spins a shaft when you apply power.\n\nIn FTC, each motor is controlled by a motor controller that translates your setPower() commands into electrical current.\n\nPower values range from -1.0 (full reverse) to 0.0 (stopped) to 1.0 (full forward).\n\nMost motors also have built-in encoders that count how far they've turned."
+          "value": "A DC motor spins a shaft when you apply power.\n\nIn FTC, to spin a motor, you call setPower().\n\nPower values range from -1.0 (full reverse) to 0.0 (stopped) to 1.0 (full forward).\n\nMotors also have built-in encoders that count how far they've turned."
         }
       ]
     },
@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Device names are set in the robot configuration, which you create in the Driver Station app or by editing an XML file.\n\nCommon motor names include \"front_left_motor\", \"front_right_motor\", \"back_left_motor\", \"back_right_motor\".\n\nThe name must match exactly."
+          "value": "Device names are set in the robot configuration, which you create in the Driver Station app or by editing an XML file. You can see the robot configuration on the right side of the simulation.\n\nCommon motor names include \"front_left_motor\", \"front_right_motor\", \"back_left_motor\", \"back_right_motor\".\n\nThe name must match exactly."
         }
       ]
     },
@@ -36,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "At the class level, add: private DcMotor motor;\n\nFields declared with private are only accessible within this class. This is good practice."
+          "value": "At the class level (before init()), add: private DcMotor motor;\n\nFields declared with private are only accessible within this class. This is good practice."
         }
       ]
     },

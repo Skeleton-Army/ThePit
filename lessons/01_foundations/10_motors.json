@@ -36,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "RUN_USING_ENCODER tries to maintain a target speed using the motor's encoder.\n\nHowever, the SDK's built-in velocity controller uses a basic proportional controller with fixed gains.\n\nIt doesn't account for battery voltage sag, mechanical load, or motor differences. The result is inconsistent — the same setPower() value produces different speeds as the battery drains.\n\nFor reliable velocity control, you should use your own PID implementation or the SolversLib Motor class (covered in the Command-Based module). We will touch on PID and feedforward in Module 5: Control & Tuning."
+          "value": "RUN_USING_ENCODER tries to maintain a target speed using the motor's encoder.\n\nHowever, the SDK's built-in velocity controller uses a basic proportional controller with fixed gains.\n\nIt doesn't account for battery voltage sag, mechanical load, or motor differences. The result is inconsistent — the same setPower() value produces different speeds as the battery drains.\n\nFor reliable velocity control, you should use your own PID implementation or the SolversLib Motor class (covered in the Command-Based module). If you don't quite understand what this all means, don't worry, we will touch on it in Module 3: Control & Tuning."
         }
       ]
     },
@@ -45,7 +45,7 @@
       "content": [
         {
           "type": "text",
-          "value": "RUN_TO_POSITION tries to drive the motor to a specific encoder count. You set a target position, a power, and the SDK runs an internal PID loop.\n\nThe problem: the default PID gains are poorly tuned for FTC motors.\n\nThe motor often overshoots, oscillates, or stalls before reaching the target. There's no built-in feedforward.\n\nFor reliable position control, write your own PID loop or use SolversLib's Motor with PositionControl RunMode. We will touch on PID and feedforward in Module 5: Control & Tuning."
+          "value": "RUN_TO_POSITION tries to drive the motor to a specific encoder count. You set a target position, a power, and the SDK runs an internal PID loop.\n\nThe problem: the default PID gains are poorly tuned for FTC motors.\n\nThe motor often overshoots, oscillates, or stalls before reaching the target. There's no built-in feedforward.\n\nFor reliable position control, write your own PID loop or use SolversLib's Motor with PositionControl RunMode. We will touch on PID and feedforward in Module 3: Control & Tuning."
         }
       ]
     },
@@ -54,7 +54,7 @@
       "content": [
         {
           "type": "text",
-          "value": "For TeleOp driving: RUN_WITHOUT_ENCODER is fine — your thumb is the feedback controller.\n\nFor drivetrains: use BRAKE so the robot stops cleanly when you release the stick.\n\nFor flywheels and shooters: use FLOAT so the mechanism spins down naturally.\n\nFor autonomous driving with encoders: either write your own PID or use SolversLib's Motor class.\n\nThe SDK's built-in RUN_USING_ENCODER and RUN_TO_POSITION are not reliable enough for competitive robotics. Proper PID and feedforward control is covered in Module 5: Control & Tuning."
+          "value": "For TeleOp driving: RUN_WITHOUT_ENCODER is fine — your thumb is the feedback controller.\n\nFor drivetrains: use BRAKE so the robot stops cleanly when you release the stick.\n\nFor flywheels and shooters: use FLOAT so the mechanism spins down naturally.\n\nIn future lessons, we will learn how to implement our own motors controls. Just know for now that you shouldn't use RUN_WITH_ENCODER and RUN_TO_POSITION, as they are not very accurate."
         }
       ]
     }

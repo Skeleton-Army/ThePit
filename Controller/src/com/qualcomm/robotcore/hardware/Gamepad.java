@@ -188,9 +188,9 @@ public class Gamepad {
         a = state.a;
         b = state.b;
         left_stick_x = setWithDeadzone(state.leftStickX);
-        left_stick_y = setWithDeadzone(state.leftStickY);
+        left_stick_y = setWithDeadzone(-state.leftStickY);
         right_stick_x = setWithDeadzone(state.rightStickX);
-        right_stick_y = setWithDeadzone(state.rightStickY);
+        right_stick_y = setWithDeadzone(-state.rightStickY);
         dpad_up = state.dpad_up;
         dpad_down = state.dpad_down;
         dpad_left = state.dpad_left;

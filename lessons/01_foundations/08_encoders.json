@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Encoders count motor rotations in ticks. They let you measure distance precisely instead of guessing with timing.\n\ngetCurrentPosition() returns the accumulated tick count."
+          "value": "Encoders count motor rotations in ticks. They report ticks relative to the start - when you turn on the robot (not when you run an OpMode), the zero is reset to whatever position the motor is currently in. This means that if you turn on the robot while, for example, an arm is extended, and you then command the arm to go to tick 0, it will return to that extended position. You can also reset the encoder through code.\n\ngetCurrentPosition() returns the current accumulated tick count."
         }
       ]
     },

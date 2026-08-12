@@ -1070,12 +1070,12 @@ public class VirtualRobotController {
             float lsx = 0, lsy = 0, rsx = 0, rsy = 0;
             boolean keysHeld = false;
 
-            if (getKeyState(KeyCode.W)) { lsy = -1.0f; keysHeld = true; }
-            if (getKeyState(KeyCode.S)) { lsy = 1.0f;  keysHeld = true; }
+            if (getKeyState(KeyCode.W)) { lsy = 1.0f; keysHeld = true; }
+            if (getKeyState(KeyCode.S)) { lsy = -1.0f;  keysHeld = true; }
             if (getKeyState(KeyCode.A)) { lsx = -1.0f; keysHeld = true; }
             if (getKeyState(KeyCode.D)) { lsx = 1.0f;  keysHeld = true; }
-            if (getKeyState(KeyCode.UP))    { rsy = -1.0f; keysHeld = true; }
-            if (getKeyState(KeyCode.DOWN))  { rsy = 1.0f;  keysHeld = true; }
+            if (getKeyState(KeyCode.UP))    { rsy = 1.0f; keysHeld = true; }
+            if (getKeyState(KeyCode.DOWN))  { rsy = -1.0f;  keysHeld = true; }
             if (getKeyState(KeyCode.LEFT))  { rsx = -1.0f; keysHeld = true; }
             if (getKeyState(KeyCode.RIGHT)) { rsx = 1.0f;  keysHeld = true; }
 

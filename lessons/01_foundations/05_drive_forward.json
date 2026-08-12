@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Setting motor power makes the wheel spin.\n\nPower ranges -1.0 (reverse) to 1.0 (forward). The motor's controller translates this into current."
+          "value": "Setting motor power makes the wheel spin.\n\nPower ranges -1.0 (reverse) to 1.0 (forward). The motor's internal controller translates this into current."
         }
       ]
     },
@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Declare a private DcMotor field.\n\nIn init(), get \"front_left_motor\" from hardwareMap."
+          "value": "Declare a private DcMotor field.\n\nIn init(), get \"front_left_motor\" from hardwareMap like you learned before."
         }
       ]
     },

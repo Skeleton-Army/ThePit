@@ -197,9 +197,9 @@ public class VirtualGamePadController {
         keyboardActive = leftX != 0 || leftY != 0 || rightX != 0 || rightY != 0;
         Platform.runLater(() -> {
             joyStickLeftHandle.setTranslateX(50 + leftX * 50);
-            joyStickLeftHandle.setTranslateY(50 + leftY * 50);
+            joyStickLeftHandle.setTranslateY(50 - leftY * 50);
             joyStickRightHandle.setTranslateX(50 + rightX * 50);
-            joyStickRightHandle.setTranslateY(50 + rightY * 50);
+            joyStickRightHandle.setTranslateY(50 - rightY * 50);
         });
     }
 
@@ -218,12 +218,12 @@ public class VirtualGamePadController {
                 joyStickLeftHandle.setTranslateX(x - 10);
                 joyStickLeftHandle.setTranslateY(y - 10);
                 left_stick_x = (x - 60.0f) / 50.0f;
-                left_stick_y = (y - 60.0f) / 50.0f;
+                left_stick_y = (60.0f - y) / 50.0f;
             } else if (arg.getSource() == joyStickRightPane) {
                 joyStickRightHandle.setTranslateX(x - 10);
                 joyStickRightHandle.setTranslateY(y - 10);
                 right_stick_x = (x - 60.0f) / 50.0f;
-                right_stick_y = (y - 60.0f) / 50.0f;
+                right_stick_y = (60.0f - y) / 50.0f;
             }
         } else if (arg.getEventType() == MouseEvent.MOUSE_RELEASED){
             boolean keyDown = virtualRobotController.getKeyState(KeyCode.SHIFT)

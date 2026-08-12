@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Voltage is the electrical \"pressure\" that pushes electricity through a circuit, measured in volts.\n\nThink of it like water pressure in a pipe. Higher pressure (voltage) pushes more water (current) through.\n\nFTC robots use 12V batteries (nominal), though a fully charged battery reads around 13-14V at rest."
+          "value": "This lesson is about electricity, not code. It is important that you know the basics of how mechanisms work to build reliable code.\n\nVoltage is the electrical \"pressure\" that pushes electricity through a circuit, measured in volts.\n\nThink of it like water pressure in a pipe. Higher pressure (voltage) pushes more water (current) through.\n\nFTC robots use 12V batteries (nominal), though a fully charged battery reads around 13-14V at rest."
         }
       ]
     },
@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "text",
-          "value": "When motors draw lots of current, the battery voltage drops temporarily. This is called voltage sag.\n\nA battery reading 13V at rest may sag to 11.5V under heavy motor load. This is normal. The voltage recovers when the load decreases.\n\nHowever, if it sags too low, the robot can brownout and reset."
+          "value": "When motors draw lots of current, the battery voltage drops temporarily. This is called voltage sag.\n\nA battery reading 13V at rest may sag to 11.5V under heavy motor load. This is normal. The voltage recovers when the load decreases.\n\nHowever, if it sags too low, the robot can brownout and reset (though this rarely happens)."
         }
       ]
     },
@@ -36,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Voltage ranges to know:\n\n11V or below means the battery is too low. Charge or replace it before a match.\n\n12-13V is acceptable but not ideal.\n\n13V and above is good, showing a healthy, well-charged battery.\n\nAlways monitor voltage during matches to avoid brownouts, which cause the robot to lose power and reset mid-match."
+          "value": "Voltage ranges to know:\n\n11V or below means the battery is too low. Charge or replace it before a match.\n\n12-13V is acceptable but not ideal.\n\n13V and above is good, showing a healthy, well-charged battery.\n\nIn addition, don't use batteries that are too hot, as that can damage the battery."
         }
       ]
     }

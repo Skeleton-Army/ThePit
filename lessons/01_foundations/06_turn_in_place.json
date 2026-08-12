@@ -37,7 +37,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Use getRuntime() to detect when 1.5 seconds have passed, then set all four motors to 0.0.\n\nThe robot should end up facing roughly 90 degrees from its start."
+          "value": "Use getRuntime() to detect when 1.5 seconds have passed, then set all four motors to 0.0."
         }
       ]
     }

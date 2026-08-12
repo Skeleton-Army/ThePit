@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "An OpMode is the base class for every robot program in FTC.\n\nIt controls the lifecycle of your robot code: initialization, match start, the main loop (50+ times per second), and finally stop.\n\nEvery program you write extends either OpMode or LinearOpMode."
+          "value": "An OpMode is the base class for every robot program in FTC.\n\nIt controls the lifecycle of your robot code: initialization, match start, the main loop, and finally stop.\n\nEvery program you write extends either OpMode or LinearOpMode."
         }
       ]
     },
@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "LinearOpMode runs top-to-bottom on a single thread.\n\nYou call waitForStart() to wait for the start button, then use while(opModeIsActive()) to loop until the match ends.\n\nBeginners find it easy. Code flows like a recipe.\n\nBut if any step gets stuck, the whole robot freezes."
+          "value": "LinearOpMode runs top-to-bottom on a single thread.\n\nYou call waitForStart() to wait for the start button, then use while(opModeIsActive()) to loop until the match ends.\n\nBeginners find it easy because code flows like a recipe, but if any step gets stuck, the whole robot freezes."
         },
         {
           "type": "code",

@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Telemetry displays live values on the Driver Station screen.\n\nUse telemetry.addData(\"label\", value) to add a line.\n\nThe SDK calls telemetry.update() automatically each loop iteration, so your data always shows."
+            "value": "Telemetry displays live values on the Driver Station screen.\n\nUse telemetry.addData(\"label\", value) to add a line.\n\nAt the end of loop(), you must call telemetry.update() to show the telemetry on the screen."
         }
       ]
     },
@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In loop(), write telemetry.addData(\"Runtime\", getRuntime());\n\ngetRuntime() returns the number of seconds since you pressed START. This confirms the OpMode is looping."
+          "value": "In loop(), write:\n\ntelemetry.addData(\"Runtime\", getRuntime());\ntelemetry.update();\n\ngetRuntime() returns the number of seconds since you pressed START. This confirms the OpMode is looping."
         }
       ]
     },

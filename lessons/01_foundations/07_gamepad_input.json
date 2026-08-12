@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "The FTC Driver Station supports two gamepads: gamepad1 and gamepad2.\n\ngamepad1 is usually the driver. In this simulator, only gamepad1 is available.\n\nEach joystick axis returns -1.0 to 1.0. left_stick_y is forward/back, left_stick_x is strafe, right_stick_x is turn.\n\nYou can control the virtual joysticks with the keyboard: WASD moves the left stick, arrow keys move the right stick."
+          "value": "The FTC Driver Station supports two gamepads: gamepad1 and gamepad2.\n\ngamepad1 is usually the driver, and gamepad2 is the operator (second driver). In this simulator, only gamepad1 is available.\n\nEach joystick axis returns -1.0 to 1.0. left_stick_y is forward/back, left_stick_x is strafe, right_stick_x is turn.\n\nImportant: left_stick_y is reversed (pushing forward gives a negative value). You must negate it with -gamepad1.left_stick_y to get positive forward.\n\nYou can control the virtual joysticks with the keyboard: WASD moves the left stick, arrow keys move the right stick."
         }
       ]
     },
@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Mecanum wheels let the robot move in any direction.\n\nThe standard mecanum drive formula uses four motors:\n\nfrontLeft = forward + strafe + turn\nfrontRight = forward - strafe - turn\nbackLeft = forward - strafe + turn\nbackRight = forward + strafe - turn\n\nWhere forward = -left_stick_y, strafe = left_stick_x, turn = right_stick_x."
+          "value": "Mecanum wheels let the robot move in any direction.\n\nThe standard mecanum drive formula uses four motors:\n\nfrontLeft = forward + strafe + turn\nfrontRight = forward - strafe - turn\nbackLeft = forward - strafe + turn\nbackRight = forward + strafe - turn\n\nWhere forward = -left_stick_y, strafe = left_stick_x, turn = right_stick_x.\n\nThe left-side motors (frontLeft and backLeft) must be reversed with setDirection(DcMotorSimple.Direction.REVERSE) so they spin in the correct direction."
         }
       ]
     },
@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Declare four private DcMotor fields: frontLeft, frontRight, backLeft, backRight.\n\nIn init(), get all four from hardwareMap: \"front_left_motor\", \"front_right_motor\", \"back_left_motor\", \"back_right_motor\"."
+          "value": "Declare four private DcMotor fields: frontLeft, frontRight, backLeft, backRight.\n\nIn init(), get all four from hardwareMap: \"front_left_motor\", \"front_right_motor\", \"back_left_motor\", \"back_right_motor\".\n\nAfter getting them, reverse the left-side motors. Use setDirection(DcMotorSimple.Direction.REVERSE) on frontLeft and backLeft."
         }
       ]
     },
@@ -36,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In loop(), compute forward = -gamepad1.left_stick_y, strafe = gamepad1.left_stick_x, turn = gamepad1.right_stick_x.\n\nApply the mecanum formula to set all four motors."
+          "value": "In loop(), compute forward = -gamepad1.left_stick_y, strafe = gamepad1.left_stick_x, turn = gamepad1.right_stick_x.\n\nApply the mecanum formula from before to set all four motors:\n\nfrontLeft.setPower(forward + strafe + turn);\nfrontRight.setPower(forward - strafe - turn);\nbackLeft.setPower(forward - strafe + turn);\nbackRight.setPower(forward + strafe - turn);"
         }
       ],
       "check": { "type": "opmode_running" }

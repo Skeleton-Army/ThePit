@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Sensors give your robot perception.\n\nColor sensors detect RGB values (0-255 each). The simulator has a virtual color sensor built into most robot models."
+          "value": "Sensors give your robot perception.\n\nColor sensors detect RGB values (0-255 each). The simulator has a virtual color sensor pointing straight down to the ground."
         }
       ]
     },
@@ -47,42 +47,7 @@
       "content": [
         {
           "type": "text",
-          "value": "An IMU (Inertial Measurement Unit) is a sensor that measures the robot's heading — which direction it's pointing.\n\nIt combines a gyroscope, accelerometer, and magnetometer into one chip (like the BNO055 on the Rev Expansion Hub or the built-in IMU on the Control Hub).\n\nThe gyroscope measures angular velocity — how fast the robot is turning. By integrating this over time, the IMU tracks heading.\n\nThe accelerometer measures linear acceleration — including gravity. It tells the IMU which way is down, giving a gravity reference.\n\nThe magnetometer acts like a compass, measuring the Earth's magnetic field to determine absolute orientation.\n\nAll three are fused together to produce a single clean heading value that doesn't drift over the course of a match. This is critical for localization — without an IMU, dead wheels alone can't reliably track heading."
-        }
-      ]
-    },
-    {
-      "title": "Read the gyro heading",
-      "content": [
-        {
-          "type": "text",
-          "value": "Declare a private GyroSensor field. In init(), get \"gyro_sensor\" from hardwareMap:\n\ngyroSensor = hardwareMap.gyroSensor.get(\"gyro_sensor\");\n\nCall gyroSensor.calibrate() right after to zero the heading.\n\nIn loop(), call gyroSensor.getHeading() — it returns heading in degrees from -180 to 180.\n\nDisplay it with telemetry.addData(\"Heading\", heading).\n\nNow start the OpMode and rotate the robot by clicking and dragging. Watch the heading change."
-        }
-      ],
-      "check": { "type": "hardware_mapped", "name": "gyro_sensor" }
-    },
-    {
-      "title": "What heading means",
-      "content": [
-        {
-          "type": "text",
-          "value": "0 degrees = the direction the robot was facing when you calibrated.\n\nPositive angles = counter-clockwise rotation.\n\nNegative angles = clockwise rotation.\n\n-180 and +180 are the same direction.\n\nThe IMU gives you absolute heading. Unlike encoder-based heading estimates (which drift), the IMU stays accurate because it has an absolute gravity reference and magnetometer.\n\nThis is why localization systems fuse IMU heading with dead wheel odometry — the dead wheels track position, the IMU tracks orientation."
-        }
-      ]
-    },
-    {
-      "title": "Quiz: IMU basics",
-      "content": [
-        {
-          "type": "quiz",
-          "question": "What three sensors are fused together inside an IMU to produce a clean heading?",
-          "options": [
-            "Gyroscope, color sensor, touch sensor",
-            "Gyroscope, accelerometer, magnetometer",
-            "Encoder, distance sensor, gyroscope",
-            "Accelerometer, voltage sensor, magnetometer"
-          ],
-          "correctIndex": 1
+          "value": "An IMU (Inertial Measurement Unit) is a sensor that measures the robot's heading — which direction it's pointing.\n\nIt combines a gyroscope, accelerometer, and magnetometer into one chip (like the BNO055 on the Rev Expansion Hub or the built-in IMU on the Control Hub).\n\nThe gyroscope measures angular velocity — how fast the robot is turning. By integrating this over time, the IMU tracks heading.\n\nThe accelerometer measures linear acceleration — including gravity. It tells the IMU which way is down, giving a gravity reference.\n\nThe magnetometer acts like a compass, measuring the Earth's magnetic field to determine absolute orientation.\n\nJust know what it is for now. We will touch on it later."
         }
       ]
     }
