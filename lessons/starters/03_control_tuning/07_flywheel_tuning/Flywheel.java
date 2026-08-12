@@ -2,21 +2,25 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.controller.PIDController;
+import com.seattlesolvers.solverslib.controller.wpilibcontroller.SimpleMotorFeedforward;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
-import com.seattlesolvers.solverslib.hardware.motors.Motor.RunMode;
 
 public class Flywheel extends SubsystemBase {
     public final MotorEx motor;
     private final VoltageSensor battery;
     public final double targetRPM;
 
+    public final PIDController pid;
+    public final SimpleMotorFeedforward feedforward;
+
     public Flywheel(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap) {
         motor = new MotorEx(hardwareMap, "motor", FlywheelConfig.MOTOR_TYPE);
         battery = hardwareMap.voltageSensor.iterator().next();
 
-        motor.setRunMode(RunMode.VelocityControl);
-        motor.setVeloCoefficients(FlywheelConfig.kP, FlywheelConfig.kI, FlywheelConfig.kD);
-        motor.setFeedforwardCoefficients(FlywheelConfig.kS, FlywheelConfig.kV);
+        pid = new PIDController(FlywheelConfig.kP, FlywheelConfig.kI, FlywheelConfig.kD);
+        feedforward = new SimpleMotorFeedforward(FlywheelConfig.kS, FlywheelConfig.kV);
+
         targetRPM = FlywheelConfig.TARGET_RPM;
     }
 
@@ -27,6 +31,15 @@ public class Flywheel extends SubsystemBase {
     @Override
     public void periodic() {
         double voltage = battery.getVoltage();
-        motor.set(14.0 / voltage);
+
+        double targetVelocity = targetRPM * motor.getCPR() / 60.0;
+        double currentVelocity = motor.getCorrectedVelocity();
+
+        double pidOutput = pid.calculate(currentVelocity, targetVelocity);
+        double feedforwardOutput = feedforward.calculate(targetVelocity);
+
+        double desiredVoltage = pidOutput + feedforwardOutput;
+
+        motor.set(desiredVoltage / voltage);
     }
 }

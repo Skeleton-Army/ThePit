@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Most loop time is spent on hardware I/O — not your code.\n\nEvery time you read a motor encoder, call getCurrentPosition(), or read the IMU, the Expansion Hub sends an I2C command and waits for a response. Each I2C read costs about 5 milliseconds.\n\nIf your loop reads 4 encoders (4 × 5ms) and the IMU (another 5ms), that's 25ms before your PID even starts calculating. Your loop is already behind.\n\nHardware writes (setPower) also cost I2C time, though writes can be batched.\n\nThis is not simulated — in the virtual robot, reads and writes are instant. But the code patterns you learn here apply directly to real hardware."
+          "value": "Most loop time is spent on hardware I/O — not your code.\n\nThere are two kinds of hardware I/O on an FTC robot:\n\nMotors — getCurrentPosition() and setPower() go over USB to the hub (or straight to the Control Hub's board). Motors are NOT I2C. Each read is still a round trip that costs time, but motors can be bulk read (see Fix 1).\n\nI2C devices — color sensors and distance sensors plug into the I2C bus. Each read costs several milliseconds, and unlike motors, they CANNOT be bulk read. A single color sensor read can take 5-10ms.\n\nSo a loop that reads 4 encoders, a color sensor, and a distance sensor might spend ~4ms on the motors plus ~15ms on the two I2C sensors before your PID even starts.\n\nHardware writes (setPower) also cost time, though writes can be batched.\n\nThis is not simulated — in the virtual robot, reads and writes are instant. But the code patterns you learn here apply directly to real hardware."
         }
       ]
     },
@@ -36,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "The biggest loop time killer on real hardware is reading sensors one at a time.\n\nBy default, every getCurrentPosition() or IMU read sends its own I2C transaction. Four encoders plus an IMU = 5 transactions = 5 × 5ms = 25ms.\n\nBulk reading fixes this. Instead of sending one command per read, you send ONE command that fetches ALL cached data at once. Then each getCurrentPosition() just returns the already-fetched value — no I2C wait.\n\nThe simplest way to enable it:\n\nList<LynxModule> hubs = hardwareMap.getAll(LynxModule.class);\nfor (LynxModule hub : hubs) {\n    hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);\n}\n\nIn AUTO mode, the SDK automatically refreshes the bulk cache once per loop iteration. Every hardware read after that just returns cached data — no manual clearBulkCache() calls needed. It's a one-time setup in init() that silently saves 20+ milliseconds per loop."
+          "value": "The biggest loop time killer on real hardware is reading motor encoders one at a time.\n\nBy default, every getCurrentPosition() sends its own round trip to the hub. Four encoders = 4 round trips.\n\nBulk reading fixes this. Instead of sending one command per read, you send ONE command that fetches all the hub's cached data at once. Then each getCurrentPosition() just returns the already-fetched value — no wait.\n\nThe simplest way to enable it is using Marrow, which will be talked about in Module 5: Marrow.\n\nIn AUTO mode, the SDK automatically refreshes the bulk cache once per loop iteration. Every motor read after that just returns cached data — no manual clearBulkCache() calls needed. It's a one-time setup in init() that silently saves 20+ milliseconds per loop.\n\nImportant: bulk reads only help motors. I2C devices — color sensors and distance sensors — can't be bulk read. Each I2C read still costs its full several milliseconds, so keep the number of I2C reads in your loop as low as possible."
         }
       ]
     },
@@ -54,7 +54,7 @@
       "content": [
         {
           "type": "text",
-          "value": "To keep loop times fast:\n\nBulk read all sensors at the top of loop() — one I2C transaction for everything instead of one per sensor.\n\nUse MotorEx which caches writes — only sends setPower when the value meaningfully changes.\n\nRead sensor values once and store them in local variables — don't re-read the same encoder twice.\n\nDon't call hardwareMap.get() inside loop() — that's for init() only.\n\nIn the simulator, these techniques don't change your measured loop time because there's no real I2C bus. But on a real robot with an Expansion Hub, they cut loop times from 40-50ms down to 2-5ms."
+          "value": "To keep loop times fast:\n\nBulk read motor encoders at the top of loop() — one round trip to the hub for all of them instead of one per motor.\n\nUse MotorEx which caches writes — only sends setPower when the value meaningfully changes.\n\nMinimize I2C reads — color sensors and distance sensors can't be bulk read, so read each one only when you actually need it.\n\nRead sensor values once and store them in local variables — don't re-read the same encoder or I2C sensor twice.\n\nDon't call hardwareMap.get() inside loop() — that's for init() only.\n\nIn the simulator, these techniques don't change your measured loop time because there's no real I2C bus. But on a real robot with an Expansion Hub, they cut loop times from 40-50ms down to 2-5ms."
         }
       ]
     }

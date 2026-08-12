@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "A robot that doesn't know where it is can't plan where to go.\n\nOdometry is the technique of estimating robot position by tracking how far the robot has moved across the ground.\n\nThe right way to do it is with dead wheels — unpowered, spring-loaded encoder wheels that ride along the ground. They're not driven by motors, so they don't suffer from wheel slip.\n\nWhy not use the drive motor encoders? Because drive wheels slip. When a wheel spins under power, it can lose traction. The encoder says the wheel turned 500 ticks, but the robot only moved 400 ticks' worth of distance. That error accumulates into drift."
+          "value": "A robot that doesn't know where it is can't plan where to go.\n\nOdometry is the technique of estimating robot position by tracking how far the robot has moved across the ground.\n\nThe right way to do it is with dead wheels — unpowered, spring-loaded encoder wheels that ride along the ground. They're not driven by motors, so they don't suffer from wheel slip.\n\nWhy not use the encoders on the wheel motors? Because drive wheels slip. When a wheel spins under power, it can lose traction. And mecanum wheels are designed to slip — that's how the robot can move in any direction. The encoder says the wheel turned 500 ticks, but the robot only moved 400 ticks' worth of distance. That error accumulates into drift."
         }
       ]
     },

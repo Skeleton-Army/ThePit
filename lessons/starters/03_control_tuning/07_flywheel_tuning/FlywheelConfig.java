@@ -5,7 +5,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 public class FlywheelConfig {
     public static final Motor.GoBILDA MOTOR_TYPE = Motor.GoBILDA.BARE;
 
-    public static final double TARGET_RPM = 6000;
+    public static final double TARGET_RPM = 4000;
 
     public static final double kS = 0.0;
     public static final double kV = 0.0;

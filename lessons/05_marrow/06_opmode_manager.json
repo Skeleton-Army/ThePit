@@ -46,7 +46,7 @@
         {
           "type": "code",
           "language": "java",
-          "value": "@Override\npublic void periodic() {\n    runControl();\n\n    Telemetry telemetry = OpModeManager.getTelemetry();\n    telemetry.addData(\"Buggy/currentPower\", currentPower);\n    telemetry.addData(\"Buggy/targetPower\", targetPower);\n    telemetry.addData(\"Buggy/error\", error);\n}"
+          "value": "@Override\npublic void periodic() {\n    runControl();\n\n    Telemetry telemetry = OpModeManager.getTelemetry();\n    telemetry.addData(\"Buggy/currentPower\", currentPower);\n    telemetry.addData(\"Buggy/targetPower\", targetPower);\n    telemetry.addData(\"Buggy/error\", error);\n    telemetry.update();\n}"
         }
       ]
     },

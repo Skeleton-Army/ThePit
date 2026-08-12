@@ -34,7 +34,7 @@
       "content": [
         {
           "type": "text",
-          "value": "The CommandScheduler runs in a tight loop, calling execute() on every active command each tick.\n\nIt checks isFinished() to know when commands are done, calls end() for cleanup, and enforces the rule that only one command can use each subsystem."
+          "value": "The CommandScheduler runs in a loop, calling execute() on every active command each tick.\n\nIt checks isFinished() to know when commands are done, calls end() for cleanup, and enforces the rule that only one command can use each subsystem. Basically, it is the brain of the command-based system."
         }
       ]
     },
@@ -43,7 +43,7 @@
       "content": [
         {
           "type": "text",
-          "value": "World-championship FTC teams use command-based because it scales.\n\nAdding a new arm subsystem doesn't touch existing drive code.\n\nAutonomous routines are built from small, tested building blocks.\n\nTeleOp and auto share the same commands."
+          "value": "FTC teams use command-based because it scales.\n\nAdding a new arm subsystem doesn't touch existing drive code.\n\nAutonomous routines are built from small, tested building blocks.\n\nTeleOp and auto share the same commands."
         },
         {
           "type": "link",

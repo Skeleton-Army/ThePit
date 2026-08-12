@@ -28,7 +28,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In loop(), display readings: telemetry.addData(\"Red\", colorSensor.red());\n\nDo the same for green() and blue(). Each returns 0-255."
+          "value": "In loop(), display readings: telemetry.addData(\"Red\", colorSensor.red());\n\nDo the same for green() and blue(). Each returns 0-255. End with telemetry.update() to show the values."
         }
       ],
       "check": { "type": "sensor_value", "name": "color_sensor_red", "minimumValue": 1, "maximumValue": 255 }

@@ -39,6 +39,7 @@ public class ZoneCommandOpMode extends CommandOpMode {
     @Override
     public void run() {
         super.run();
+        telemetry.update();
 
         follower.update();
         follower.setTeleOpDrive(

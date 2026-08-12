@@ -9,7 +9,7 @@ public class DriveSubsystem extends SubsystemBase {
     public DriveSubsystem(HardwareMap hardwareMap) {
     }
 
-    public void drive(double forward, double turn) {
+    public void drive(double forward, double strafe, double turn) {
     }
 
     public void stop() {

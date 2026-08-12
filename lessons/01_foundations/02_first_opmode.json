@@ -36,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "loop() runs repeatedly after you press START.\n\nThis is your main code.\n\nFor now, add telemetry.addData(\"Status\", \"Running\"); inside loop() to confirm the OpMode is alive."
+          "value": "loop() runs repeatedly after you press START.\n\nThis is your main code.\n\nFor now, add telemetry.addData(\"Status\", \"Running\"); inside loop(), then call telemetry.update() so it shows on the Driver Station."
         }
       ],
       "check": { "type": "opmode_running" }

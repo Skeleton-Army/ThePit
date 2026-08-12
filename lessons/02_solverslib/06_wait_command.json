@@ -38,7 +38,7 @@
       "content": [
         {
           "type": "text",
-          "value": "All three commands get scheduled at the same time.\n\nThe InstantCommands finish on the first tick — so the motor starts and stops in a single tick.\n\nThe WaitCommand happily counts down in the background, but it doesn't control the ordering.\n\nTo make them run in order, you need SequentialCommandGroup — covered in an upcoming lesson."
+          "value": "All three commands get scheduled at the same time.\n\nThe InstantCommands finish on the first tick — so the motor starts and stops in a single tick.\n\nThe WaitCommand happily counts down in the background, but it doesn't control the ordering.\n\nTo make them run in order, you need SequentialCommandGroup — covered in the upcoming lesson."
         }
       ]
     },
@@ -47,7 +47,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Thread.sleep() would freeze the whole robot, stopping telemetry and disabling the stop button.\n\nWaitCommand only delays one command — the scheduler keeps running, and other commands still execute each tick.\n\nBut WaitCommand is most powerful inside a SequentialCommandGroup, which you'll learn soon."
+          "value": "Thread.sleep() would freeze the whole robot, stopping telemetry and disabling the stop button.\n\nWaitCommand only delays one command — the scheduler keeps running, and other commands still execute each tick.\n\nBut WaitCommand is most powerful inside a SequentialCommandGroup, which you'll learn next."
         }
       ]
     }

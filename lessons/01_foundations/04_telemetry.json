@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Add another line: telemetry.addData(\"Status\", \"Running\");\n\nYou can display as many pieces of data as you want. Each addData() adds a line. No hardware needed."
+          "value": "Add another line: telemetry.addData(\"Status\", \"Running\");\n\nYou can display as many pieces of data as you want. Each addData() adds a line. Keep the telemetry.update() call after your addData() calls. No hardware needed."
         }
       ],
       "check": { "type": "opmode_running" }

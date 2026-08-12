@@ -68,7 +68,7 @@
       "content": [
         {
           "type": "text",
-          "value": "No single sensor is perfect. The solution is combining them:\n\nDead wheels → accurate distance, low slip. Handles position.\n\nIMU → absolute heading reference. Slower to drift than pod-only heading.\n\nAprilTags / vision → occasional absolute position fixes from field landmarks. Resets accumulated drift.\n\nPedro Pathing's Follower also helps — it constantly corrects motor powers to steer back toward the path. Small errors get fixed before they grow.\n\nWith dead wheels + IMU + a good path follower, drift becomes manageable enough for reliable autonomous."
+          "value": "No single sensor is perfect. The solution is combining them:\n\nDead wheels → accurate distance, low slip. Handles position.\n\nIMU → absolute heading reference. Slower to drift than pod-only heading.\n\nAprilTags / vision → occasional absolute position fixes from field landmarks. Resets accumulated drift."
         }
       ]
     }

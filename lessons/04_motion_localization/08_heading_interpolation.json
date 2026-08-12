@@ -44,7 +44,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Starting from (70.75, 70.75, 0):\n\nSegment 1: BezierLine to (142.75, 70.75, 0) with setConstantHeadingInterpolation(0) — drive right while facing right.\n\nSegment 2: BezierLine to (142.75, 142.75, Math.toRadians(90)) with setLinearHeadingInterpolation(0, Math.toRadians(90)) — drive up while turning.\n\nSegment 3: BezierCurve from there to (70.75, 70.75, 0) with control at (106.75, 106.75, 0) and setTangentHeadingInterpolation().\n\nAdd .setGlobalDeceleration() before .build().\n\nSchedule: new FollowPathCommand(follower, chain)."
+          "value": "Starting from (70.75, 70.75, 0):\n\nSegment 1: BezierLine to (142.75, 70.75, 0) with setConstantHeadingInterpolation(0) — drive right while facing right.\n\nSegment 2: BezierLine to (142.75, 142.75, Math.toRadians(90)) with setLinearHeadingInterpolation(0, Math.toRadians(90)) — drive up while turning.\n\nSegment 3: BezierCurve from there to (70.75, 70.75, 0) with control at (106.75, 106.75, 0) and setTangentHeadingInterpolation().\n\nAdd .setGlobalDeceleration() before .build().\n\nSchedule: new FollowPathCommand(follower, chain).\n\nOverride run() to call super.run() and then follower.update() every tick so the Follower drives the path."
         }
       ]
     },
@@ -53,7 +53,7 @@
       "content": [
         {
           "type": "text",
-          "value": "You can combine multiple interpolations within a single path segment using piecewise:\n\nPATH.setHeadingInterpolation(\n    HeadingInterpolator.piecewise(\n        new PiecewiseNode(0, 0.3, HeadingInterpolator.linear(0, Math.toRadians(180))),\n        new PiecewiseNode(0.3, 1, HeadingInterpolator.tangent)\n    )\n);\n\nThis turns 180° in the first 30% of the path, then follows the curve tangentially for the rest. Piecewise is useful when you need different behaviors at different stages of one segment."
+          "value": "You can combine multiple interpolations within a single path segment using piecewise:\n\n.setHeadingInterpolation(\n    HeadingInterpolator.piecewise(\n        new PiecewiseNode(0, 0.3, HeadingInterpolator.linear(0, Math.toRadians(180))),\n        new PiecewiseNode(0.3, 1, HeadingInterpolator.tangent)\n    )\n);\n\nThis turns 180° in the first 30% of the path, then follows the curve tangentially for the rest. Piecewise is useful when you need different behaviors at different stages of one segment."
         }
       ]
     },

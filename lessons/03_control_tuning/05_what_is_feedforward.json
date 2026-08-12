@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "PID is reactive — it only corrects after measuring an error. It must wait for the flywheel to fall below the target before it applies more power.\n\nFeedforward is predictive — it estimates what output is needed before any error exists.\n\nFeedforward is not one specific formula. It's a concept: you model the physics of your system, and your model tells you what output to apply for a given target. The model can be anything — a linear equation, a lookup table, or a physics equation.\n\nThis lesson covers the most common FTC feedforward model: a DC motor driving a flywheel. But the same idea applies to an arm fighting gravity, an elevator lifting a load, or a drivetrain accelerating."
+          "value": "PID is reactive — it only corrects after measuring an error. For example, it must wait for a flywheel to fall below the target before it applies more power.\n\nFeedforward is predictive — it estimates what output is needed before any error exists.\n\nFeedforward is not one specific formula. It's a concept: you model the physics of your system, and your model tells you what output to apply for a given target. The model can be anything — a linear equation, a lookup table, or a physics equation.\n\nThis lesson covers the most common FTC feedforward model: a DC motor driving a flywheel. But the same idea applies to an arm fighting gravity, an elevator lifting a load, or a drivetrain accelerating."
         }
       ]
     },
@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "For a flywheel (a spinning mass shooting game pieces), the feedforward model has three components:\n\n1. Static friction: the minimum voltage needed to just start spinning\n\n2. Velocity: the voltage needed to maintain a given speed\n\n3. Acceleration: the extra voltage needed to speed up or slow down\n\nThese three components are parameterized by kS, kV, and kA. Together, the feedforward output is:\n\nff = kS × sign(velocity) + kV × velocity + kA × acceleration\n\nThis feedforward runs alongside PID. Feedforward handles the known physics; PID handles what the model misses."
+          "value": "Let's see the feedforward model for a flywheel (a spinning mass shooting game pieces). The feedforward model has three components:\n\n1. Static friction: the minimum voltage needed to just start spinning\n\n2. Velocity: the voltage needed to maintain a given speed\n\n3. Acceleration: the extra voltage needed to speed up or slow down\n\nThese three components are parameterized by kS, kV, and kA. Together, the feedforward output is:\n\nff = kS × sign(velocity) + kV × velocity + kA × acceleration\n\nThis feedforward runs alongside PID. Feedforward handles the known physics; PID handles what the model misses."
         }
       ]
     },
@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "text",
-          "value": "A motor at rest needs a minimum voltage to overcome static friction and start spinning.\n\nkS is that minimum voltage. In the SimpleMotorFeedforward API, kS is in ticks per second — the feedforward output is in ticks/sec, which Motor divides by ACHIEVABLE_MAX_TICKS_PER_SECOND to convert to power.\n\nWithout kS: the flywheel sits still until the PID integral builds up enough error to push through friction. That takes time.\n\nWith kS: as soon as you set a target, the feedforward applies kS × sign(target). The flywheel starts moving immediately.\n\nFor a GoBILDA motor, try starting at kS = 100.\n\nFeedforward contribution: ff_S = kS × sign(targetVelocity)"
+          "value": "A motor at rest needs a minimum voltage to overcome static friction and start spinning.\n\nkS is that minimum voltage.\n\nWithout kS: the flywheel sits still until the PID integral builds up enough error to push through friction. That takes time.\n\nWith kS: as soon as you set a target, the feedforward applies kS × sign(target). The flywheel starts moving immediately.\n\nFor a GoBILDA motor, try starting at kS = 100.\n\nFeedforward contribution: ff_S = kS × sign(targetVelocity)"
         }
       ]
     },

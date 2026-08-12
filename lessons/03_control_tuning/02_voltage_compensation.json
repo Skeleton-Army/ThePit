@@ -47,7 +47,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In real FTC code, voltage compensation is NOT built into SolversLib's Motor — feedforward predicts output for a target speed assuming constant voltage. When the battery sags, that prediction becomes wrong and PID has to fight to catch up.\n\nThis is why understanding the principle matters: manually scaling output by voltage keeps motor behavior consistent, reducing how hard PID has to work as the battery drains."
+          "value": "In real FTC code, voltage compensation is NOT built into SolversLib's Motor. When the battery sags, that prediction becomes wrong and PID has to fight to catch up.\n\nThis is why it is usually better to write your own PID controller, which we will touch on in the next lessons."
         }
       ]
     }

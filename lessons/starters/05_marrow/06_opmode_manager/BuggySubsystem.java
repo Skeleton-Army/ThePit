@@ -41,5 +41,6 @@ public class BuggySubsystem extends SubsystemBase {
         telemetry.addData("Buggy/currentPower", currentPower);
         telemetry.addData("Buggy/targetPower", targetPower);
         telemetry.addData("Buggy/error", error);
+        telemetry.update();
     }
 }

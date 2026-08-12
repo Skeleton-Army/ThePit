@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Open CommandOpModeLesson.java.\n\nIt extends CommandOpMode and has one method: initialize().\n\nYou don't write loop() — the scheduler handles the loop for you."
+          "value": "Open CommandOpModeLesson.java.\n\nIt extends CommandOpMode and has one method: initialize().\n\nYou usually don't write loop() — the scheduler handles the loop for you."
         }
       ]
     },
@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Put all your setup in initialize(): create subsystems, schedule commands, bind buttons.\n\nIt's the only method you'll normally override.\n\nThe scheduler starts running right after initialize() returns."
+          "value": "Put all your setup in initialize(): create subsystems, schedule commands, bind buttons.\n\nThe scheduler starts running right after initialize() finishes."
         }
       ]
     },

@@ -14,16 +14,15 @@ public class FlywheelTuningOpMode extends CommandOpMode {
 
         schedule(new RunCommand(() -> {
             double currentRPM = flywheel.getRPM();
-            double[] velo = flywheel.motor.getVeloCoefficients();
-            double[] ff = flywheel.motor.getFeedforwardCoefficients();
+            double[] coefficients = flywheel.pid.getCoefficients();
             telemetry.addData("Target RPM", flywheel.targetRPM);
             telemetry.addData("Current RPM", currentRPM);
             telemetry.addData("Power", flywheel.motor.get());
-            telemetry.addData("kP", velo[0]);
-            telemetry.addData("kI", velo[1]);
-            telemetry.addData("kD", velo[2]);
-            telemetry.addData("kS", ff[0]);
-            telemetry.addData("kV", ff[1]);
+            telemetry.addData("kP", coefficients[0]);
+            telemetry.addData("kI", coefficients[1]);
+            telemetry.addData("kD", coefficients[2]);
+            telemetry.addData("kS", flywheel.feedforward.ks);
+            telemetry.addData("kV", flywheel.feedforward.kv);
             telemetry.update();
         }));
     }

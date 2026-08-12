@@ -37,7 +37,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Build a PathChain with three BezierLine segments starting from the field center:\n\nSegment 1: (70.75, 70.75, 0) to (118.75, 70.75, 0) — 48\" forward.\n\nSegment 2: (118.75, 70.75, 0) to (118.75, 106.75, 0) — 36\" left.\n\nSegment 3: (118.75, 106.75, 0) to (70.75, 70.75, 0) — return.\n\nUse setConstantHeadingInterpolation(0) on each. End with .setGlobalDeceleration().\n\nSchedule: new FollowPathCommand(follower, chain)."
+          "value": "Build a PathChain with three BezierLine segments starting from the field center:\n\nSegment 1: (70.75, 70.75, 0) to (118.75, 70.75, 0) — 48\" forward.\n\nSegment 2: (118.75, 70.75, 0) to (118.75, 106.75, 0) — 36\" left.\n\nSegment 3: (118.75, 106.75, 0) to (70.75, 70.75, 0) — return.\n\nUse setConstantHeadingInterpolation(0) on each. End with .setGlobalDeceleration().\n\nSchedule: new FollowPathCommand(follower, chain).\n\nOverride run() to call super.run() and then follower.update() every tick — that's what makes the Follower actually drive the path."
         }
       ]
     },

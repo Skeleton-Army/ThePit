@@ -51,7 +51,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Build a PathChain with a single BezierCurve:\n\nnew BezierCurve(\n    new Pose(70.75, 70.75, 0),\n    new Pose(70.75, 120.75, 0),\n    new Pose(70.75, 170.75, 0)\n)\n\nUse setTangentHeadingInterpolation() so the robot faces the direction of the curve.\n\nAlways add .setGlobalDeceleration() before .build().\n\nSchedule: new FollowPathCommand(follower, chain)."
+          "value": "Build a PathChain with a single BezierCurve:\n\nnew BezierCurve(\n    new Pose(70.75, 70.75, 0),\n    new Pose(70.75, 120.75, 0),\n    new Pose(70.75, 170.75, 0)\n)\n\nUse setTangentHeadingInterpolation() so the robot faces the direction of the curve.\n\nAlways add .setGlobalDeceleration() before .build().\n\nSchedule: new FollowPathCommand(follower, chain).\n\nOverride run() to call super.run() and then follower.update() every tick so the Follower drives the curve."
         }
       ]
     },

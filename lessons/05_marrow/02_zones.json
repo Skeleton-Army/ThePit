@@ -46,7 +46,7 @@
         {
           "type": "code",
           "language": "java",
-          "value": "private final PolygonZone robotZone = new PolygonZone(18, 18);\n\n// In run():\nrobotZone.setPosition(\n    follower.getPose().getX(),\n    follower.getPose().getY()\n);\nrobotZone.setRotation(follower.getPose().getHeading());"
+          "value": "private final PolygonZone robotZone = new PolygonZone(18, 18);\n\n// In run():\ntelemetry.update();\n\nrobotZone.setPosition(\n    follower.getPose().getX(),\n    follower.getPose().getY()\n);\nrobotZone.setRotation(follower.getPose().getHeading());"
         }
       ]
     },
@@ -55,7 +55,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Trigger wraps a BooleanSupplier. whileActiveContinuous() schedules the command when the condition becomes true and cancels when it becomes false.\n\nNo wasInside boolean. No manual state tracking. Trigger handles edge detection."
+          "value": "Trigger wraps a BooleanSupplier. whileActiveContinuous() schedules the command when the condition becomes true and cancels when it becomes false."
         },
         {
           "type": "code",

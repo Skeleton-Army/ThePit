@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Mecanum wheels use rollers mounted at 45° on the wheel hub. When driving forward or backward, the main wheel drives the robot directly — the rollers don't slip because the force is aligned with the wheel's rotation.\n\nWhen strafing sideways, the wheels spin but the force goes through the rollers at an angle. The rollers must spin freely to allow sideways motion, which wastes energy in friction. This makes strafing slower and less efficient than forward/back.\n\nIn practice, a mecanum robot's top speed strafing is only 60-70% of its forward speed. Pedro Pathing accounts for this automatically through the xVelocity and yVelocity constants in your config."
+          "value": "Mecanum wheels use rollers mounted at 45° on the wheel hub. When driving forward or backward, the main wheel drives the robot directly — the rollers don't slip because the force is aligned with the wheel's rotation.\n\nWhen strafing sideways, the wheels spin but the force goes through the rollers at an angle. The rollers must spin freely to allow sideways motion, which wastes energy in friction. This makes strafing slower and less efficient than forward/back.\n\nIn practice, a mecanum robot's top speed strafing is only 60-70% of its forward speed. Keep this in mind when creating the paths in your autonomous."
         }
       ]
     },
@@ -36,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "setTeleOpDrive has an extra parameter for drive mode:\n\nsetTeleOpDrive(forward, strafe, turn, true) — robot-centric. Forward = toward the robot's front, regardless of field orientation. If the robot faces up, pushing forward moves up on the field.\n\nsetTeleOpDrive(forward, strafe, turn, false) — field-centric. Forward = toward the top of the field, no matter which way the robot faces. The Follower automatically translates based on heading.\n\nWhen no fourth parameter is given, the default is robot-centric."
+          "value": "setTeleOpDrive has an extra parameter for drive mode:\n\nsetTeleOpDrive(forward, strafe, turn, true) — robot-centric. Forward = toward the robot's front, relative to the robot's rotation. If the robot faces up, pushing forward moves up on the field.\n\nsetTeleOpDrive(forward, strafe, turn, false) — field-centric. Forward = toward the top of the field, no matter which way the robot faces. The Follower automatically translates based on heading.\n\nWhen no fourth parameter is given, the default is robot-centric."
         }
       ]
     },

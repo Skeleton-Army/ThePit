@@ -9,7 +9,7 @@
       "content": [
         {
           "type": "text",
-          "value": "A Subsystem represents one hardware mechanism: the drivetrain, an arm, or a claw.\n\nIt owns the motors and sensors for that mechanism.\n\nOther code accesses the hardware only through the subsystem's public methods.\n\nEvery subsystem in SolversLib extends SubsystemBase."
+          "value": "A Subsystem represents one hardware mechanism: the drivetrain, an arm, or a claw.\n\nIt owns the motors and sensors for that mechanism.\n\nOther code accesses the hardware only through the subsystem's public methods. It is good practice to never expose the hardware to the outside of the subsystem.\n\nEvery subsystem in SolversLib extends SubsystemBase."
         }
       ]
     },
@@ -36,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In the constructor, get \"front_left_motor\" and \"front_right_motor\" from the HardwareMap."
+          "value": "In the constructor, get the drive motors from the HardwareMap."
         }
       ],
       "check": { "type": "hardware_mapped", "name": "front_left_motor" }
@@ -46,7 +46,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Fill in drive() with two parameters: forward and turn.\n\nSet leftMotor to forward + turn and rightMotor to forward - turn.\n\nThis is the same arcade drive you've used before."
+          "value": "Fill in drive() with three parameters: forward, strafe, and turn.\n\nUse the same drive code as you did before."
         }
       ]
     },
@@ -55,7 +55,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Fill in stop() — set both motors to 0.\n\nLeave periodic() empty for now. It's called every tick by the scheduler and is where you'd read sensors or update state.\n\nIn SubsystemOpMode.java, create a DriveSubsystem in initialize() — the constructor auto-registers it with the scheduler."
+          "value": "Fill in stop() — set both motors to 0.\n\nLeave periodic() empty for now. It's called every tick by the scheduler and is where you'd read sensors or update PID.\n\nIn SubsystemOpMode.java, create a DriveSubsystem in initialize() — the constructor auto-registers it with the scheduler."
         }
       ],
       "check": { "type": "opmode_running" }

@@ -1,5 +1,5 @@
 {
-  "id": "03_instant_command",
+  "id": "04_instant_command",
   "title": "InstantCommand",
   "starterOpMode": "InstantCommandOpMode.java",
   "starterFiles": ["InstantCommandOpMode.java"],
@@ -28,7 +28,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In initialize(), use schedule() with an InstantCommand. The lambda sets motor power to 0.5."
+          "value": "In initialize(), write:\n\nschedule(new InstantCommand(() -> motor.setPower(0.5)));"
         }
       ],
       "check": { "type": "motor_power", "name": "front_left_motor", "target": 0.5, "tolerance": 0.1 }
@@ -38,7 +38,16 @@
       "content": [
         {
           "type": "text",
-          "value": "Add a second schedule() call with another InstantCommand that sets motor power to 0.0.\n\nBoth commands run — the first starts the motor, the second stops it.\n\nInstantCommand finishes so fast you might not see a full rotation. Later you'll learn commands that control timing and duration."
+          "value": "Add a second schedule() call with another InstantCommand that sets motor power to 0.0.\n\nBoth commands run at the same time — the first starts the motor, the second stops it.\n\nInstantCommand finishes so fast the motor won't move. Later you'll learn commands that control timing and duration."
+        }
+      ]
+    },
+    {
+      "title": "Require a subsystem",
+      "content": [
+        {
+          "type": "text",
+          "value": "A command can require a subsystem by passing it as a parameter after the lambda:\n\nschedule(new InstantCommand(() -> motor.setPower(0.5), driveSubsystem));\n\nRequiring a subsystem tells the scheduler this command uses that subsystem. Only one command may require a given subsystem at a time — if another command needs it, the scheduler interrupts this one.\n\nYou can pass several subsystems after the lambda. Subsystems themselves are covered in the next lesson."
         }
       ]
     },
@@ -47,7 +56,7 @@
       "content": [
         {
           "type": "text",
-          "value": "InstantCommand is one of many built-in command types.\n\nSolversLib also provides ConditionalCommand (runs one of two commands based on a condition), ProxyCommand (defers command creation until scheduled), and others.\n\nThe next few lessons cover WaitCommand, WaitUntilCommand, RunCommand, and the group containers — but there's more beyond that."
+          "value": "InstantCommand is one of many built-in command types.\n\nSolversLib also provides ConditionalCommand (runs one of two commands based on a condition), ProxyCommand (defers command creation until scheduled), and others.\n\nThe next few lessons cover WaitCommand, WaitUntilCommand, RunCommand, and the group containers — but there's more beyond that. Please read the documentation after you finish all the lessons."
         },
         {
           "type": "link",

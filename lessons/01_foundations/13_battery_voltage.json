@@ -28,7 +28,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In loop(), add telemetry.addData(\"Battery\", battery.getVoltage());\n\nThe value is in volts."
+          "value": "In loop(), add telemetry.addData(\"Battery\", battery.getVoltage()); then call telemetry.update() to display it.\n\nThe value is in volts."
         }
       ],
       "check": { "type": "opmode_running" }

@@ -1,5 +1,5 @@
 {
-  "id": "08_sequential_command",
+  "id": "07_sequential_command",
   "title": "SequentialCommandGroup",
   "starterOpMode": "SequentialCommandOpMode.java",
   "starterFiles": ["SequentialCommandOpMode.java"],
@@ -28,20 +28,10 @@
       "content": [
         {
           "type": "text",
-          "value": "Create a SequentialCommandGroup with three commands: an InstantCommand that sets motor power to 0.5, a WaitCommand with duration 2000, and an InstantCommand that sets power to 0.0.\n\nUse schedule() on the SequentialCommandGroup.\n\nNow the order is guaranteed: start, wait 2 seconds, stop."
+          "value": "Schedule a SequentialCommandGroup with three commands:\n\nschedule(\n                new SequentialCommandGroup(\n                        new InstantCommand(() -> motor.setPower(0.5)),\n                        new WaitCommand(2000),\n                        new InstantCommand(() -> motor.setPower(0.0))\n                )\n        );\n\nNow the order is guaranteed: start, wait 2 seconds, stop."
         }
       ],
       "check": { "type": "elapsed_time", "minimumValue": 2.0 }
-    },
-    {
-      "title": "Add more steps",
-      "content": [
-        {
-          "type": "text",
-          "value": "Add another WaitCommand(1000) and an InstantCommand that starts the motor again to the sequence.\n\nThe full sequence: start, run 2s, stop, pause 1s, start.\n\nEach command waits for the previous to finish. SequentialCommandGroup respects the order of the list you give it."
-        }
-      ],
-      "check": { "type": "opmode_running" }
     },
     {
       "title": "Sequencing is the backbone of auton",

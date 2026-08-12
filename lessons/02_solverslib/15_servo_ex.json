@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Declare a private ServoEx field. In initialize(), create it with: servo = new ServoEx(hardwareMap, \"back_servo\").\n\nThat's it — no range needed. The default ranges from 0.0 to 1.0, same as the raw SDK servo.\n\nservo.set(0.5) sends the servo to its middle position.\n\nIf you want a custom range, you can pass min and max in the constructor or call servo.setRange(min, max) later."
+          "value": "Declare a private ServoEx field. In initialize(), create it with: servo = new ServoEx(hardwareMap, \"back_servo\").\n\nThe default ranges from 0.0 to 1.0, same as the raw SDK servo.\n\nservo.set(0.5) sends the servo to its middle position.\n\nIf you want a custom range, you can pass min and max in the constructor or call servo.setRange(min, max) later."
         }
       ],
       "check": { "type": "hardware_mapped", "name": "back_servo" }
@@ -48,7 +48,7 @@
       "content": [
         {
           "type": "text",
-          "value": "servo.setPwm(pwmRange) configures custom pulse width limits for specialty servos.\n\nservo.setInverted(true) reverses direction.\n\nservo.getRawPosition() returns the raw 0.0-1.0 position.\n\nservo.getServo() gives the underlying SDK Servo object.\n\nservo.setCachingTolerance(0.01) enables power caching.\n\nFor continuous rotation servos, use CRServo and CRServoEx from the same package."
+          "value": "servo.setInverted(true) reverses direction.\n\nservo.getRawPosition() returns the raw 0.0-1.0 position.\n\nFor continuous rotation servos, use CRServo and CRServoEx from the same package."
         }
       ]
     }

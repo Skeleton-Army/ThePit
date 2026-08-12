@@ -65,20 +65,6 @@
       ]
     },
     {
-      "title": "Gating with isCompleted()",
-      "content": [
-        {
-          "type": "text",
-          "value": "In a CommandOpMode, the run() override checks isCompleted(). While prompts are pending, it calls prompter.run() to drive the UI. Once done, it falls through to normal autonomous behavior."
-        },
-        {
-          "type": "code",
-          "language": "java",
-          "value": "@Override\npublic void run() {\n    if (!prompter.isCompleted()) {\n        prompter.run();\n        return;\n    }\n    super.run();\n}"
-        }
-      ]
-    },
-    {
       "title": "Run it",
       "content": [
         {

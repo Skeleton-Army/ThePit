@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "text",
-          "value": "A simulated grab increments a counter each attempt. isGrabbed() returns true once 3 attempts have been made. RetryCommand keeps trying up to 5 times."
+          "value": "A simulated grab increments a counter each attempt. isGrabbed() returns true once 3 attempts have been made. RetryCommand keeps trying up to 5 times.\n\nA scheduled RunCommand(() -> telemetry.update()) runs every tick so the attempts appear on screen."
         },
         {
           "type": "code",

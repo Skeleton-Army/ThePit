@@ -14,30 +14,29 @@
       ]
     },
     {
-      "title": "Look at the skeletons",
+      "title": "Look at the files",
       "content": [
         {
           "type": "text",
-          "value": "Open DefaultCommandOpMode.java. It extends CommandOpMode with an empty initialize().\n\nOpen DriveSubsystem.java. It extends SubsystemBase with empty constructor, drive(), stop(), and periodic().\n\nYou'll fill in both."
+          "value": "Open DefaultCommandOpMode.java. It extends CommandOpMode with an empty initialize().\n\nOpen DriveSubsystem.java. It's already filled in with the mecanum drive from the gamepad input lesson — four motors and a drive(forward, strafe, turn) method.\n\nYou only need to write the OpMode."
         }
       ]
     },
     {
-      "title": "Fill in the DriveSubsystem",
+      "title": "Look at the DriveSubsystem",
       "content": [
         {
           "type": "text",
-          "value": "Declare two private DcMotor fields: leftMotor and rightMotor.\n\nIn the constructor, get front_left_motor and front_right_motor from the HardwareMap.\n\nFill in drive() with forward and turn parameters — set leftMotor to forward + turn, rightMotor to forward - turn.\n\nFill in stop() — set both motors to 0. Leave periodic() empty."
+          "value": "Open DriveSubsystem.java.\n\nIt declares four private DcMotor fields and gets them from the HardwareMap in the constructor, reversing the left-side motors.\n\ndrive(forward, strafe, turn) applies the exact mecanum formula from the gamepad input lesson. stop() sets all four motors to 0. periodic() is empty.\n\nYou don't need to change anything here."
         }
-      ],
-      "check": { "type": "hardware_mapped", "name": "front_left_motor" }
+      ]
     },
     {
       "title": "Set the default command",
       "content": [
         {
           "type": "text",
-          "value": "In DefaultCommandOpMode's initialize(), create a DriveSubsystem and a GamepadEx from gamepad1.\n\nCall drive.setDefaultCommand() with a RunCommand. The RunCommand reads gamepad1's left stick Y (negated, for forward) and right stick X (for turn), and calls drive.drive(forward, turn) each tick.\n\nNo schedule() call needed — the default command runs automatically.\n\nAlso add telemetry display and telemetry.update() inside the RunCommand so you can see it's running."
+          "value": "In DefaultCommandOpMode's initialize(), create a DriveSubsystem and a GamepadEx from gamepad1.\n\nCall drive.setDefaultCommand() with a RunCommand. The RunCommand reads the gamepad sticks (forward = -leftY, strafe = leftX, turn = rightX) and calls drive.drive(forward, strafe, turn) each tick.\n\nA default command must require its subsystem, so pass drive to the RunCommand constructor: new RunCommand(() -> { ... }, drive).\n\nNo schedule() call needed — the default command runs automatically.\n\nAlso add telemetry display and telemetry.update() inside the RunCommand so you can see it's running."
         }
       ],
       "check": { "type": "opmode_running" }
@@ -47,7 +46,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Bind the A button using GamepadEx. When pressed, schedule a command that requires the drive subsystem.\n\nUse a SequentialCommandGroup: an InstantCommand that sets both motors to -0.5 (backward), a WaitCommand of 2000ms, and an InstantCommand that calls drive.stop().\n\nRequiring the drive subsystem means the scheduler must interrupt the default command — you can't have two commands using the same subsystem.\n\nWhen the sequence finishes, the default drive command resumes automatically."
+          "value": "Bind the A button using GamepadEx. When pressed, schedule a command that requires the drive subsystem.\n\nUse a SequentialCommandGroup: an InstantCommand that calls drive.drive(-0.5, 0, 0) (backward), a WaitCommand of 2000ms, and an InstantCommand that calls drive.stop().\n\nPass drive to each InstantCommand's constructor so they require the subsystem.\n\nRequiring the drive subsystem means the scheduler must interrupt the default command — you can't have two commands using the same subsystem.\n\nWhen the sequence finishes, the default drive command resumes automatically."
         }
       ]
     },

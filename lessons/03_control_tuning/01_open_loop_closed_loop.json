@@ -18,7 +18,7 @@
       "content": [
         {
           "type": "text",
-          "value": "Your starter file is a working open-loop drive.\n\nIt schedules two commands:\n\n1. A SequentialCommandGroup: WaitUntilCommand to wait for the opmode to go active, then an InstantCommand that sets 0.3 power, a WaitCommand for 2 seconds, and a final InstantCommand that stops both motors.\n\n2. A RunCommand that displays telemetry continuously — position, runtime, and current mode.\n\nMotorEx is SolversLib's wrapper around DcMotorEx. It handles hardwareMap lookup so you don't call hardwareMap.get().\n\nRun the OpMode. Press START. Watch the left motor's encoder position tick up in telemetry, then hold steady after 2 seconds.\n\nRun it a few times. How consistent is the final tick count?"
+          "value": "First, switch to the Programming Board configuration. In the simulator window, use the Configuration dropdown (top of the window, next to the Op Mode dropdown) and select Programming Board. The board has a single motor named motor, and it does not drive around the field.\n\nYour starter file is a working open-loop drive.\n\nIt schedules two commands:\n\n1. A SequentialCommandGroup: WaitUntilCommand to wait for the opmode to go active, then an InstantCommand that sets 0.3 power, a WaitCommand for 2 seconds, and a final InstantCommand that stops the motor.\n\n2. A RunCommand that displays telemetry continuously — position, runtime, and current mode.\n\nRun the OpMode. Press START. Watch the motor's encoder position tick up in telemetry, then hold steady after 2 seconds.\n\nRun it a few times. How consistent is the final tick count?"
         }
       ],
       "check": { "type": "elapsed_time", "minimumValue": 2.0 }
@@ -37,10 +37,10 @@
       "content": [
         {
           "type": "text",
-          "value": "Replace the SequentialCommandGroup with an InstantCommand that sets up closed-loop PositionControl.\n\nIn the InstantCommand:\n\nCall leftMotor.setRunMode(RunMode.PositionControl) and the same for rightMotor.\n\nCall resetEncoder() on both motors.\n\nCall setTargetPosition(1000) on both motors.\n\nCall set(0.3) on both motors.\n\nThe RunCommand stays — it continues displaying telemetry, which now shows the encoder counting toward 1000.\n\nThe motor's built-in position controller now closes the loop — it compares encoder count to the target and adjusts power automatically.\n\nRun it multiple times. The final position is the same every time."
+          "value": "Now switch to closed-loop PositionControl.\n\nIn initialize(), after creating the motor, set up the closed-loop controller:\n\nCall motor.setRunMode(Motor.RunMode.PositionControl).\n\nCall motor.resetEncoder().\n\nCall motor.setTargetPosition(1000).\n\nThen replace the SequentialCommandGroup with a RunCommand that calls motor.set(1) every loop.\n\nIn PositionControl mode, set(1) is a multiplier — it means drive at full power toward the target. The controller compares the encoder count to 1000 and adjusts power automatically.\n\nRun it multiple times. The final position is the same every time."
         }
       ],
-      "check": { "type": "robot_position", "x": 50, "y": 50, "tolerance": 60 }
+      "check": { "type": "encoder_ticks", "name": "motor", "minimum": 1000 }
     },
     {
       "title": "Why closed-loop wins",

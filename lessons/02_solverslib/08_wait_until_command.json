@@ -1,5 +1,5 @@
 {
-  "id": "07_wait_until_command",
+  "id": "08_wait_until_command",
   "title": "WaitUntilCommand",
   "starterOpMode": "WaitUntilCommandOpMode.java",
   "starterFiles": ["WaitUntilCommandOpMode.java"],
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "title": "Delcare and get your motor",
+      "title": "Declare and get your motor",
       "content": [
         {
           "type": "text",

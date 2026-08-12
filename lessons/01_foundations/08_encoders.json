@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In loop(), call motor.getCurrentPosition() and display it with telemetry.addData(\"Encoder\", ticks)."
+          "value": "In loop(), call motor.getCurrentPosition() and display it with telemetry.addData(\"Encoder\", ticks), then call telemetry.update() to show it."
         }
       ],
       "check": { "type": "encoder_ticks", "name": "front_left_motor", "minimum": 100 }

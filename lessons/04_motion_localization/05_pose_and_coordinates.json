@@ -52,7 +52,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In competition, you write one autonomous and need it to work on both the red and blue alliances. The field is symmetrical — the blue side is a mirror of the red side.\n\nInstead of writing two different autos, use mirroring:\n\nPose mirrored = pose.mirror();\n\nThe mirror() method flips the X coordinate across the field center (defaults to 141.5). Heading is automatically adjusted to face the mirrored direction.\n\nPattern: store your poses in an array, then call .mirror() on each one when you're on the red alliance. One set of waypoints, both alliances."
+          "value": "In competition, you write one autonomous and need it to work on both the red and blue alliances. The field is symmetrical — the blue side is a mirror of the red side.\n\nInstead of writing two different autos, use mirroring:\n\nPose mirrored = pose.mirror();\n\nThe mirror() method flips the X coordinate across the field center (defaults to 141.5). Heading is automatically adjusted to face the mirrored direction."
         }
       ]
     }
