@@ -14,11 +14,20 @@
       ]
     },
     {
+      "title": "Mirror-image motors",
+      "content": [
+        {
+          "type": "text",
+          "value": "The left and right motors are bolted onto opposite sides of the robot, so they are mirror images of each other.\n\nPositive power on a left motor spins its wheel backward, while positive power on a right motor spins its wheel forward.\n\nIf you don't account for this, 'left motors forward, right motors backward' will not actually spin the robot.\n\nFix it by reversing the left-side motors so positive power means 'wheel forward' on every wheel."
+        }
+      ]
+    },
+    {
       "title": "Declare and get four motors",
       "content": [
         {
           "type": "text",
-          "value": "Declare four private DcMotor fields: frontLeft, backLeft, frontRight, backRight.\n\nIn init(), get all four from hardwareMap using their names: \"front_left_motor\", \"back_left_motor\", \"front_right_motor\", \"back_right_motor\"."
+          "value": "Declare four private DcMotor fields: frontLeft, backLeft, frontRight, backRight.\n\nIn init(), get all four from hardwareMap using their names: \"front_left_motor\", \"back_left_motor\", \"front_right_motor\", \"back_right_motor\".\n\nThen reverse the left-side motors:\n\nfrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);\nbackLeft.setDirection(DcMotorSimple.Direction.REVERSE);"
         }
       ]
     },
@@ -27,7 +36,7 @@
       "content": [
         {
           "type": "text",
-          "value": "In loop(), set the left motors to 0.5 and the right motors to -0.5. This spins the robot clockwise."
+          "value": "Now that the left motors are reversed, positive power means 'forward' on all four wheels.\n\nIn loop(), set the left motors to 0.5 and the right motors to -0.5. This spins the robot clockwise."
         }
       ],
       "check": { "type": "heading", "target": 90.0, "tolerance": 25.0 }
